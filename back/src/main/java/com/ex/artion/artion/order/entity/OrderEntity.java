@@ -15,6 +15,8 @@ public class OrderEntity {
 
     private String address_order;
 
+    private String delivery_type;
+
     @OneToOne
     private AuctionEntity auction;
 }
