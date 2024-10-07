@@ -1,6 +1,7 @@
 package com.ex.artion.artion.order.entity;
 
 import com.ex.artion.artion.auction.entity.AuctionEntity;
+import com.ex.artion.artion.paying.entity.PayingEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,5 +19,5 @@ public class OrderEntity {
     private String delivery_type;
 
     @OneToOne
-    private AuctionEntity auction;
+    private PayingEntity paying;
 }

@@ -26,4 +26,8 @@ public class UserEntity {
 
     private Boolean black_list_status;
 
+    private String user_account;
+
+    private String bank_name;
+
 }

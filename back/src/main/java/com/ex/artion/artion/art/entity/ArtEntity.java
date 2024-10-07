@@ -30,7 +30,10 @@ public class ArtEntity {
     private LocalDateTime upload; // 그림 등록 날짜
     private String startTime;
     private String endTime;
-    private Boolean current_auction_status;
+    private Integer current_auction_status;
+
+    private String painter;
+
 
 
     @ManyToOne
