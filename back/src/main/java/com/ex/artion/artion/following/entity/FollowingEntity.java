@@ -1,5 +1,6 @@
 package com.ex.artion.artion.following.entity;
 
+import com.ex.artion.artion.art.entity.ArtEntity;
 import com.ex.artion.artion.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
