@@ -35,6 +35,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	implementation("net.datafaker:datafaker:2.4.0")
 }
 
 tasks.withType<Test> {

@@ -14,7 +14,7 @@ import lombok.Setter;
 public class ArtCategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer art_category_pd;
+    private Integer art_category_pk;
 
     private String art_category_name;
 }

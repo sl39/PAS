@@ -2,12 +2,14 @@ package com.ex.artion.artion.artcategory.entity;
 
 import com.ex.artion.artion.art.entity.ArtEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ArtArtCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
