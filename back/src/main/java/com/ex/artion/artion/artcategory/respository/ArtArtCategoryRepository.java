@@ -1,6 +1,5 @@
 package com.ex.artion.artion.artcategory.respository;
 
-import com.ex.artion.artion.art.entity.ArtEntity;
 import com.ex.artion.artion.artcategory.entity.ArtArtCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
