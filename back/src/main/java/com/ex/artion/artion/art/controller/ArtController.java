@@ -23,4 +23,8 @@ public class ArtController {
         return new ResponseEntity<>(artService.getArtDetail(artPk,userPk), HttpStatus.OK);
     }
 
+    @GetMapping()
+
+
+
 }
