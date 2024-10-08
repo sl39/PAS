@@ -40,6 +40,7 @@ public interface ArtRepository extends JpaRepository<ArtEntity, Integer> {
             "ON a.art_pk = top_followers.art_pk", nativeQuery = false)
     List<ArtSearchResponseDto> findAllWithRecent();
 
+    // 카테고리, 키워드, max, min, sortby, sort, pagination 해야됨
     @Query(value = "SELECT new com.ex.artion.artion.art.dto.ArtSearchKeywordResponseDto(a.art_pk, COALESCE(c.price, a.minP), a.art_name, a.painter, COALESCE(d.f_c, 0)) " +
             "FROM ArtEntity a " +
             "LEFT JOIN (SELECT b.art_entity.art_pk AS art_pk, MAX(b.current_price) AS price " +
