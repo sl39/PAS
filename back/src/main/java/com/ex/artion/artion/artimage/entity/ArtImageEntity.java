@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -16,6 +18,6 @@ public class ArtImageEntity {
 
     private String art_image_url;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private ArtEntity art_entity;
 }

@@ -22,7 +22,7 @@ public class UserEntity {
 
     private String phone_number;
 
-    private String user_cash;
+    private Long user_cash;
 
     private Boolean black_list_status;
 
