@@ -1,6 +1,7 @@
 package com.ex.artion.artion.art.service;
 
 import com.ex.artion.artion.art.dto.ArtDetailResponseDto;
+import com.ex.artion.artion.art.dto.ArtSearchResponseDto;
 import com.ex.artion.artion.art.entity.ArtEntity;
 import com.ex.artion.artion.art.respository.ArtRepository;
 import com.ex.artion.artion.artfollowing.respository.ArtFollowingRepository;
@@ -102,6 +103,18 @@ public class ArtService {
             dto.setIsPossible(true);
         }
         return dto;
+
+    }
+
+    public List<ArtSearchResponseDto> getPopular(){
+        List<ArtSearchResponseDto> ob = artRepository.findAllWithFollowerCount();
+        for (ArtSearchResponseDto result : ob) {
+            // COALESCE로 인해 null일 경우 0이 반환됨
+            System.out.println(result.getArt_pk());
+        }
+        // store 의 현재 값, artImage 가져오기
+
+        return ob;
 
     }
 
