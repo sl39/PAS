@@ -1,9 +1,11 @@
 package com.ex.artion.artion.art.controller;
 
 import com.ex.artion.artion.art.dto.ArtDetailResponseDto;
+import com.ex.artion.artion.art.dto.ArtSearchKeywordResponseDto;
 import com.ex.artion.artion.art.dto.ArtSearchResponseDto;
 import com.ex.artion.artion.art.service.ArtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,24 @@ public class ArtController {
     public ResponseEntity<List<ArtSearchResponseDto>> getPopular() {
         return new ResponseEntity<>(artService.getPopular(), HttpStatus.OK);
     }
+    @GetMapping("/main/recent")
+    public ResponseEntity<List<ArtSearchResponseDto>> getRecent() {
+        return new ResponseEntity<>(artService.getRecent(), HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ArtSearchKeywordResponseDto>> getSearch(
+            @RequestParam(value = "keyword", defaultValue = "") String keyword,
+            @RequestParam(value = "category", defaultValue = "") String category,
+            @RequestParam(value = "minPrice", defaultValue = "0") Long minPrice,
+            @RequestParam(value = "maxPrice", defaultValue =  "2036854000000") Long maxPrice,
+            @RequestParam(value = "sortBy", defaultValue = "LIKE") String sortBy,
+            @RequestParam(value = "sort", defaultValue = "DESC") String sort
+            ) {
+
+        return new ResponseEntity<>(artService.getSearch(keyword,category,minPrice,maxPrice,sortBy,sort), HttpStatus.OK);
+    }
+
 
 
 

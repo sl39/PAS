@@ -1,6 +1,7 @@
 package com.ex.artion.artion.art.service;
 
 import com.ex.artion.artion.art.dto.ArtDetailResponseDto;
+import com.ex.artion.artion.art.dto.ArtSearchKeywordResponseDto;
 import com.ex.artion.artion.art.dto.ArtSearchResponseDto;
 import com.ex.artion.artion.art.entity.ArtEntity;
 import com.ex.artion.artion.art.respository.ArtRepository;
@@ -16,6 +17,7 @@ import com.ex.artion.artion.user.entity.UserEntity;
 import com.ex.artion.artion.user.respository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Key;
 import java.time.LocalDateTime;
@@ -109,13 +111,64 @@ public class ArtService {
     public List<ArtSearchResponseDto> getPopular(){
         List<ArtSearchResponseDto> ob = artRepository.findAllWithFollowerCount();
         for (ArtSearchResponseDto result : ob) {
-            // COALESCE로 인해 null일 경우 0이 반환됨
-            System.out.println(result.getArt_pk());
+            List<ArtImageEntity> images = artImageRepository.findAllByArtEntity(result.getArt_pk());
+            ArtEntity art = artRepository.findById(result.getArt_pk()).get();
+            if(art == null){
+                continue;
+            }
+            if(!images.isEmpty()){
+                result.setArtImage(images.get(0).getArt_image_url());
+            }
+            if(art.getCurrent_auction_status() == 0){
+                result.setPrice(art.getMinP());
+            } else  {
+                Long price = art.getMinP();
+                Long auctionPrice = auctionRepository.findMaxPriceByArtPk(art.getArt_pk());
+                if(auctionPrice != null && (auctionPrice > price)){
+                    price = auctionPrice;
+                }
+                result.setPrice(price);
+            }
         }
-        // store 의 현재 값, artImage 가져오기
-
         return ob;
 
     }
 
+    public List<ArtSearchResponseDto> getRecent() {
+        List<ArtSearchResponseDto> ob = artRepository.findAllWithRecent();
+        for (ArtSearchResponseDto result : ob) {
+            List<ArtImageEntity> images = artImageRepository.findAllByArtEntity(result.getArt_pk());
+            ArtEntity art = artRepository.findById(result.getArt_pk()).get();
+            if(art == null){
+                continue;
+            }
+            if(!images.isEmpty()){
+                result.setArtImage(images.get(0).getArt_image_url());
+            }
+            if(art.getCurrent_auction_status() == 0){
+                result.setPrice(art.getMinP());
+            } else  {
+                Long price = art.getMinP();
+                Long auctionPrice = auctionRepository.findMaxPriceByArtPk(art.getArt_pk());
+                if(auctionPrice != null && (auctionPrice > price)){
+                    price = auctionPrice;
+                }
+                result.setPrice(price);
+            }
+        }
+        return ob;
+    }
+
+    public List<ArtSearchKeywordResponseDto> getSearch(String keyword, String category, Long minPrice, Long maxPrice, String sortBy, String sort){
+//        List<ArtSearchKeywordResponseDto> ob = new ArrayList<>();
+//        if(sortBy.equals("LIKE")) {
+//
+//        } else if(sortBy.equals("PRICE")){
+//
+//        } else{
+//
+//        }
+
+        return artRepository.findAllWithDetails();
+    }
 }
