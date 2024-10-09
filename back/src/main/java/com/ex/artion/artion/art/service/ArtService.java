@@ -5,6 +5,7 @@ import com.ex.artion.artion.art.dto.ArtSearchKeywordResponseDto;
 import com.ex.artion.artion.art.dto.ArtSearchResponseDto;
 import com.ex.artion.artion.art.entity.ArtEntity;
 import com.ex.artion.artion.art.respository.ArtRepository;
+import com.ex.artion.artion.artcategory.respository.ArtCategoryRepository;
 import com.ex.artion.artion.artfollowing.respository.ArtFollowingRepository;
 import com.ex.artion.artion.artimage.entity.ArtImageEntity;
 import com.ex.artion.artion.artimage.respository.ArtImageRepository;
@@ -16,6 +17,10 @@ import com.ex.artion.artion.global.error.ErrorCode;
 import com.ex.artion.artion.user.entity.UserEntity;
 import com.ex.artion.artion.user.respository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -37,6 +42,7 @@ public class ArtService {
     private final ArtFollowingRepository artFollowingRepository;
     private final AuctionRepository auctionRepository;
     private final BlackListUserRepository blackListUserRepository;
+    private final ArtCategoryRepository artCategoryRepository;
 
     public ArtDetailResponseDto getArtDetail(Integer artpk, Integer userPk) {
         Optional<ArtEntity> art = artRepository.findById(artpk);
@@ -159,16 +165,41 @@ public class ArtService {
         return ob;
     }
 
-    public List<ArtSearchKeywordResponseDto> getSearch(String keyword, String category, Long minPrice, Long maxPrice, String sortBy, String sort){
-//        List<ArtSearchKeywordResponseDto> ob = new ArrayList<>();
-//        if(sortBy.equals("LIKE")) {
-//
-//        } else if(sortBy.equals("PRICE")){
-//
-//        } else{
-//
-//        }
+    public Page<ArtSearchKeywordResponseDto> getSearch(String keyword, String category, Long minPrice, Long maxPrice, String sortBy, String sort, Integer page, Integer pageSize){
+        if(artCategoryRepository.findByArtCategoryName(category).isEmpty()){
+            throw new CustomException(ErrorCode.ARTCATEGORY_NOT_FOUND);
+        }
 
-        return artRepository.findAllWithDetails();
+        if(minPrice > maxPrice){
+            throw new CustomException(ErrorCode.MIN_PRICE_MAX_PRICE_NOT_VALID);
+        }
+
+
+
+
+        String sortType = "";
+        if (sortBy.equals("LIKE")) {
+            sortType = "artFollowingNum";
+        } else if (sortBy.equals("PRICE")) {
+            sortType = "price";
+        } else if (sortBy.equals("DATE")) {
+            sortType = "a.upload";
+        } else {
+            throw new CustomException(ErrorCode.SORTEDBY_BAD_REQUEST);
+        }
+        if (!sort.equals("ASC") && !sort.equals("DESC")) {
+            throw new CustomException(ErrorCode.SORT_BAD_REQUEST);
+        }
+
+        if(page < 0 ){
+            throw new CustomException(ErrorCode.PAGE_BAD_REQUEST);
+        }
+        if(pageSize < 1){
+            throw new CustomException(ErrorCode.PAGESIZE_BAD_REQUEST);
+        }
+
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.fromString(sort),sortType));
+        return artRepository.findAllWithDetails(keyword,category,minPrice,maxPrice,pageable);
     }
+
 }
