@@ -4,17 +4,15 @@ import com.ex.artion.artion.art.entity.ArtEntity;
 import com.ex.artion.artion.art.respository.ArtRepository;
 import com.ex.artion.artion.auction.entity.AuctionEntity;
 import com.ex.artion.artion.auction.respository.AuctionRepository;
-import com.ex.artion.artion.order.entity.OrderEntity;
-import com.ex.artion.artion.order.respository.OrderRepostory;
 import com.ex.artion.artion.paying.entity.PayingEntity;
 import com.ex.artion.artion.paying.repository.PayingRepository;
+import com.ex.artion.artion.order.respository.OrderRepostory;
+import com.ex.artion.artion.order.entity.OrderEntity;
 import com.ex.artion.artion.user.dto.UserCreateDto;
-import com.ex.artion.artion.user.dto.UserMaxDto;
 import com.ex.artion.artion.user.dto.UserUpdateDto;
 import com.ex.artion.artion.user.entity.UserEntity;
 import com.ex.artion.artion.user.respository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.query.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -50,12 +48,11 @@ public class UserService {
         this.userRepository.save(user);
     }
 
-    public UserEntity searchUser(@RequestParam(value = "user_pk") Integer user_pk) {
+    public UserEntity searchUser(@RequestParam(value="user_pk") Integer user_pk) {
         UserEntity founduser = userRepository.findById(user_pk)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
         return founduser;
     }
-
 
     // 유저 정보 수정
     public void updateUser(@RequestBody UserUpdateDto dto, @RequestParam(value = "user_pk") Integer user_pk) {

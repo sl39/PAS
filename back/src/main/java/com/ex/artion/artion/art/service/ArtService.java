@@ -1,7 +1,6 @@
 package com.ex.artion.artion.art.service;
 
-import com.ex.artion.artion.art.dto.ArtCreateDto;
-import com.ex.artion.artion.art.dto.ArtUpdateDto;
+import com.ex.artion.artion.art.dto.*;
 import com.ex.artion.artion.art.entity.ArtEntity;
 import com.ex.artion.artion.art.respository.ArtRepository;
 import com.ex.artion.artion.artcategory.entity.ArtArtCategory;
@@ -26,6 +25,10 @@ import com.ex.artion.artion.global.error.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,6 +37,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
@@ -41,6 +46,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class ArtService {
+
     private final ArtRepository artRepository;
 
     private final UserService userService;
@@ -204,7 +210,6 @@ public class ArtService {
 
         String start = artEntity.getStartTime().format(formatter);
         String end = artEntity.getEndTime().format(formatter);
-        ;
 
         ArtDetailResponseDto dto = ArtDetailResponseDto.builder()
                 .created(artEntity.getCreatedAt())
@@ -248,7 +253,6 @@ public class ArtService {
 
         Optional<BlackListUserEntity> blackListUserEntity = blackListUserRepository.findByUserEntityAndArtEntity(userEntity, artEntity);
 
-
         // 블랙리스트인지, 블랙리스트 status, 자신의 그림인지
         if (userEntity.getUser_pk() == artEntity.getUserEntity().getUser_pk() || userEntity.getBlack_list_status() == true || blackListUserEntity.isPresent()) {
             dto.setIsPossible(false);
@@ -256,6 +260,100 @@ public class ArtService {
             dto.setIsPossible(true);
         }
         return dto;
+    }
 
+    public List<ArtSearchResponseDto> getPopular() {
+        List<ArtSearchResponseDto> ob = artRepository.findAllWithFollowerCount();
+        for (ArtSearchResponseDto result : ob) {
+            List<ArtImageEntity> images = artImageRepository.findAllByArtEntity(result.getArt_pk());
+            ArtEntity art = artRepository.findById(result.getArt_pk()).get();
+            if(art == null){
+                continue;
+            }
+            if(!images.isEmpty()){
+                result.setArtImage(images.get(0).getArt_image_url());
+            }
+            if(art.getCurrent_auction_status() == 0){
+                result.setPrice(art.getMinP());
+            } else  {
+                Long price = art.getMinP();
+                Long auctionPrice = auctionRepository.findMaxPriceByArtPk(art.getArt_pk());
+                if(auctionPrice > price){
+                    price = auctionPrice;
+                }
+                result.setPrice(price);
+            }
+        }
+        return ob;
+
+    }
+
+    public List<ArtSearchResponseDto> getRecent() {
+        List<ArtSearchResponseDto> ob = artRepository.findAllWithRecent();
+        for (ArtSearchResponseDto result : ob) {
+            List<ArtImageEntity> images = artImageRepository.findAllByArtEntity(result.getArt_pk());
+            ArtEntity art = artRepository.findById(result.getArt_pk()).get();
+            if(art == null){
+                continue;
+            }
+            if(!images.isEmpty()){
+                result.setArtImage(images.get(0).getArt_image_url());
+            }
+            if(art.getCurrent_auction_status() == 0){
+                result.setPrice(art.getMinP());
+            } else  {
+                Long price = art.getMinP();
+                Long auctionPrice = auctionRepository.findMaxPriceByArtPk(art.getArt_pk());
+                if(auctionPrice > price){
+                    price = auctionPrice;
+                }
+                result.setPrice(price);
+            }
+        }
+        return ob;
+    }
+
+    public PageArtSearchResponseDto getSearch(String keyword, String category, Long minPrice, Long maxPrice, String sortBy, String sort, Integer page, Integer pageSize){
+        Optional<ArtCategoryEntity> artCategory =artCategoryRepository.findByCategoryName(category);
+        if(category != null && !category.equals("") && artCategory.isEmpty()){
+            throw new CustomException(ErrorCode.ARTCATEGORY_NOT_FOUND);
+        }
+        if(minPrice > maxPrice){
+            throw new CustomException(ErrorCode.MIN_PRICE_MAX_PRICE_NOT_VALID);
+        }
+
+        String sortType = "";
+        if (sortBy.equals("LIKE")) {
+            sortType = "artFollowingNum";
+        } else if (sortBy.equals("PRICE")) {
+            sortType = "price";
+        } else if (sortBy.equals("DATE")) {
+            sortType = "a.upload";
+        } else {
+            throw new CustomException(ErrorCode.SORTEDBY_BAD_REQUEST);
+        }
+        if (!sort.equals("ASC") && !sort.equals("DESC")) {
+            throw new CustomException(ErrorCode.SORT_BAD_REQUEST);
+        }
+
+        if(page < 0 ){
+            throw new CustomException(ErrorCode.PAGE_BAD_REQUEST);
+        }
+        if(pageSize < 1){
+            throw new CustomException(ErrorCode.PAGESIZE_BAD_REQUEST);
+        }
+
+
+
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.fromString(sort),sortType));
+        Page<ArtSearchKeywordResponseDto> dto = artRepository.findAllWithDetails(keyword,category,minPrice,maxPrice,pageable);
+        PageArtSearchResponseDto pages = PageArtSearchResponseDto.builder()
+                .content(dto.getContent())
+                .totalPages(dto.getTotalPages())
+                .totalElements(dto.getTotalElements())
+                .pageSize(dto.getSize())
+                .page(dto.getNumber())
+                .build();
+        return pages;
     }
 }
