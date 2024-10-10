@@ -1,5 +1,6 @@
 package com.ex.artion.artion.art.controller;
 
+import com.ex.artion.artion.art.dto.ArtBidDto;
 import com.ex.artion.artion.art.dto.ArtCreateDto;
 import com.ex.artion.artion.art.dto.ArtUpdateDto;
 import com.ex.artion.artion.art.entity.ArtEntity;
@@ -49,7 +50,6 @@ public class ArtController {
 
     @PostMapping("/delete")
         public ResponseEntity<String> deleteArt(
-         //해당 userId검사 --> 나중에.
          @RequestParam(value = "art_pk") Integer art_pk) {
         artService.deleteArt(art_pk);
         return ResponseEntity.ok("그림 삭제 성공!");
@@ -60,11 +60,14 @@ public class ArtController {
         return new ResponseEntity<>(artService.getArtDetail(artPk,userPk), HttpStatus.OK);
     }
 
+//    @GetMapping("/bid")
+//    public ResponseEntity<ArtBidDto> artBid(@RequestParam(value = "auction_pk") Integer auction_pk) {
+//        return ResponseEntity.ok(artService.getBidDetail(auction_pk);
+//    }
 }
 
 //    @PostMapping("/detail")
 //    public ResponseEntity<Map<String, Object>> detailArt(
-//            //해당 userId검사 --> 나중에.
 //            @RequestParam(value = "art_pk") Integer art_pk) {
 //        artService.artDetail(art_pk);
 //        return ResponseEntity.ok(artService.artDetail(art_pk));
