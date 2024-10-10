@@ -5,6 +5,7 @@ import com.ex.artion.artion.art.dto.ArtSearchKeywordResponseDto;
 import com.ex.artion.artion.art.dto.ArtSearchResponseDto;
 import com.ex.artion.artion.art.entity.ArtEntity;
 import com.ex.artion.artion.art.respository.ArtRepository;
+import com.ex.artion.artion.artcategory.entity.ArtCategoryEntity;
 import com.ex.artion.artion.artcategory.respository.ArtCategoryRepository;
 import com.ex.artion.artion.artfollowing.respository.ArtFollowingRepository;
 import com.ex.artion.artion.artimage.entity.ArtImageEntity;
@@ -166,16 +167,13 @@ public class ArtService {
     }
 
     public Page<ArtSearchKeywordResponseDto> getSearch(String keyword, String category, Long minPrice, Long maxPrice, String sortBy, String sort, Integer page, Integer pageSize){
-        if(artCategoryRepository.findByArtCategoryName(category).isEmpty()){
+        Optional<ArtCategoryEntity> artCategory =artCategoryRepository.findByCategoryName(category);
+        if(artCategory.isEmpty()){
             throw new CustomException(ErrorCode.ARTCATEGORY_NOT_FOUND);
         }
-
         if(minPrice > maxPrice){
             throw new CustomException(ErrorCode.MIN_PRICE_MAX_PRICE_NOT_VALID);
         }
-
-
-
 
         String sortType = "";
         if (sortBy.equals("LIKE")) {
