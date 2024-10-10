@@ -8,6 +8,10 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface AuctionRepository extends JpaRepository<AuctionEntity, Integer> {
+    @Query(value = "SELECT * FROM auction_entity a " +
+            "WHERE a.bid_user_user_pk = :user_pk "
+            ,nativeQuery = true)
+    List<AuctionEntity> findAllByUser_pk(@Param("user_pk") Integer user_pk);
 
     // 경매하는 미술품의 최고 값과 자신의 최고 값
     @Query(value = "SELECT " +

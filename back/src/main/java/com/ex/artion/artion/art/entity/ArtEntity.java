@@ -37,8 +37,6 @@ public class ArtEntity {
 
     private String painter;
 
-
-
     @ManyToOne
     private UserEntity userEntity;
 }
