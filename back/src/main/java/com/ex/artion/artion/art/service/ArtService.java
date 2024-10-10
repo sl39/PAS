@@ -269,7 +269,7 @@ public class ArtService {
 
     }
 
-    // 그림상세보기 -> 인데 userEntity가 첨가된.
+    // 그림상세보기
     public Map<String, Object> artDetail(@RequestParam(value = "art_pk") Integer art_pk) {
         ArtEntity art = artRepository.findById(art_pk)
                 .orElseThrow(() -> new IllegalArgumentException("해당 그림이 없습니다!"));

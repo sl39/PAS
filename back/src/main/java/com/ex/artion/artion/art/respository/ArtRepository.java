@@ -61,4 +61,8 @@ public interface ArtRepository extends JpaRepository<ArtEntity, Integer> {
 
             )
     Page<ArtSearchKeywordResponseDto> findAllWithDetails(@Param("keyword") String keyword, @Param("category") String category, @Param("minPrice") Long minPrice, @Param("maxPrice") Long maxPrice, Pageable pageable);
+    @Query(value = "SELECT * FROM art_entity a " +
+            "WHERE a.user_entity_user_pk = :user_pk "
+            ,nativeQuery = true)
+    List<ArtEntity> findAllByUser_pk(@Param("user_pk") Integer user_pk);
 }
