@@ -36,7 +36,7 @@ public interface AuctionRepository extends JpaRepository<AuctionEntity, Integer>
     List<Object[]> findMaxPriceAndUserMaxPriceByArtPkAndUserPkNative(@Param("artPk") Integer artPk, @Param("userPk") Integer userPk);
 
 
-    @Query(value = "SELECT max(a.current_price) " +
+    @Query(value = "SELECT COALESCE(max(a.current_price),0) " +
             "FROM AuctionEntity as a " +
             "WHERE a.art_entity.art_pk = :artPk " +
             "GROUP BY a.art_entity "

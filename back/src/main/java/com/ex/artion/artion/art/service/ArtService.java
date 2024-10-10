@@ -1,7 +1,6 @@
 package com.ex.artion.artion.art.service;
 
-import com.ex.artion.artion.art.dto.ArtCreateDto;
-import com.ex.artion.artion.art.dto.ArtUpdateDto;
+import com.ex.artion.artion.art.dto.*;
 import com.ex.artion.artion.art.entity.ArtEntity;
 import com.ex.artion.artion.art.respository.ArtRepository;
 import com.ex.artion.artion.artcategory.entity.ArtArtCategory;
@@ -16,9 +15,6 @@ import com.ex.artion.artion.user.entity.UserEntity;
 import com.ex.artion.artion.user.respository.UserRepository;
 import com.ex.artion.artion.user.service.UserService;
 import jakarta.transaction.Transactional;
-import com.ex.artion.artion.art.dto.ArtDetailResponseDto;
-import com.ex.artion.artion.art.dto.ArtSearchKeywordResponseDto;
-import com.ex.artion.artion.art.dto.ArtSearchResponseDto;
 import com.ex.artion.artion.artfollowing.respository.ArtFollowingRepository;
 import com.ex.artion.artion.auction.respository.AuctionRepository;
 import com.ex.artion.artion.blacklistuser.entity.BlackListUserEntity;
@@ -310,7 +306,7 @@ public class ArtService {
             } else  {
                 Long price = art.getMinP();
                 Long auctionPrice = auctionRepository.findMaxPriceByArtPk(art.getArt_pk());
-                if(auctionPrice != null && (auctionPrice > price)){
+                if(auctionPrice > price){
                     price = auctionPrice;
                 }
                 result.setPrice(price);
@@ -336,7 +332,7 @@ public class ArtService {
             } else  {
                 Long price = art.getMinP();
                 Long auctionPrice = auctionRepository.findMaxPriceByArtPk(art.getArt_pk());
-                if(auctionPrice != null && (auctionPrice > price)){
+                if(auctionPrice > price){
                     price = auctionPrice;
                 }
                 result.setPrice(price);
@@ -345,7 +341,7 @@ public class ArtService {
         return ob;
     }
 
-    public Page<ArtSearchKeywordResponseDto> getSearch(String keyword, String category, Long minPrice, Long maxPrice, String sortBy, String sort, Integer page, Integer pageSize){
+    public PageArtSearchResponseDto getSearch(String keyword, String category, Long minPrice, Long maxPrice, String sortBy, String sort, Integer page, Integer pageSize){
         Optional<ArtCategoryEntity> artCategory =artCategoryRepository.findByCategoryName(category);
         if(category != null && !category.equals("") && artCategory.isEmpty()){
             throw new CustomException(ErrorCode.ARTCATEGORY_NOT_FOUND);
@@ -375,7 +371,17 @@ public class ArtService {
             throw new CustomException(ErrorCode.PAGESIZE_BAD_REQUEST);
         }
 
+
+
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.fromString(sort),sortType));
-        return artRepository.findAllWithDetails(keyword,category,minPrice,maxPrice,pageable);
+        Page<ArtSearchKeywordResponseDto> dto = artRepository.findAllWithDetails(keyword,category,minPrice,maxPrice,pageable);
+        PageArtSearchResponseDto pages = PageArtSearchResponseDto.builder()
+                .content(dto.getContent())
+                .totalPages(dto.getTotalPages())
+                .totalElements(dto.getTotalElements())
+                .pageSize(dto.getSize())
+                .page(dto.getNumber())
+                .build();
+        return pages;
     }
 }
