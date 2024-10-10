@@ -47,14 +47,8 @@ import java.util.Optional;
 public class ArtService {
 
     private final ArtRepository artRepository;
-
-    private final UserService userService;
     private final UserRepository userRepository;
-
-    private final ArtImageService artImageService;
     private final ArtImageRepository artImageRepository;
-
-    private final ArtCategoryService artCategoryService;
     private final ArtCategoryRepository artCategoryRepository;
     private final ArtArtCategoryRepository artArtCategoryRepository;
 
@@ -249,7 +243,7 @@ public class ArtService {
             maxPrice = result[0] != null ? ((Number) result[0]).longValue() : null;  // 첫 번째 값 (전체 경매의 최대값)
             userMaxPrice = result[1] != null ? ((Number) result[1]).longValue() : null;  // 두 번째 값 (유저의 입찰 중 최대값)
         }
-        dto.setMaxPrice(maxPrice);
+        dto.setCurrentPrice(maxPrice);
         dto.setMyCurrentPrice(userMaxPrice);
 
         Optional<BlackListUserEntity> blackListUserEntity = blackListUserRepository.findByUserEntityAndArtEntity(userEntity,artEntity);
