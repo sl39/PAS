@@ -43,15 +43,25 @@ public class UserController {
     @GetMapping("/purbid")
     public ResponseEntity<List<Map<String, Object>>> requestPurchaseBid(
             @RequestParam(value = "user_pk") Integer user_pk) {
-        userService.requestPurchaseBid(user_pk);
         return ResponseEntity.ok(userService.requestPurchaseBid(user_pk));
     }
 
-    @GetMapping("/pursucess")
-    public ResponseEntity<List<Map<String, Object>>> requestPurchaseSucess(
+    @GetMapping("/pursuc")
+    public ResponseEntity<List<Map<String, Object>>> requestPurchaseSuccess(
             @RequestParam(value = "user_pk") Integer user_pk) {
-        userService.requestPurchaseSuceess(user_pk);
-        return ResponseEntity.ok(userService.requestPurchaseSuceess(user_pk));
+        return ResponseEntity.ok(userService.requestPurchaseSucceess(user_pk));
+    }
+
+    @GetMapping("/salebid")
+    public ResponseEntity<List<Map<String, Object>>> requestSaleBid(
+            @RequestParam(value = "user_pk") Integer user_pk) {
+        return userService.requestSaleBid(user_pk);
+    }
+
+    @GetMapping("/salesuc")
+    public ResponseEntity<List<Map<String, Object>>> requestSaleSuccess(
+            @RequestParam(value = "user_pk") Integer user_pk) {
+        return userService.requestSaleSuccess(user_pk);
     }
 }
 //    @GetMapping("/salelists")
