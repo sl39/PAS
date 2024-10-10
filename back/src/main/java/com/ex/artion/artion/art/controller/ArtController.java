@@ -1,8 +1,6 @@
 package com.ex.artion.artion.art.controller;
 
-import com.ex.artion.artion.art.dto.ArtBidDto;
-import com.ex.artion.artion.art.dto.ArtCreateDto;
-import com.ex.artion.artion.art.dto.ArtUpdateDto;
+import com.ex.artion.artion.art.dto.*;
 import com.ex.artion.artion.art.entity.ArtEntity;
 import com.ex.artion.artion.art.service.ArtService;
 import com.ex.artion.artion.artcategory.entity.ArtArtCategory;
@@ -10,9 +8,6 @@ import com.ex.artion.artion.artcategory.entity.ArtCategoryEntity;
 import com.ex.artion.artion.artimage.entity.ArtImageEntity;
 import com.ex.artion.artion.user.dto.UserCreateDto;
 import com.ex.artion.artion.user.entity.UserEntity;
-import com.ex.artion.artion.art.dto.ArtDetailResponseDto;
-import com.ex.artion.artion.art.dto.ArtSearchKeywordResponseDto;
-import com.ex.artion.artion.art.dto.ArtSearchResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Page;
@@ -73,7 +68,7 @@ public class ArtController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Page<ArtSearchKeywordResponseDto>> getSearch(
+    public ResponseEntity<PageArtSearchResponseDto> getSearch(
             @RequestParam(value = "keyword", defaultValue = "") String keyword,
             @RequestParam(value = "category", defaultValue = "") String category,
             @RequestParam(value = "minPrice", defaultValue = "0") Long minPrice,
