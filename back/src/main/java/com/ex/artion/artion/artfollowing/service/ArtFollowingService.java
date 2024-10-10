@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,7 +33,6 @@ public class ArtFollowingService {
         if (existingLike.isPresent()) {
             return "You have already followed this art!";
         }
-
         ArtFollowingEntity artFollowingEntity = new ArtFollowingEntity();
         artFollowingEntity.setUserEntity(user);
         artFollowingEntity.setArtEntity(art);
@@ -52,4 +52,5 @@ public class ArtFollowingService {
             return "not liked";
         }
     }
+
 }

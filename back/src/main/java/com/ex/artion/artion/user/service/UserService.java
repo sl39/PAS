@@ -45,14 +45,10 @@ public class UserService {
         this.userRepository.save(user);
     }
 
-    public boolean searchUser(@RequestParam(value="user_pk") Integer user_pk) {
-        UserEntity user = userRepository.findById(user_pk)
+    public UserEntity searchUser(@RequestParam(value="user_pk") Integer user_pk) {
+        UserEntity founduser = userRepository.findById(user_pk)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
-        if(user == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return founduser;
     }
 
 

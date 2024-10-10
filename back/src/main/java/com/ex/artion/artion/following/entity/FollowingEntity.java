@@ -19,4 +19,5 @@ public class FollowingEntity {
 
     @ManyToOne
     private UserEntity seller;
+
 }

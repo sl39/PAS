@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/artfollowing")
 public class ArtFollowingController {
     private final ArtFollowingService artFollowingService;
-   @PostMapping("{artId}/artfollowing")
-    public String followingArt (@RequestParam Integer userId, @PathVariable Integer artId){
+   @PostMapping("/{artId}/{userId}")
+    public String followingArt (@PathVariable Integer userId, @PathVariable Integer artId){
        return artFollowingService.Followingart(userId,artId);
    }
-    @DeleteMapping("/{artId}/unlike")
-    public String unlike (@RequestParam Integer userId, @PathVariable Integer artId){
+    @DeleteMapping("/{artId}/{userId}/unlike")
+    public String unlike (@PathVariable Integer userId, @PathVariable Integer artId){
        return artFollowingService.unlikeartfollowing(userId,artId);
     }
 
