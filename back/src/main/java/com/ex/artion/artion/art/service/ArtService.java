@@ -17,39 +17,24 @@ import com.ex.artion.artion.user.respository.UserRepository;
 import com.ex.artion.artion.user.service.UserService;
 import jakarta.transaction.Transactional;
 import com.ex.artion.artion.art.dto.ArtDetailResponseDto;
-import com.ex.artion.artion.art.entity.ArtEntity;
-import com.ex.artion.artion.art.respository.ArtRepository;
 import com.ex.artion.artion.artfollowing.respository.ArtFollowingRepository;
-import com.ex.artion.artion.artimage.entity.ArtImageEntity;
-import com.ex.artion.artion.artimage.respository.ArtImageRepository;
 import com.ex.artion.artion.auction.respository.AuctionRepository;
 import com.ex.artion.artion.blacklistuser.entity.BlackListUserEntity;
 import com.ex.artion.artion.blacklistuser.repository.BlackListUserRepository;
 import com.ex.artion.artion.global.error.CustomException;
 import com.ex.artion.artion.global.error.ErrorCode;
-import com.ex.artion.artion.user.entity.UserEntity;
-import com.ex.artion.artion.user.respository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-
-import java.security.Key;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -106,13 +91,13 @@ public class ArtService {
 
         // 입력한 카테고리에 해당하는 pk 반환
         for (String category : dto.getArtCategory()) {
-        ArtCategoryEntity cateId = artCategoryRepository.findIdByArtCategoryName(category);
+            ArtCategoryEntity cateId = artCategoryRepository.findIdByArtCategoryName(category);
 
-        //art_artCategory에 반환된 값 저장.
-        ArtArtCategory artCat = new ArtArtCategory();
-        artCat.setArt(savedArt);
-        artCat.setArt_category(cateId);
-        this.artArtCategoryRepository.save(artCat);
+            //art_artCategory에 반환된 값 저장.
+            ArtArtCategory artCat = new ArtArtCategory();
+            artCat.setArt(savedArt);
+            artCat.setArt_category(cateId);
+            this.artArtCategoryRepository.save(artCat);
         }
     }
 
@@ -203,16 +188,14 @@ public class ArtService {
     }
 
 
-
-
     public ArtDetailResponseDto getArtDetail(Integer artpk, Integer userPk) {
         Optional<ArtEntity> art = artRepository.findById(artpk);
-        if(art.isEmpty()){
+        if (art.isEmpty()) {
             throw new CustomException(ErrorCode.ART_NOT_FOUND);
         }
 
         Optional<UserEntity> user = userRepository.findById(userPk);
-        if(user.isEmpty()){
+        if (user.isEmpty()) {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
         UserEntity userEntity = user.get();
@@ -220,7 +203,8 @@ public class ArtService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         String start = artEntity.getStartTime().format(formatter);
-        String end = artEntity.getEndTime().format(formatter);;
+        String end = artEntity.getEndTime().format(formatter);
+        ;
 
         ArtDetailResponseDto dto = ArtDetailResponseDto.builder()
                 .created(artEntity.getCreatedAt())
@@ -242,7 +226,7 @@ public class ArtService {
         // 그림 이미지들
         List<ArtImageEntity> images = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
         List<String> imageUrls = new ArrayList<>();
-        for(ArtImageEntity imageEntity : images){
+        for (ArtImageEntity imageEntity : images) {
             imageUrls.add(imageEntity.getArt_image_url());
         }
         dto.setArtImages(imageUrls);
@@ -262,41 +246,16 @@ public class ArtService {
         dto.setMaxPrice(maxPrice);
         dto.setMyCurrentPrice(userMaxPrice);
 
-        Optional<BlackListUserEntity> blackListUserEntity = blackListUserRepository.findByUserEntityAndArtEntity(userEntity,artEntity);
+        Optional<BlackListUserEntity> blackListUserEntity = blackListUserRepository.findByUserEntityAndArtEntity(userEntity, artEntity);
 
 
         // 블랙리스트인지, 블랙리스트 status, 자신의 그림인지
-        if(userEntity.getUser_pk() == artEntity.getUserEntity().getUser_pk() || userEntity.getBlack_list_status() == true || blackListUserEntity.isPresent()){
+        if (userEntity.getUser_pk() == artEntity.getUserEntity().getUser_pk() || userEntity.getBlack_list_status() == true || blackListUserEntity.isPresent()) {
             dto.setIsPossible(false);
         } else {
             dto.setIsPossible(true);
         }
         return dto;
 
-    }
-
-    // 그림상세보기
-    public Map<String, Object> artDetail(@RequestParam(value = "art_pk") Integer art_pk) {
-        ArtEntity art = artRepository.findById(art_pk)
-                .orElseThrow(() -> new IllegalArgumentException("해당 그림이 없습니다!"));
-
-        Map<String, Object> artDetails = new HashMap<>();
-        Field[] fields = art.getClass().getDeclaredFields();  // Entity의 모든 필드 가져오기
-
-        for (Field field : fields) {
-            field.setAccessible(true);  // private 필드 접근 가능하게 설정
-            if(!field.getName().equals("userEntity")) {
-                Object value = null;  // 필드 값 가져오기
-                try {
-                    value = field.get(art);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
-                if (value != null) {
-                    artDetails.put(field.getName(), value);  // 필드명과 값을 맵에 추가
-                }
-            }
-        }
-        return artDetails;
     }
 }

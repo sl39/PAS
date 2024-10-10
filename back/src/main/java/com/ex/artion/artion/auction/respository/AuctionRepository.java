@@ -1,6 +1,7 @@
 package com.ex.artion.artion.auction.respository;
 
 import com.ex.artion.artion.auction.entity.AuctionEntity;
+import com.ex.artion.artion.user.dto.UserMaxDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -34,5 +35,4 @@ public interface AuctionRepository extends JpaRepository<AuctionEntity, Integer>
             "FROM auction_entity a " +
             "WHERE a.art_entity_art_pk = :artPk", nativeQuery = true)
     List<Object[]> findMaxPriceAndUserMaxPriceByArtPkAndUserPkNative(@Param("artPk") Integer artPk, @Param("userPk") Integer userPk);
-
 }
