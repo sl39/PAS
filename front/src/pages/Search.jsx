@@ -1,6 +1,6 @@
 import React from "react";
-import { SideMenu } from "../components";
+import { ArtworkInProfile } from "../components";
 
 export default function Search() {
-  return <SideMenu></SideMenu>;
+  return <ArtworkInProfile></ArtworkInProfile>;
 }

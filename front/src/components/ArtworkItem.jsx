@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { GoHeartFill } from "react-icons/go";
 
-export default function ArtworkInProfile() {
+export default function ArtworkItem() {
   // Styled Components
   const ArtworkContainer = styled.div`
     margin: 5px;
@@ -13,7 +13,6 @@ export default function ArtworkInProfile() {
     width: 120px;
     height: 120px;
     overflow: hidden;
-    margin-bottom: 3px;
   `;
 
   const SquareImage = styled.img`
@@ -67,6 +66,7 @@ export default function ArtworkInProfile() {
         <ImageContainer>
           <SquareImage src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTn697KapdshZw4TZFDoybC8SzUhBlqTJO3A&s"></SquareImage>
         </ImageContainer>
+        <BoldParagraph>빈센트 반 고흐 빈센트 반 고흐</BoldParagraph>
         <NormalParagraph>
           빈센트 반 고흐의 자화상으로, 빈센트 반 고흐의 자화상
         </NormalParagraph>
