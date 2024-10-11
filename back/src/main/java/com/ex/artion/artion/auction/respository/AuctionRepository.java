@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AuctionRepository extends JpaRepository<AuctionEntity, Integer> {
     // 유저 정보로 옥션 엔티티 조회
@@ -42,4 +43,13 @@ public interface AuctionRepository extends JpaRepository<AuctionEntity, Integer>
             "GROUP BY a.art_entity "
     )
     Long findMaxPriceByArtPk(@Param("artPk") Integer artPk);
+
+    @Query(value = "SELECT a.* FROM auction_entity as a " +
+            "WHERE a.art_entity_art_pk =:artPk and a.current_price = " +
+            "(SELECT MAX(b.current_price) FROM auction_entity b WHERE b.art_entity_art_pk = :artPk)" , nativeQuery = true
+    )
+    Optional<AuctionEntity> findMax(@Param("artPk") Integer artPk);
+
+
+
 }
