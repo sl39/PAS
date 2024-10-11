@@ -4,9 +4,7 @@ import Button from 'react-bootstrap/Button';
 
 const BidModal = ({ showBidModal, setShowBidModal, bidPrice, setBidPrice, handleBid, currentPrice }) => {
   const handleSubmit = () => {
-    handleBid(Number(bidPrice)); // 입력한 값을 숫자로 변환하여 전달
-    setBidPrice(''); // 입력 필드 초기화
-    setShowBidModal(false); // 모달 닫기
+    handleBid(); // handleBid 호출
   };
 
   return (
@@ -20,7 +18,7 @@ const BidModal = ({ showBidModal, setShowBidModal, bidPrice, setBidPrice, handle
           className="form-control"
           placeholder={`현재가: KRW ${currentPrice.toLocaleString()}`}
           value={bidPrice}
-          onChange={(e) => setBidPrice(e.target.value)}
+          onChange={(e) => setBidPrice(e.target.value)} // setBidPrice 함수 호출
         />
       </Modal.Body>
       <Modal.Footer>
