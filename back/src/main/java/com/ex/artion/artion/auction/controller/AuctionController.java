@@ -1,6 +1,7 @@
 package com.ex.artion.artion.auction.controller;
 
 
+import com.ex.artion.artion.art.dto.ArtDetailResponseDto;
 import com.ex.artion.artion.auction.dto.AuctionBitRequestDto;
 import com.ex.artion.artion.auction.dto.AuctionBitResponseDto;
 import com.ex.artion.artion.auction.dto.AuctionDetailResponseDto;

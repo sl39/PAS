@@ -1,5 +1,6 @@
 package com.ex.artion.artion.auction.service;
 
+import com.ex.artion.artion.art.dto.ArtDetailResponseDto;
 import com.ex.artion.artion.art.entity.ArtEntity;
 import com.ex.artion.artion.art.respository.ArtRepository;
 import com.ex.artion.artion.artfollowing.respository.ArtFollowingRepository;
@@ -14,6 +15,7 @@ import com.ex.artion.artion.blacklistuser.entity.BlackListUserEntity;
 import com.ex.artion.artion.blacklistuser.repository.BlackListUserRepository;
 import com.ex.artion.artion.global.error.CustomException;
 import com.ex.artion.artion.global.error.ErrorCode;
+import com.ex.artion.artion.paying.repository.PayingRepository;
 import com.ex.artion.artion.user.entity.UserEntity;
 import com.ex.artion.artion.user.respository.UserRepository;
 import lombok.RequiredArgsConstructor;
