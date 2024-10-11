@@ -3,6 +3,7 @@ import { PiUserCircleThin } from "react-icons/pi";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
+import SideMenu from "./SideMenu";
 
 export default function Header() {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -27,25 +28,34 @@ export default function Header() {
     margin: 0;
     font-size: 35px;
     font-weight: 300;
+    user-select: none;
   `;
 
-  const UnstyledLink = styled(Link)`
+  const StyledLink = styled(Link)`
     cursor: pointer;
     text-decoration: none;
     color: inherit;
   `;
 
   return (
-    <HeaderContainer>
-      <MenuIcon>
-        <CiMenuBurger size={30} onClick={handleToggle} />
-      </MenuIcon>
-      <UnstyledLink to="/">
-        <Logo>Artion</Logo>
-      </UnstyledLink>
-      <UnstyledLink to="/">
-        <PiUserCircleThin size={40} />
-      </UnstyledLink>
-    </HeaderContainer>
+    <>
+      <HeaderContainer>
+        <MenuIcon>
+          <CiMenuBurger size={30} onClick={handleToggle} />
+        </MenuIcon>
+        <StyledLink to="/">
+          <Logo>Artion</Logo>
+        </StyledLink>
+        <StyledLink to="/">
+          <PiUserCircleThin size={40} />
+        </StyledLink>
+      </HeaderContainer>
+      {isMenuOpen && (
+        <SideMenu
+          handleToggle={handleToggle}
+          isMenuOpen={isMenuOpen}
+        ></SideMenu>
+      )}
+    </>
   );
 }

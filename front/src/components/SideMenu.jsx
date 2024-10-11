@@ -1,17 +1,23 @@
-import { CiMenuBurger } from "react-icons/ci";
+import { TfiClose } from "react-icons/tfi";
 import styled from "styled-components";
 import React from "react";
 import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
 
-export default function SideMenu({ handleToggle }) {
+export default function SideMenu({ handleToggle, isMenuOpen }) {
   const MenuContainer = styled.div`
     position: fixed;
-    width: 30vw;
-    height: 100vh;
+    width: 30%;
+    min-width: 250px;
+    max-width: 350px;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     z-index: 1000;
-    padding: 20px;
+    padding: 30px;
+    background-color: white;
   `;
 
   const CategoryContainer = styled.div`
@@ -21,14 +27,14 @@ export default function SideMenu({ handleToggle }) {
 
   const MenuIcon = styled.div`
     cursor: pointer;
-    margin-bottom: 30px;
+    margin-bottom: 43px;
   `;
 
   const MenuContent = styled.div`
     margin-top: 50px;
   `;
 
-  const UnstyledLink = styled(Link)`
+  const StyledLink = styled(Link)`
     cursor: pointer;
     text-decoration: none;
     color: inherit;
@@ -36,25 +42,26 @@ export default function SideMenu({ handleToggle }) {
 
   const StyledParagraph = styled.p`
     margin: 1px 0;
+    user-select: none;
   `;
 
   const StyledHeading = styled.h3`
     margin-top: 10px;
     margin-bottom: 5px;
-
     font-weight: 500;
+    user-select: none;
   `;
 
   return (
     <MenuContainer>
       <MenuIcon>
-        <CiMenuBurger size={30} onClick={handleToggle} />
+        <TfiClose size={30} onClick={handleToggle} />
       </MenuIcon>
       <SearchBar></SearchBar>
       <MenuContent>
         <StyledHeading>Category</StyledHeading>
         <CategoryContainer>
-          <UnstyledLink to="/">
+          <StyledLink to="/">
             <StyledParagraph>유화</StyledParagraph>
             <StyledParagraph>수채화</StyledParagraph>
             <StyledParagraph>아크릴화</StyledParagraph>
@@ -70,17 +77,17 @@ export default function SideMenu({ handleToggle }) {
             <StyledParagraph>추상화</StyledParagraph>
             <StyledParagraph>누드화</StyledParagraph>
             <StyledParagraph>초상화</StyledParagraph>
-          </UnstyledLink>
+          </StyledLink>
         </CategoryContainer>
-        <UnstyledLink to="/">
+        <StyledLink to="/">
           <StyledHeading>My Page</StyledHeading>
-        </UnstyledLink>
-        <UnstyledLink to="/">
+        </StyledLink>
+        <StyledLink to="/">
           <StyledHeading>Subscribe & Like</StyledHeading>
-        </UnstyledLink>
-        <UnstyledLink to="/">
+        </StyledLink>
+        <StyledLink to="/">
           <StyledHeading>Login</StyledHeading>
-        </UnstyledLink>
+        </StyledLink>
       </MenuContent>
     </MenuContainer>
   );
