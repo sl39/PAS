@@ -65,4 +65,9 @@ public interface ArtRepository extends JpaRepository<ArtEntity, Integer> {
             "WHERE a.user_entity_user_pk = :user_pk "
             ,nativeQuery = true)
     List<ArtEntity> findAllByUser_pk(@Param("user_pk") Integer user_pk);
+
+    @Query(value = "SELECT * FROM art_entity a " +
+            "WHERE a.art_pk = :art_pk "
+            ,nativeQuery = true)
+    ArtEntity findByArt_pk(Integer art_pk);
 }

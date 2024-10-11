@@ -15,4 +15,9 @@ public interface PayingRepository extends JpaRepository<PayingEntity,Integer> {
             "WHERE a.auction_auction_pk = :auction "
             ,nativeQuery = true)
 List<PayingEntity> findAllByAuction_pk(@Param("auction") Integer auction);
+
+    @Query(value = "SELECT * FROM paying_entity a " +
+            "WHERE a.auction_auction_pk = :auction "
+            ,nativeQuery = true)
+    PayingEntity findOneByAuction_pk(@Param("auction") Integer auction);
 }

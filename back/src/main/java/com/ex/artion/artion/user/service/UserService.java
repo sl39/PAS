@@ -2,8 +2,14 @@ package com.ex.artion.artion.user.service;
 
 import com.ex.artion.artion.art.entity.ArtEntity;
 import com.ex.artion.artion.art.respository.ArtRepository;
+import com.ex.artion.artion.artfollowing.entity.ArtFollowingEntity;
+import com.ex.artion.artion.artfollowing.respository.ArtFollowingRepository;
+import com.ex.artion.artion.artimage.entity.ArtImageEntity;
+import com.ex.artion.artion.artimage.respository.ArtImageRepository;
 import com.ex.artion.artion.auction.entity.AuctionEntity;
 import com.ex.artion.artion.auction.respository.AuctionRepository;
+import com.ex.artion.artion.following.entity.FollowingEntity;
+import com.ex.artion.artion.following.respository.FollowingRepository;
 import com.ex.artion.artion.paying.entity.PayingEntity;
 import com.ex.artion.artion.paying.repository.PayingRepository;
 import com.ex.artion.artion.order.respository.OrderRepostory;
@@ -13,9 +19,11 @@ import com.ex.artion.artion.user.dto.UserUpdateDto;
 import com.ex.artion.artion.user.entity.UserEntity;
 import com.ex.artion.artion.user.respository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -31,6 +39,9 @@ public class UserService {
     private final AuctionRepository auctionRepository;
     private final PayingRepository payingRepository;
     private final OrderRepostory orderRepostory;
+    private final ArtImageRepository artImageRepository;
+    private final ArtFollowingRepository artFollowingRepository;
+    private final FollowingRepository followingRepository;
 
     // 소셜로그인 전 기본적인 유저 생성 테스트
     public void createUser(@RequestBody UserCreateDto dto) {
@@ -48,7 +59,7 @@ public class UserService {
         this.userRepository.save(user);
     }
 
-    public UserEntity searchUser(@RequestParam(value="user_pk") Integer user_pk) {
+    public UserEntity searchUser(@RequestParam(value = "user_pk") Integer user_pk) {
         UserEntity founduser = userRepository.findById(user_pk)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
         return founduser;
@@ -122,12 +133,12 @@ public class UserService {
                     // 결과 리스트에 추가
                     result.add(map);
                     System.out.println(result);
-                    }
                 }
-
             }
-            return ResponseEntity.ok(result);
+
         }
+        return ResponseEntity.ok(result);
+    }
 
 
     // user_pk로 구매내역(낙찰) 조회
@@ -279,6 +290,26 @@ public class UserService {
         }
         return ResponseEntity.ok(result);
     }
+
+    // 구매내역 전체
+    public ResponseEntity<List<Map<String, Object>>> requestPurchaseAll(@RequestParam(value = "user_pk") Integer user_pk) {
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        if(requestPurchaseBid(user_pk).getBody() != null || requestPurchaseSuccess(user_pk).getBody() != null || requestPurchaseEnd(user_pk).getBody() != null) {
+            result.addAll(requestPurchaseBid(user_pk).getBody());
+            result.addAll(requestPurchaseSuccess(user_pk).getBody());
+            result.addAll(requestPurchaseEnd(user_pk).getBody());
+        } else {
+            Map<String, Object> errorMessage = new HashMap<>();
+            errorMessage.put("에러", "구매이력이 존재하지 않습니다");
+            result.add(errorMessage);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        }
+        return ResponseEntity.ok(result);
+    }
+
+
+
 
     // user_pk로 판매내역(입찰 중) 조회
     public ResponseEntity<List<Map<String, Object>>> requestSaleBid(@RequestParam(value = "user_pk") Integer user_pk) {
@@ -520,40 +551,303 @@ public class UserService {
         }
         return ResponseEntity.ok(result);
     }
-}
 
-    // user_pk로 판매내역(입찰 중) 조회 - 낙찰된 거 클릭이랑 섞인 듯.
-//    public  List<Map<String, Object>> requestSaleList(@RequestParam(value="user_pk") Integer user_pk) {
-//        UserEntity user = userRepository.findById(user_pk)
-//                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
-//        List<ArtEntity> art = artRepository.findAllByUser_pk(user.getUser_pk());
-//
-//        List <Map<String, Object>> result = new ArrayList<>();
-//
-//        for (ArtEntity artEntity : art) {
-//            Map<String, Object> map = new HashMap<>();
-//
-//            AuctionEntity auction = auctionRepository.findAllByArt_pk(artEntity.getArt_pk());
-//            Integer auction_pk = auction.getAuction_pk();
-//            Long current_price = auction.getCurrent_price();
-//
-//            Integer art_pk = artEntity.getArt_pk();
-//            String artName = artEntity.getArt_name();
-//            String painter = artEntity.getPainter();
-//            LocalDate createdAt = artEntity.getCreatedAt();
-//            LocalDateTime endTime = artEntity.getEndTime();
-//
-//            map.put("auction_pk", auction_pk);
-//            map.put("current_price", current_price);
-//            map.put("art_pk", art_pk);
-//            map.put("artName", artName);
-//            map.put("painter", painter);
-//            map.put("createdAt", createdAt);
-//            map.put("endTime", endTime);
-//
-//            // 결과 리스트에 추가
-//            result.add(map);
-//            System.out.println(result);
-//        }
-//        return result;
-//    }
+    // 판매내역 전체
+    public ResponseEntity<List<Map<String, Object>>> requestSaleAll(@RequestParam(value = "user_pk") Integer user_pk) {
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        if(requestSaleBid(user_pk).getBody() != null || requestSaleSuccess(user_pk).getBody() != null || requestSaleEnd(user_pk).getBody() != null) {
+            result.addAll(requestSaleBid(user_pk).getBody());
+            result.addAll(requestSaleSuccess(user_pk).getBody());
+            result.addAll(requestSaleEnd(user_pk).getBody());
+        } else {
+            Map<String, Object> errorMessage = new HashMap<>();
+            errorMessage.put("에러", "판매이력이 존재하지 않습니다");
+            result.add(errorMessage);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    //유저정보 - 그림, current_auction_status에 따라 price가 달라지게,
+    public ResponseEntity<Map<String, Object>> requestMyArt(@RequestParam(value = "user_pk") Integer user_pk) {
+        UserEntity user;
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> itemList = new ArrayList<>();
+        Map<String, Object> itemData = new HashMap<>();
+        try {
+            user = userRepository.findById(user_pk)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+        } catch (Exception e) {
+            result.put("에러", "사용자가 존재하지 않습니다");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        }
+        Map<String, Object> mainData = new HashMap<>();
+
+        // 소셜로그인 시 여기서 이미지 불러와야 함
+        String User_name = user.getUser_name();
+        result.put("User_name", User_name);
+
+        List<FollowingEntity> Follow = followingRepository.findBySeller(user);
+        result.put("Follow", Follow.size());
+
+        List<ArtEntity> art = artRepository.findAllByUser_pk(user.getUser_pk());
+        if (art.isEmpty()) {
+            result.put("에러", "사용자가 등록한 그림이 없습니다");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        } else {
+            for (ArtEntity artEntity : art) {
+                List<AuctionEntity> auction = auctionRepository.findAllByArt_pk(artEntity.getArt_pk());
+                if (auction == null) {
+                    result.put("에러", "사용자는 경매를 진행한 적이 없습니다");
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+                } else {
+                    if (artEntity.getCurrent_auction_status() != 0) {
+                        Integer art_pk = artEntity.getArt_pk();
+                        String art_name = artEntity.getArt_name();
+                        Long price = auctionRepository.findMaxPriceByArtPk(art_pk);
+                        List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
+
+                        if (!artImage.isEmpty()) {
+                            String image = String.valueOf(artImage.get(0).getArt_image_url());
+                            itemData.put("image", image);
+                        } else {
+                            String image = null;
+                            itemData.put("image", image);
+                        }
+
+                        Integer artFollows = artFollowingRepository.countByArtPk(artEntity.getArt_pk());
+
+                        if (artFollows != null) {
+                            itemData.put("follows", artFollows);
+                        } else {
+                            itemData.put("follows", 0);
+                        }
+
+                        itemData.put("price", price);
+                        itemData.put("art_name", art_name);
+                        itemData.put("art_pk", art_pk);
+
+                        itemList.add(itemData);
+                        result.put("artList", itemList);
+                    } else {
+                        Integer art_pk = artEntity.getArt_pk();
+                        String art_name = artEntity.getArt_name();
+                        Long price = artEntity.getMinP();
+                        List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
+
+                        if (artImage != null) {
+                            String image = String.valueOf(artImage.get(0).getArt_image_url());
+                            itemData.put("image", image);
+                        } else {
+                            String image = null;
+                            itemData.put("image", image);
+                        }
+
+                        Integer artFollows = artFollowingRepository.countByArtPk(artEntity.getArt_pk());
+
+                        if (artFollows != null) {
+                            itemData.put("follows", artFollows);
+                        } else {
+                            itemData.put("follows", 0);
+                        }
+
+                        itemData.put("price", price);
+                        itemData.put("art_name", art_name);
+                        itemData.put("art_pk", art_pk);
+
+                        itemList.add(itemData);
+                        result.put("artList", itemList);
+
+                    }
+                }
+            }
+            return ResponseEntity.ok(result);
+        }
+    }
+
+    //유저 정보 반환
+    public ResponseEntity<Map<String, Object>> requestMyProfile(@PathVariable(value = "user_pk") Integer user_pk) {
+        UserEntity user;
+        Map<String, Object> result = new HashMap<>();
+        try {
+            user = userRepository.findById(user_pk)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+        } catch (Exception e) {
+            result.put("에러", "사용자가 존재하지 않습니다");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        }
+
+        String User_name = user.getUser_name();
+
+        // 카카오 로그인 시 이미지 불러오기 해야함.
+        String Image = "https://png.pngtree.com/thumb_back/fh260/background/20230613/pngtree-small-white-rabbit-in-the-grass-image_2915502.jpg";
+
+        result.put("User_name", User_name);
+        result.put("User_image", Image);
+
+        return ResponseEntity.ok(result);
+    }
+
+    public ResponseEntity<Map<String, Object>> requestMyProfileAndFollows(@PathVariable(value = "user_pk") Integer user_pk) {
+        UserEntity user;
+        Map<String, Object> result = new HashMap<>();
+        try {
+            user = userRepository.findById(user_pk)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+        } catch (Exception e) {
+            result.put("에러", "사용자가 존재하지 않습니다");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        }
+
+        String User_name = user.getUser_name();
+
+        // 카카오 로그인 시 이미지 불러오기 해야함.
+        String Image = "https://png.pngtree.com/thumb_back/fh260/background/20230613/pngtree-small-white-rabbit-in-the-grass-image_2915502.jpg";
+
+        result.put("User_name", User_name);
+        result.put("User_image", Image);
+
+        Integer artFollow = artFollowingRepository.findByUserEntity(user).size();
+        result.put("art_following", artFollow);
+
+        Integer follower = followingRepository.findByCustomer(user).size();
+        result.put("follower", follower);
+
+        Integer following = followingRepository.findBySeller(user).size();
+        result.put("following", following);
+
+        return ResponseEntity.ok(result);
+    }
+
+    public ResponseEntity<List<Map<String, Object>>> requestArtFollowing(@PathVariable(value = "user_pk") Integer user_pk) {
+        UserEntity user;
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        try {
+            user = userRepository.findById(user_pk)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+        } catch (Exception e) {
+            Map<String, Object> errorMessage = new HashMap<>();
+            errorMessage.put("에러", "사용자가 존재하지 않습니다");
+            result.add(errorMessage);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        }
+
+        List<ArtFollowingEntity> artFollowing = artFollowingRepository.findByUserEntity(user);
+        if (artFollowing != null) {
+            for (ArtFollowingEntity artFollowingEntity : artFollowing) {
+                Map<String, Object> map = new HashMap<>();
+
+                ArtEntity art = artFollowingEntity.getArtEntity();
+                String art_name = art.getArt_name();
+                Integer art_pk = art.getArt_pk();
+
+                List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(art_pk);
+                if (!artImage.isEmpty()) {
+                    String image = String.valueOf(artImage.get(0).getArt_image_url());
+                    map.put("image", image);
+                } else {
+                    String image = null;
+                    map.put("image", image);
+                }
+
+                map.put("art_pk", art_pk);
+                map.put("art_name", art_name);
+                map.put("user_pk", user_pk);
+                result.add(map);
+            }
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    public ResponseEntity<List<Map<String, Object>>> requestFollowing(@PathVariable(value = "user_pk") Integer user_pk) {
+        UserEntity user;
+        List<Map<String, Object>> result = new ArrayList<>();
+        try {
+            user = userRepository.findById(user_pk)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+        } catch (Exception e) {
+            Map<String, Object> errorMessage = new HashMap<>();
+            errorMessage.put("에러", "사용자가 존재하지 않습니다");
+            result.add(errorMessage);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        }
+
+        // 여기서 이미 내가 구독한 사람들 다 가져왔음.
+        List<FollowingEntity> Following = followingRepository.findByCustomer(user);
+        if (Following != null) {
+            for (FollowingEntity followingEntity : Following) {
+                Map<String, Object> map = new HashMap<>();
+
+                Integer Seller_pk = followingEntity.getSeller().getUser_pk();
+
+                // 카카오 로그인 시 이미지 불러오기 해야함.
+                String user_image = "https://png.pngtree.com/thumb_back/fh260/background/20230613/pngtree-small-white-rabbit-in-the-grass-image_2915502.jpg";
+
+                String user_name = followingEntity.getSeller().getUser_name();
+
+//                카톡 이미지가 없을 수도 있으니까 일단 남겨놓자.
+//                List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(art_pk);
+//                if (!artImage.isEmpty()) {
+//                    String image = String.valueOf(artImage.get(0).getArt_image_url());
+//                    map.put("image", image);
+//                } else {
+//                    String image = null;
+//                    map.put("image", image);
+//                }
+
+                map.put("user_image", user_image);
+                map.put("user_name", user_name);
+                map.put("user_pk", Seller_pk);
+                result.add(map);
+            }
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    public ResponseEntity<List<Map<String, Object>>> requestMyFollower (@PathVariable(value = "user_pk") Integer user_pk) {
+        UserEntity user;
+        List<Map<String, Object>> result = new ArrayList<>();
+        try {
+            user = userRepository.findById(user_pk)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+        } catch (Exception e) {
+            Map<String, Object> errorMessage = new HashMap<>();
+            errorMessage.put("에러", "사용자가 존재하지 않습니다");
+            result.add(errorMessage);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        }
+
+        // 날 구독한 사람들
+        List<FollowingEntity> Following = followingRepository.findBySeller(user);
+        if (Following != null) {
+            for (FollowingEntity followingEntity : Following) {
+                Map<String, Object> map = new HashMap<>();
+
+                // 필요없겠지?
+//                Integer Seller_pk = followingEntity.getCustomer().getUser_pk();
+
+                // 카카오 로그인 시 이미지 불러오기 해야함.
+                String user_image = "https://png.pngtree.com/thumb_back/fh260/background/20230613/pngtree-small-white-rabbit-in-the-grass-image_2915502.jpg";
+
+                String user_name = followingEntity.getCustomer().getUser_name();
+
+//                카톡 이미지가 없을 수도 있으니까 일단 남겨놓자.
+//                List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(art_pk);
+//                if (!artImage.isEmpty()) {
+//                    String image = String.valueOf(artImage.get(0).getArt_image_url());
+//                    map.put("image", image);
+//                } else {
+//                    String image = null;
+//                    map.put("image", image);
+//                }
+
+                map.put("user_image", user_image);
+                map.put("user_name", user_name);
+                result.add(map);
+            }
+        }
+        return ResponseEntity.ok(result);
+    }
+}

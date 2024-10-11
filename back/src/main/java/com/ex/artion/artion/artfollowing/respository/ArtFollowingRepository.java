@@ -21,4 +21,5 @@ public interface ArtFollowingRepository extends JpaRepository<ArtFollowingEntity
     Integer countByArtPk(@Param("art_pk") Integer art_pk);
     Optional<ArtFollowingEntity> findByUserEntityAndArtEntity(UserEntity userEntity, ArtEntity artEntity);
     void deleteByUserEntityAndArtEntity(UserEntity userEntity, ArtEntity artEntity);
+    List<ArtFollowingEntity> findByUserEntity(UserEntity userEntity);
 }

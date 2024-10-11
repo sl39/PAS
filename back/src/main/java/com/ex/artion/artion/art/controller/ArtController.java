@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -23,36 +24,51 @@ public class ArtController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createArt(
-        @RequestBody ArtCreateDto dto,
-        @RequestParam(value = "user_pk") Integer user_pk) {
+            @RequestBody ArtCreateDto dto,
+            @RequestParam(value = "user_pk") Integer user_pk) {
         artService.createArt(dto, user_pk);
         return ResponseEntity.ok("그림 추가 성공!");
     }
 
     @PutMapping("/update")
     public ResponseEntity<String> updateArt(
-        @RequestBody ArtUpdateDto dto,
-        @RequestParam(value = "art_pk") Integer art_pk) {
+            @RequestBody ArtUpdateDto dto,
+            @RequestParam(value = "art_pk") Integer art_pk) {
         artService.updateArt(dto, art_pk);
         return ResponseEntity.ok("그림 수정 성공!");
     }
 
+    @PostMapping("/changed")
+    public void updateArt(
+            @RequestBody ArtBidDto dto,
+            @RequestParam(value = "art_pk") Integer art_pk) {
+        artService.changedArt(dto, art_pk);
+        System.out.println("current_auction_status 변경 : " + dto.getCurrent_auction_status());
+    }
+
     @PostMapping("/delete")
     public ResponseEntity<String> deleteArt(
-         @RequestParam(value = "art_pk") Integer art_pk) {
+            @RequestParam(value = "art_pk") Integer art_pk) {
         artService.deleteArt(art_pk);
         return ResponseEntity.ok("그림 삭제 성공!");
     }
 
+    @PostMapping("/ordered/{art_pk}")
+    public ResponseEntity<Map<String, Object>> orderedArt(
+            @PathVariable(value="art_pk") Integer art_pk) {
+        return artService.orderedArt(art_pk);
+    }
+
     @GetMapping("/detail")
     public ResponseEntity<ArtDetailResponseDto> artDetail(@RequestParam Integer artPk, @RequestParam Integer userPk) {
-        return new ResponseEntity<>(artService.getArtDetail(artPk,userPk), HttpStatus.OK);
+        return new ResponseEntity<>(artService.getArtDetail(artPk, userPk), HttpStatus.OK);
     }
 
     @GetMapping("/main/popular")
     public ResponseEntity<List<ArtSearchResponseDto>> getPopular() {
         return new ResponseEntity<>(artService.getPopular(), HttpStatus.OK);
     }
+
     @GetMapping("/main/recent")
     public ResponseEntity<List<ArtSearchResponseDto>> getRecent() {
         return new ResponseEntity<>(artService.getRecent(), HttpStatus.OK);
@@ -63,26 +79,13 @@ public class ArtController {
             @RequestParam(value = "keyword", defaultValue = "") String keyword,
             @RequestParam(value = "category", defaultValue = "") String category,
             @RequestParam(value = "minPrice", defaultValue = "0") Long minPrice,
-            @RequestParam(value = "maxPrice", defaultValue =  "2036854000000") Long maxPrice,
+            @RequestParam(value = "maxPrice", defaultValue = "2036854000000") Long maxPrice,
             @RequestParam(value = "sortBy", defaultValue = "LIKE") String sortBy,
             @RequestParam(value = "sort", defaultValue = "DESC") String sort,
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize
-            ) {
+    ) {
 
-        return new ResponseEntity<>(artService.getSearch(keyword,category,minPrice,maxPrice,sortBy,sort,page,pageSize), HttpStatus.OK);
+        return new ResponseEntity<>(artService.getSearch(keyword, category, minPrice, maxPrice, sortBy, sort, page, pageSize), HttpStatus.OK);
     }
-
-//    @GetMapping("/bid")
-//    public ResponseEntity<ArtBidDto> artBid(@RequestParam(value = "auction_pk") Integer auction_pk) {
-//        return ResponseEntity.ok(artService.getBidDetail(auction_pk);
-//    }
 }
-
-//    @PostMapping("/detail")
-//    public ResponseEntity<Map<String, Object>> detailArt(
-//            @RequestParam(value = "art_pk") Integer art_pk) {
-//        artService.artDetail(art_pk);
-//        return ResponseEntity.ok(artService.artDetail(art_pk));
-//    }
-//}

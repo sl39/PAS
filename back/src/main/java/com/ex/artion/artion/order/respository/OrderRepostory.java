@@ -13,4 +13,9 @@ public interface OrderRepostory extends JpaRepository<OrderEntity,Integer> {
             "WHERE a.paying_paying_pk = :paying_pk "
             ,nativeQuery = true)
     List<OrderEntity> findAllByPaying_pk(@Param("paying_pk") Integer paying_pk);
+
+    @Query(value = "SELECT * FROM order_entity a " +
+            "WHERE a.paying_paying_pk = :paying_pk "
+            ,nativeQuery = true)
+    OrderEntity findOneByPaying_pk(@Param("paying_pk") Integer paying_pk);
 }
