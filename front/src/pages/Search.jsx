@@ -1,6 +1,7 @@
 import React from "react";
-import { ArtworkInProfile } from "../components";
+import { ArtworkInProfile, MainFeedItem } from "../components";
+import MainFeed from "./MainFeed";
 
 export default function Search() {
-  return <ArtworkInProfile></ArtworkInProfile>;
+  return <MainFeedItem></MainFeedItem>;
 }

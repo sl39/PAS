@@ -10,6 +10,9 @@ export default function SearchBar() {
     align-items: center;
     padding-right: 12px;
     border: 1px solid #000;
+    max-width: 835px;
+    margin-bottom: 40px;
+    width: 100%;
   `;
 
   const SearchInput = styled.input`

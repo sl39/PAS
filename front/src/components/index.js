@@ -5,6 +5,7 @@ import ArtistItem from "./ArtistItem";
 import ArtworkItem from "./ArtworkItem";
 import ArtworkInProfile from "./ArtworkInProfile";
 import SearchFilter from "./SearchFilter";
+import MainFeedItem from "./MainFeedItem";
 
 export {
   Header,
@@ -14,4 +15,5 @@ export {
   ArtworkItem,
   ArtworkInProfile,
   SearchFilter,
+  MainFeedItem,
 };
