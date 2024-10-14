@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { GoHeartFill } from "react-icons/go";
 
-export default function ArtworkItem() {
+export default function ArtworkItem({ artWork }) {
   // Styled Components
   const ArtworkContainer = styled.div`
     margin: 5px;
@@ -64,16 +64,14 @@ export default function ArtworkItem() {
     <StyledLink to="/">
       <ArtworkContainer>
         <ImageContainer>
-          <SquareImage src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTn697KapdshZw4TZFDoybC8SzUhBlqTJO3A&s"></SquareImage>
+          <SquareImage src={artWork.artImage}></SquareImage>
         </ImageContainer>
-        <BoldParagraph>빈센트 반 고흐 빈센트 반 고흐</BoldParagraph>
-        <NormalParagraph>
-          빈센트 반 고흐의 자화상으로, 빈센트 반 고흐의 자화상
-        </NormalParagraph>
-        <BoldParagraph>art_price원</BoldParagraph>
+        <BoldParagraph>{artWork.artistName}</BoldParagraph>
+        <NormalParagraph>{artWork.artName}</NormalParagraph>
+        <BoldParagraph>{artWork.price} 원</BoldParagraph>
         <LikeBox>
           <HeartIcon></HeartIcon>
-          <NormalParagraph>132</NormalParagraph>
+          <NormalParagraph>{artWork.artFollowingNum}</NormalParagraph>
         </LikeBox>
       </ArtworkContainer>
     </StyledLink>

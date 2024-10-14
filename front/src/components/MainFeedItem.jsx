@@ -4,9 +4,7 @@ import ArtworkItem from "./ArtworkItem";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useRef } from "react";
 
-export default function MainFeedItem() {
-  // todo: props로 Best인지 New인지 받고(Text, Api 구분용), 안에 넣을 Artwork List 받아오기
-
+export default function MainFeedItem({ type, artWorkList }) {
   // Styled Components
   const MainFeedContainer = styled.div`
     overflow: hidden;
@@ -71,20 +69,22 @@ export default function MainFeedItem() {
   return (
     <>
       <MainFeedContainer>
-        <BoldParagraph>Most Popular</BoldParagraph>
-        <NormalParagraph>인기 작품</NormalParagraph>
+        {type === "best" ? (
+          <>
+            <BoldParagraph>Most Popular</BoldParagraph>
+            <NormalParagraph>인기 작품</NormalParagraph>
+          </>
+        ) : (
+          <>
+            <BoldParagraph>New Arrivals</BoldParagraph>
+            <NormalParagraph>신규 작품</NormalParagraph>
+          </>
+        )}
         <LeftArrow onClick={scrollLeft}></LeftArrow>
         <ContentBox ref={contentRef}>
-          <ArtworkItem></ArtworkItem>
-          <ArtworkItem></ArtworkItem>
-          <ArtworkItem></ArtworkItem>
-          <ArtworkItem></ArtworkItem>
-          <ArtworkItem></ArtworkItem>
-          <ArtworkItem></ArtworkItem>
-          <ArtworkItem></ArtworkItem>
-          <ArtworkItem></ArtworkItem>
-          <ArtworkItem></ArtworkItem>
-          <ArtworkItem></ArtworkItem>
+          {artWorkList.map((item) => (
+            <ArtworkItem key={item.art_pk} artWork={item}></ArtworkItem>
+          ))}
         </ContentBox>
         <RightArrow onClick={scrollRight}></RightArrow>
       </MainFeedContainer>
