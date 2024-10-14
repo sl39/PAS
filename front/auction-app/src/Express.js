@@ -26,7 +26,7 @@ app.post('/payment', async (req, res) => {
       buyer_name: buyerName,
       buyer_tel: buyerTel,
       buyer_email: buyerEmail,
-      pg: 'INICIS', // PG사 코드
+      pg: 'html5_inicis.INIpayTest', // PG사 코드
     }, {
       headers: {
         Authorization: accessToken // 발급받은 Access Token

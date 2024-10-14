@@ -15,7 +15,6 @@ const AuctionResult = ({
   isAuctionEnded,
 }) => {
   const [isImpLoaded, setIsImpLoaded] = useState(false);
-
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://cdn.iamport.kr/v1/iamport.js';
@@ -24,33 +23,31 @@ const AuctionResult = ({
     document.body.appendChild(script);
   }, []);  
 
-  const handlePayment = async () => {
-    try {
-      const response = await fetch('/payment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          amount: finalPrice,
-          buyerName: winnerName,
-          buyerTel: winnerContact,
-          buyerEmail: 'test@example.com', // 테스트 이메일
-        }),
-      });
+  const handlePayment = () => {
+    const IMP = window.IMP; // 아임포트 객체
+    IMP.init("imp08864537"); // 가맹점 식별코드
   
-      const data = await response.json();
-  
-      if (data.success) {
+    IMP.request_pay({
+      pg: 'html5_inicis', // 새로운 PG 코드
+      pay_method: 'card', // 결제 방식
+      merchant_uid: `merchant_${new Date().getTime()}`, // 결제 고유 번호
+      name: artName, // 상품명
+      amount: finalPrice, // 가격
+      buyer_email: 'test@example.com', // 구매자 이메일
+      buyer_name: winnerName, // 구매자 이름
+      buyer_tel: winnerContact, // 구매자 연락처
+      buyer_addr: winnerAddress, // 구매자 주소
+      buyer_postcode: '123-456', // 구매자 우편번호
+    }, function (rsp) {
+      console.log('결제 요청 결과:', rsp); // 응답 로그 추가
+      if (rsp.success) {
+        // 결제 성공 처리
         alert('결제가 완료되었습니다.');
-        // 결제 성공 후 처리 로직
+        // 추가적인 처리 로직
       } else {
-        alert(`결제에 실패하였습니다. 이유: ${data.message}`);
+        alert(`결제에 실패하였습니다. 이유: ${rsp.error_msg}`);
       }
-    } catch (error) {
-      alert('결제 요청 중 오류가 발생했습니다.');
-      console.error(error);
-    }
+    });
   };  
 
   return (

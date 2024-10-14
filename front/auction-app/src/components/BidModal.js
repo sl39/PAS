@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
-const BidModal = ({ showBidModal, setShowBidModal, bidPrice, setBidPrice, handleBid, currentPrice }) => {
+const BidModal = ({ showBidModal, setShowBidModal, bidPrice, setBidPrice, handleBid, currentPrice}) => {
   const handleSubmit = () => {
     handleBid(); // handleBid 호출
   };

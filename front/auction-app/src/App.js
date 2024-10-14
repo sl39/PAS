@@ -5,13 +5,20 @@ import BidModal from './components/BidModal';
 import AuctionInfo from './components/AuctionInfo';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import * as PortOne from "@portone/browser-sdk/v2";
+import * as StompJs from "@stomp/stompjs";
+import axios from 'axios';
+
+// axios 기본 URL 설정
+axios.defaults.baseURL = 'http://artion.site:8080';
 
 const App = () => {
-  const [currentPrice, setCurrentPrice] = useState(1000000);
-  const [maxPrice, setMaxPrice] = useState(1500000);
+  const artPk = 7;
+  const userPk = 1;
+  
+  const [currentPrice, setCurrentPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(0);
   const [showBidModal, setShowBidModal] = useState(false);
-  const [userBid, setUserBid] = useState(null);
+  const [userBid, setUserBid] = useState(() => JSON.parse(localStorage.getItem('userBid')) || null);
   const [bidPrice, setBidPrice] = useState('');
   const [isAuctionEnded, setIsAuctionEnded] = useState(false);
   const [bidResult, setBidResult] = useState(null);
@@ -22,23 +29,104 @@ const App = () => {
   const [winnerAddress, setWinnerAddress] = useState('');
   const [shippingMethod, setShippingMethod] = useState('일반배송');
 
-  const auctionEndTime = new Date('2024-10-11T17:50:00');
+  // 경매 정보 가져오기
+  const fetchAuctionDetails = async () => {
+    try {
+      const response = await axios.get(`/api/auction/detail`, {
+        params: { artPk, userPk },
+      });
+      const data = response.data;
+      setCurrentPrice(data.currentPrice);
+      setMaxPrice(data.maxPrice);
+      localStorage.setItem('currentPrice', JSON.stringify(data.currentPrice));
+      localStorage.setItem('maxPrice', JSON.stringify(data.maxPrice));
+    } catch (error) {
+      console.error('Error fetching auction details:', error.response ? error.response.data : error.message);
+      toast.error('경매 정보를 가져오는 데 실패했습니다.');
+    }
+  };
 
-  // 남은 시간 계산
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
-      const remaining = auctionEndTime - now;
+  // 입찰 처리
+  const handleBid = async (maxBid) => {
+    if (isAuctionEnded) {
+      toast.error('경매가 종료되었습니다. 더 이상 입찰할 수 없습니다.');
+      return;
+    }
 
-      if (remaining <= 0) {
-        clearInterval(interval);
-        setIsAuctionEnded(true);
-        toast.error('경매가 종료되었습니다.');
+    // 유효성 검증
+    if (!validateBid(maxBid)) return;
+
+    try {
+      await axios.post(`/api/auction/bid/${artPk}`, {
+        userPk,
+        price: maxBid,
+      });
+
+      // 입찰가가 현재가보다 높고 최대가보다 낮은 경우
+      if (maxBid > currentPrice) {
+        setUserBid(maxBid);
+        localStorage.setItem('userBid', JSON.stringify(maxBid));
+        setCurrentPrice(maxBid);
+        localStorage.setItem('currentPrice', JSON.stringify(maxBid));
+        toast.success('입찰이 성공적으로 이루어졌습니다.');
       }
-    }, 1000);
 
-    return () => clearInterval(interval);
-  }, [auctionEndTime]);
+      // 입찰가가 최대가와 같을 경우 즉시 경매 종료
+      if (maxBid === maxPrice) {
+        setUserBid(maxBid);
+        localStorage.setItem('userBid', JSON.stringify(maxBid));
+        setCurrentPrice(maxBid);
+        localStorage.setItem('currentPrice', JSON.stringify(maxBid));
+        setBidResult({ success: true, myBid: maxBid });
+        toast.success('축하합니다! 낙찰되었습니다.');
+        setIsAuctionEnded(true);
+      }
+    } catch (error) {
+      console.error('Error placing bid:', error.response ? error.response.data : error.message);
+      toast.error('입찰 처리에 실패하였습니다.');
+    }
+  };
+
+  // WebSocket 설정
+  useEffect(() => {
+    fetchAuctionDetails();
+
+    const client = new StompJs.Client({
+      brokerURL: "ws://artion.site:8080/api/socket/ws",
+      debug: (str) => { console.log(str); },
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+      onConnect: () => {
+        client.subscribe("/sub/auction/7", (message) => {
+          const data = JSON.parse(message.body);
+          
+          // 서버로부터 받은 경매 정보 업데이트
+          if (data.currentPrice !== currentPrice) {
+            setCurrentPrice(data.currentPrice);
+            localStorage.setItem('currentPrice', JSON.stringify(data.currentPrice));
+          }
+          if (data.maxPrice !== maxPrice) {
+            setMaxPrice(data.maxPrice);
+            localStorage.setItem('maxPrice', JSON.stringify(data.maxPrice));
+          }
+
+          if (data.isAuctionEnded) {
+            setIsAuctionEnded(true);
+            toast.error('경매가 종료되었습니다.');
+          }
+        });
+      },
+    });
+
+    client.activate();
+
+    return () => {
+      if (client.connected) {
+        client.deactivate();
+      }
+    };
+  }, [currentPrice, maxPrice]); // currentPrice와 maxPrice에 따라 의존성 배열 추가
 
   const validateBid = (maxBid) => {
     if (maxBid <= currentPrice) {
@@ -51,38 +139,6 @@ const App = () => {
     }
     return true;
   };
-
-  const handleBid = (maxBid) => {
-    if (isAuctionEnded) {
-      toast.error('경매가 종료되었습니다. 더 이상 입찰할 수 없습니다.');
-      return;
-    }
-  
-    // 유효성 검증
-    if (!validateBid(maxBid)) return;
-  
-    // 입찰가가 현재가보다 높고 최대가보다 낮은 경우
-    if (maxBid > currentPrice && maxBid < maxPrice) {
-      setUserBid(maxBid);
-      setCurrentPrice(maxBid); // 현재가를 입찰가로 업데이트
-      toast.success('입찰이 성공적으로 이루어졌습니다.');
-    }
-  
-    // 입찰가가 최대가와 같을 경우 즉시 경매 종료
-    if (maxBid === maxPrice) {
-      setUserBid(maxBid);
-      setCurrentPrice(maxBid); // 현재가를 최대가로 업데이트
-      setBidResult({ success: true, myBid: maxBid });
-      toast.success('축하합니다! 낙찰되었습니다.');
-      setIsAuctionEnded(true); // 경매 종료 상태로 설정
-    }
-    
-    // 입찰가가 현재가보다 낮은 경우
-    if (maxBid <= currentPrice) {
-      setBidResult({ success: false, myBid: maxBid });
-      toast.error('입찰가는 현재가보다 높아야 합니다.');
-    }
-  };  
 
   const handleCloseModal = () => {
     const bidAmount = Number(bidPrice);

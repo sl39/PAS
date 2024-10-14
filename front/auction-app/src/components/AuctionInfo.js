@@ -1,49 +1,68 @@
 import React, { useEffect, useState } from 'react';
 import AuctionResult from './AuctionResult';
+import axios from 'axios';
 
 const AuctionInfo = ({
-  artImages = ['https://www.ccnnews.co.kr/news/photo/201511/52489_56243_00.jpg'],
-  created = '2024-10-01',
-  curator = true,
-  artName = '임의 작품 이름',
-  artistName = '임의 작가 이름',
-  startPrice = 500000,
-  maxPrice = 1500000,
-  currentPrice,
+  artPk,
   setShowBidModal,
   myCurrentPrice,
   isAuctionEnded,
-  bidResult, // 입찰 결과 추가
-  winnerName,
-  winnerContact,
-  winnerAddress,
-  setWinnerName,
-  setWinnerContact,
-  setWinnerAddress,
-  shippingMethod,
-  setShippingMethod,
   handlePayment,
 }) => {
-  const auctionEndTime = new Date('2024-10-11T17:50:00');
-
+  const [auctionData, setAuctionData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // 남은 시간 상태
   const [timeRemaining, setTimeRemaining] = useState(0);
+  
+  // API에서 경매 정보 가져오기
+  const fetchAuctionDetails = async () => {
+    try {
+      const response = await axios.get(`/api/auction/detail`, {
+        params: {
+          artPk: 7,
+          userPk: 7, // 예시로 사용자의 PK 값, 필요시 수정
+        },
+      });
+      setAuctionData(response.data);
+      // 종료 시간을 기반으로 남은 시간 계산
+      const endTime = new Date(response.data.endTime);
+      const now = new Date();
+      setTimeRemaining(endTime - now);
+    } catch (error) {
+      setError('경매 정보를 가져오는 데 실패했습니다.');
+      console.error('Error fetching auction details:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
-      const remaining = auctionEndTime - now;
+    fetchAuctionDetails(); // 컴포넌트가 마운트될 때 한 번만 호출
 
-      if (remaining <= 0) {
-        clearInterval(interval);
-        setTimeRemaining(0);
-      } else {
-        setTimeRemaining(remaining);
-      }
+    const interval = setInterval(() => {
+      setTimeRemaining((prevTime) => {
+        if (prevTime <= 1000) {
+          clearInterval(interval);
+          setAuctionData((prevData) => ({ ...prevData, isAuctionEnded: true })); // 경매 종료 상태 업데이트
+          return 0;
+        }
+        return prevTime - 1000; // 1초씩 감소
+      });
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [auctionEndTime]);
+  }, []); // 의존성 배열을 빈 배열로 설정하여 한 번만 실행
 
+  // 로딩 중일 때와 에러 발생 시 처리
+  if (loading) return <p>로딩 중...</p>;
+  if (error) return <p>{error}</p>;
+
+  // API에서 받은 데이터로 상태 업데이트
+  const { artImages, created, artistName, artName, width, length, maxPrice, currentPrice } = auctionData;
+
+  // 남은 시간 계산 함수
   const formatTime = (time) => {
     const seconds = Math.floor((time / 1000) % 60);
     const minutes = Math.floor((time / 1000 / 60) % 60);
@@ -66,10 +85,8 @@ const AuctionInfo = ({
       <div className="col-md-6 mb-4 info-panel">
         <h5>{artName}</h5>
         <p>작가: {artistName}</p>
-        <p>재질: 팬넬에 아크릴</p>
-        <p>사이즈: 30 × 50 cm</p>
+        <p>사이즈: {width.toFixed(2)} × {length.toFixed(2)} cm</p>
         <p>제작일: {created}</p>
-        <p>큐레이터: {curator ? '있음' : '없음'}</p>
         <hr className="dotted-line" />
 
         {/* 경매 종료 상태에 따라 AuctionResult 컴포넌트 사용 */}
@@ -77,20 +94,12 @@ const AuctionInfo = ({
           <AuctionResult
             userBid={myCurrentPrice}
             finalPrice={currentPrice}
-            winnerName={winnerName}
-            winnerContact={winnerContact}
-            winnerAddress={winnerAddress}
-            shippingMethod={shippingMethod}
-            setWinnerName={setWinnerName}
-            setWinnerContact={setWinnerContact}
-            setWinnerAddress={setWinnerAddress}
-            setShippingMethod={setShippingMethod}
             handlePayment={handlePayment}
             isAuctionEnded={isAuctionEnded}
+            artName={artName}
           />
         ) : (
           <>
-            <p>시작가: KRW {startPrice?.toLocaleString() || '없음'}</p>
             <p>최대가: KRW {maxPrice?.toLocaleString() || '없음'}</p>
             <p>현재가: KRW {currentPrice?.toLocaleString() || '없음'}</p>
             <p>내 입찰가: KRW {myCurrentPrice?.toLocaleString() || '없음'}</p>
@@ -106,4 +115,3 @@ const AuctionInfo = ({
 };
 
 export default AuctionInfo;
-
