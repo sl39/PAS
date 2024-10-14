@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 public class AuctionBitResponseDto {
-    private Long price;
+    private Long currentPrice;
     private Integer userPk;
 }

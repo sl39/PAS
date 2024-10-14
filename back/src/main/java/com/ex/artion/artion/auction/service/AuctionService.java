@@ -69,7 +69,7 @@ public class AuctionService {
         auctionRepository.save(auction);
 
         AuctionBitResponseDto auctionBitResponseDto = AuctionBitResponseDto.builder()
-                .price(auction.getCurrent_price())
+                .currentPrice(auction.getCurrent_price())
                 .userPk(auction.getBid_user().getUser_pk())
                 .build();
         messagingTemplate.convertAndSend("/sub/auction/" + artPk, auctionBitResponseDto);
