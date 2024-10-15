@@ -46,9 +46,9 @@ class ArtionApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
-	@Autowired
-	private ScheduledMessageService service;
+//
+//	@Autowired
+//	private ScheduledMessageService service;
 
 //	@Test
 //	public void getTimeTest(){
