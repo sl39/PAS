@@ -60,6 +60,7 @@ export default function ArtworkItem({ artWork }) {
     color: red;
   `;
 
+  // 작품 상세 페이지 url에 {artWork.art_pk} 쓰면 됨
   return (
     <StyledLink to="/">
       <ArtworkContainer>

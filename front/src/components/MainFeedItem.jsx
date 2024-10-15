@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import ArtworkItem from "./ArtworkItem";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useRef } from "react";
@@ -19,9 +18,9 @@ export default function MainFeedItem({ type, artWorkList }) {
     overflow: hidden;
     display: flex;
     flex-shrink: 0;
+    scroll-behavior: smooth;
   `;
 
-  // todo: 비활성화 시 color: lightgrey 추가 + cursor: pointer 삭제 ;
   const LeftArrow = styled(IoIosArrowBack)`
     position: absolute;
     left: 10px;
