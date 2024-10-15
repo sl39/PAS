@@ -3,7 +3,8 @@ import AuctionResult from './AuctionResult';
 import axios from 'axios';
 
 const AuctionInfo = ({
-  artPk,
+  currentPrice,
+  maxPrice,
   setShowBidModal,
   myCurrentPrice,
   isAuctionEnded,
@@ -12,21 +13,14 @@ const AuctionInfo = ({
   const [auctionData, setAuctionData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
-  // 남은 시간 상태
   const [timeRemaining, setTimeRemaining] = useState(0);
-  
-  // API에서 경매 정보 가져오기
+
   const fetchAuctionDetails = async () => {
     try {
       const response = await axios.get(`/api/auction/detail`, {
-        params: {
-          artPk: 7,
-          userPk: 7, // 예시로 사용자의 PK 값, 필요시 수정
-        },
+        params: { artPk: 7, userPk: 7 },
       });
       setAuctionData(response.data);
-      // 종료 시간을 기반으로 남은 시간 계산
       const endTime = new Date(response.data.endTime);
       const now = new Date();
       setTimeRemaining(endTime - now);
@@ -39,30 +33,25 @@ const AuctionInfo = ({
   };
 
   useEffect(() => {
-    fetchAuctionDetails(); // 컴포넌트가 마운트될 때 한 번만 호출
-
+    fetchAuctionDetails();
     const interval = setInterval(() => {
       setTimeRemaining((prevTime) => {
         if (prevTime <= 1000) {
           clearInterval(interval);
-          setAuctionData((prevData) => ({ ...prevData, isAuctionEnded: true })); // 경매 종료 상태 업데이트
           return 0;
         }
-        return prevTime - 1000; // 1초씩 감소
+        return prevTime - 1000;
       });
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []); // 의존성 배열을 빈 배열로 설정하여 한 번만 실행
+  }, []);
 
-  // 로딩 중일 때와 에러 발생 시 처리
   if (loading) return <p>로딩 중...</p>;
   if (error) return <p>{error}</p>;
 
-  // API에서 받은 데이터로 상태 업데이트
-  const { artImages, created, artistName, artName, width, length, maxPrice, currentPrice } = auctionData;
+  const { artImages, created, artistName, artName } = auctionData;
 
-  // 남은 시간 계산 함수
   const formatTime = (time) => {
     const seconds = Math.floor((time / 1000) % 60);
     const minutes = Math.floor((time / 1000 / 60) % 60);
@@ -75,17 +64,12 @@ const AuctionInfo = ({
     <div className="row">
       <div className="col-md-6 mb-4 image-container">
         {artImages && artImages.length > 0 && (
-          <img
-            src={artImages[0]}
-            className="img-fluid"
-            alt={artName}
-          />
+          <img src={artImages[0]} className="img-fluid" alt={artName} />
         )}
       </div>
       <div className="col-md-6 mb-4 info-panel">
         <h5>{artName}</h5>
         <p>작가: {artistName}</p>
-        <p>사이즈: {width.toFixed(2)} × {length.toFixed(2)} cm</p>
         <p>제작일: {created}</p>
         <hr className="dotted-line" />
 
@@ -94,7 +78,7 @@ const AuctionInfo = ({
           <AuctionResult
             userBid={myCurrentPrice}
             finalPrice={currentPrice}
-            handlePayment={handlePayment}
+            handlePayment={null} // 필요에 따라 결제 핸들러 추가
             isAuctionEnded={isAuctionEnded}
             artName={artName}
           />
