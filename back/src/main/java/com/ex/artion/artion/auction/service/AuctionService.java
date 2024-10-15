@@ -70,8 +70,7 @@ public class AuctionService {
                 .build();
 
         auctionRepository.save(auction);
-
-        if(auctionBitRequestDto.getPrice() == artEntity.getMaxP()){
+        if(auctionBitRequestDto.getPrice().longValue() == artEntity.getMaxP().longValue()){
             artEntity.setCurrent_auction_status(2);
             artRepository.save(artEntity);
             PayingEntity paying = PayingEntity.builder()
