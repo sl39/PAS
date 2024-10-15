@@ -6,6 +6,8 @@ import ArtworkItem from "./ArtworkItem";
 import ArtworkInProfile from "./ArtworkInProfile";
 import SearchFilter from "./SearchFilter";
 import MainFeedItem from "./MainFeedItem";
+import SearchedArtwork from "./SearchedArtwork";
+import SearchedArtist from "./SearchedArtist";
 
 export {
   Header,
@@ -16,4 +18,6 @@ export {
   ArtworkInProfile,
   SearchFilter,
   MainFeedItem,
+  SearchedArtwork,
+  SearchedArtist,
 };

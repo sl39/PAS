@@ -3,14 +3,14 @@ import styled from "styled-components";
 import { Header, MainFeedItem, SearchBar } from "../components";
 import axios from "axios";
 
-export async function NewFeedApi() {
+export async function newFeedApi() {
   const response = await axios.get(
     "http://artion.site:8080/api/art/main/recent"
   );
   return response.data;
 }
 
-export async function BestFeedApi() {
+export async function bestFeedApi() {
   const response = await axios.get(
     "http://artion.site:8080/api/art/main/popular"
   );
@@ -24,7 +24,7 @@ export default function MainFeed() {
   const SearchBarContainer = styled.div`
     display: flex;
     justify-content: center;
-    margin: 40px 30px 0px 30px;
+    margin: 40px 30px 50px 30px;
   `;
 
   const MainFeedContainer = styled.div`
@@ -37,7 +37,7 @@ export default function MainFeed() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const newItemList = await NewFeedApi();
+        const newItemList = await newFeedApi();
         setNewItemList(newItemList);
       } catch (error) {
         console.error("데이터를 가져오는 중에 오류가 발생했습니다: ", error);
@@ -49,7 +49,7 @@ export default function MainFeed() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const bestItemList = await BestFeedApi();
+        const bestItemList = await bestFeedApi();
         setBestItemList(bestItemList);
       } catch (error) {
         console.error("데이터를 가져오는 중에 오류가 발생했습니다: ", error);
