@@ -65,7 +65,7 @@ class ArtionApplicationTests {
 //		Optional<UserEntity> user = userRepository.findById(2);
 //		UserEntity userEntity = user.get();
 //		for (int i = 0; i < count; i++) {
-//			String art_name = faker.oscarMovie().movieName();
+//			String art_name 	= faker.oscarMovie().movieName();
 //			String art_info = faker.lorem().sentence();
 //			Long minP = (long) (random.nextInt(5000) + 1000); // Random price between 1000 and 6000
 //			Long maxP = minP + random.nextInt(5000); // Max price higher than min price
