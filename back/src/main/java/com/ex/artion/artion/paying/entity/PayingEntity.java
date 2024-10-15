@@ -2,8 +2,7 @@ package com.ex.artion.artion.paying.entity;
 
 import com.ex.artion.artion.auction.entity.AuctionEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,6 +10,9 @@ import java.time.LocalDateTime;
 @Entity
 @Setter
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PayingEntity {
 
     @Id
@@ -21,4 +23,6 @@ public class PayingEntity {
 
     @OneToOne
     private AuctionEntity auction;
+
+    private Integer status;
 }
