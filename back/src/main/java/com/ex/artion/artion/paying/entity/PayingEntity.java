@@ -27,4 +27,6 @@ public class PayingEntity {
 
     @OneToOne
     private AuctionEntity auction;
+    // 0이면 문자가 안된 상태 1이면 문자가 1개만 간 상태 2이면  끝
+    private Integer status;
 }
