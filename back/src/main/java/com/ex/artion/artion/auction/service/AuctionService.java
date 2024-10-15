@@ -15,6 +15,7 @@ import com.ex.artion.artion.blacklistuser.entity.BlackListUserEntity;
 import com.ex.artion.artion.blacklistuser.repository.BlackListUserRepository;
 import com.ex.artion.artion.global.error.CustomException;
 import com.ex.artion.artion.global.error.ErrorCode;
+import com.ex.artion.artion.paying.entity.PayingEntity;
 import com.ex.artion.artion.paying.repository.PayingRepository;
 import com.ex.artion.artion.user.entity.UserEntity;
 import com.ex.artion.artion.user.respository.UserRepository;
@@ -38,6 +39,7 @@ public class AuctionService {
     private final ArtImageRepository artImageRepository;
     private final ArtFollowingRepository artFollowingRepository;
     private final BlackListUserRepository blackListUserRepository;
+    private final PayingRepository payingRepository;
 
 
 
@@ -60,6 +62,7 @@ public class AuctionService {
             throw new CustomException(ErrorCode.AUCTION_PRICE_BAD_REQUEST);
         }
 
+
         AuctionEntity auction = AuctionEntity.builder()
                 .current_price(auctionBitRequestDto.getPrice())
                 .bid_user(userEntity)
@@ -67,6 +70,17 @@ public class AuctionService {
                 .build();
 
         auctionRepository.save(auction);
+
+        if(auctionBitRequestDto.getPrice() == artEntity.getMaxP()){
+            artEntity.setCurrent_auction_status(2);
+            artRepository.save(artEntity);
+            PayingEntity paying = PayingEntity.builder()
+                    .auction(auction)
+                    .status(0)
+                    .build();
+            payingRepository.save(paying);
+            // 메시지 처리 해야 됨
+        }
 
         AuctionBitResponseDto auctionBitResponseDto = AuctionBitResponseDto.builder()
                 .currentPrice(auction.getCurrent_price())
