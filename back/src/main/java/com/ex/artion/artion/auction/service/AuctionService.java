@@ -125,7 +125,7 @@ public class AuctionService {
                 .length(artEntity.getHeight())
                 .artName(artEntity.getArt_name())
                 .artistName(artEntity.getPainter())
-                .Qurater(artEntity.getQurator())
+                .Qurater(artEntity.getQurator() != null ? artEntity.getQurator() : false)
                 .userPk(userEntity.getUser_pk())
                 .userName(userEntity.getUser_name())
                 .minPrice(artEntity.getMinP())
@@ -148,8 +148,8 @@ public class AuctionService {
         Long maxPrice = null;
         Long userMaxPrice = null;
         for (Object[] result : results) {
-            maxPrice = result[0] != null ? ((Number) result[0]).longValue() : null;  // 첫 번째 값 (전체 경매의 최대값)
-            userMaxPrice = result[1] != null ? ((Number) result[1]).longValue() : null;  // 두 번째 값 (유저의 입찰 중 최대값)
+            maxPrice = result[0] != null ? ((Number) result[0]).longValue() : 0;  // 첫 번째 값 (전체 경매의 최대값)
+            userMaxPrice = result[1] != null ? ((Number) result[1]).longValue() : 0;  // 두 번째 값 (유저의 입찰 중 최대값)
         }
         dto.setCurrentPrice(maxPrice);
         dto.setMyCurrentPrice(userMaxPrice);
