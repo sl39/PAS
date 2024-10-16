@@ -30,7 +30,8 @@ public class OrderService {
                 .paying(paying)
                 .address_order(order.getAddress_order())
                 .delivery_type(order.getDelivery_type())
-                .pay_num(order.getPay_num())
+                .imp_uid(order.getImp_uid())
+                .merchant_uid(order.getMerchant_uid())
                 .phone_number(order.getPhone_number())
                 .name(order.getPhone_number())
                 .build();

@@ -20,7 +20,9 @@ public class OrderEntity {
 
     private String delivery_type;
 
-    private String pay_num;
+    private String imp_uid;
+
+    private String merchant_uid;
 
     private String name;
 
