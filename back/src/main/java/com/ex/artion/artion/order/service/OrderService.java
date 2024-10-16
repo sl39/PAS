@@ -10,6 +10,8 @@ import com.ex.artion.artion.paying.repository.PayingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -18,12 +20,19 @@ public class OrderService {
     private final OrderRepostory orderRepostory;
 
     public void save(OrderCreateDto order) {
+
         PayingEntity paying = payingRepository.findById(order.getPaying_pk()).orElseThrow(()-> new CustomException(ErrorCode.PAYING_NOT_FOUND));
+        Optional<OrderEntity> orderEntity1 = orderRepostory.findByPaying(paying);
+        if (orderEntity1.isPresent()) {
+            throw new CustomException(ErrorCode.ORDER_EXIST);
+        }
         OrderEntity orderEntity = OrderEntity.builder()
                 .paying(paying)
                 .address_order(order.getAddress_order())
                 .delivery_type(order.getDelivery_type())
                 .pay_num(order.getPay_num())
+                .phone_number(order.getPhone_number())
+                .name(order.getPhone_number())
                 .build();
 
         orderRepostory.save(orderEntity);

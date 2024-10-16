@@ -22,6 +22,10 @@ public class OrderEntity {
 
     private String pay_num;
 
+    private String name;
+
+    private String phone_number;
+
     @OneToOne
     private PayingEntity paying;
 }

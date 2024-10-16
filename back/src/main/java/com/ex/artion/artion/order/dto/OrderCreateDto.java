@@ -16,4 +16,8 @@ public class OrderCreateDto {
     private String pay_num;
 
     private Integer paying_pk;
+
+    private String name;
+
+    private String phone_number;
 }
