@@ -272,12 +272,13 @@ public class ArtService {
 
         // 그림의 최대값과 최솟값
         List<Object[]> results = auctionRepository.findMaxPriceAndUserMaxPriceByArtPkAndUserPkNative(artEntity.getArt_pk(), userPk);
-        Long maxPrice = null;
-        Long userMaxPrice = null;
+        Long maxPrice = 0L;
+        Long userMaxPrice = 0L;
         for (Object[] result : results) {
             maxPrice = result[0] != null ? ((Number) result[0]).longValue() : 0;  // 첫 번째 값 (전체 경매의 최대값)
             userMaxPrice = result[1] != null ? ((Number) result[1]).longValue() : 0;  // 두 번째 값 (유저의 입찰 중 최대값)
         }
+        maxPrice = Math.max(artEntity.getMinP(), maxPrice);
         dto.setCurrentPrice(maxPrice);
         dto.setMyCurrentPrice(userMaxPrice);
 
