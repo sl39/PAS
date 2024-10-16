@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { GoHeartFill } from "react-icons/go";
 
-export default function ArtworkItem({ artWork }) {
+export default function ArtworkItem({ artWork, userPk }) {
   // Styled Components
   const ArtworkContainer = styled.div`
     margin: 5px;
@@ -62,7 +62,7 @@ export default function ArtworkItem({ artWork }) {
 
   // 작품 상세 페이지 url에 {artWork.art_pk} 쓰면 됨
   return (
-    <StyledLink to="/">
+    <StyledLink to={`/detail/${artWork.art_pk}/${userPk}`}>
       <ArtworkContainer>
         <ImageContainer>
           <SquareImage src={artWork.artImage}></SquareImage>
