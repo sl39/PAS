@@ -237,10 +237,12 @@ public class ArtService {
         UserEntity userEntity = user.get();
         ArtEntity artEntity = art.get();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        Double width = Math.round(artEntity.getWidth() * 10) / 10.0;
+        Double depth = Math.round(artEntity.getDepth() * 10) / 10.0;
+        Double length = Math.round(artEntity.getHeight() * 10) / 10.0;
 
         String start = artEntity.getStartTime().format(formatter);
         String end = artEntity.getEndTime().format(formatter);
-
         ArtDetailResponseDto dto = ArtDetailResponseDto.builder()
                 .created(artEntity.getCreatedAt())
                 .artInfo(artEntity.getArt_info())
@@ -248,9 +250,9 @@ public class ArtService {
                 .endTime(end)
                 .startTime(start)
                 .maxPrice(artEntity.getMaxP())
-                .width(artEntity.getWidth())
-                .depth(artEntity.getDepth())
-                .length(artEntity.getHeight())
+                .width(width)
+                .depth(depth)
+                .length(length)
                 .artName(artEntity.getArt_name())
                 .artistName(artEntity.getPainter())
                 .Qurater(artEntity.getQurator() != null ? artEntity.getQurator() : false)

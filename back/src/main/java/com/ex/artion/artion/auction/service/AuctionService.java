@@ -112,7 +112,10 @@ public class AuctionService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         String start = artEntity.getStartTime().format(formatter);
-        String end = artEntity.getEndTime().format(formatter);;
+        String end = artEntity.getEndTime().format(formatter);
+        Double width = Math.round(artEntity.getWidth() * 10) / 10.0;
+        Double depth = Math.round(artEntity.getDepth() * 10) / 10.0;
+        Double length = Math.round(artEntity.getHeight() * 10) / 10.0;
 
         AuctionDetailResponseDto dto = AuctionDetailResponseDto.builder()
                 .created(artEntity.getCreatedAt())
@@ -120,9 +123,9 @@ public class AuctionService {
                 .endTime(end)
                 .startTime(start)
                 .maxPrice(artEntity.getMaxP())
-                .width(artEntity.getWidth())
-                .depth(artEntity.getDepth())
-                .length(artEntity.getHeight())
+                .width(width)
+                .depth(depth)
+                .length(length)
                 .artName(artEntity.getArt_name())
                 .artistName(artEntity.getPainter())
                 .Qurater(artEntity.getQurator() != null ? artEntity.getQurator() : false)
