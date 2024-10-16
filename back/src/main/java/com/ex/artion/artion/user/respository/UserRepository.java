@@ -16,6 +16,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
             "ON u.user_pk = follow.following " +
             "WHERE (:keyword IS NULL OR :keyword = '' or u.user_name LIKE %:keyword%) " +
             "ORDER BY follow.cnt DESC " +
-            "LIMIT 5")
+            "LIMIT 10")
     List<ArtistSearchResponseDto> findByPainterKeyword(@Param(value = "keyword") String keyword);
 }
