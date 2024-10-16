@@ -8,6 +8,7 @@ import com.ex.artion.artion.artcategory.entity.ArtCategoryEntity;
 import com.ex.artion.artion.artcategory.respository.ArtArtCategoryRepository;
 import com.ex.artion.artion.artcategory.respository.ArtCategoryRepository;
 import com.ex.artion.artion.artcategory.service.ArtCategoryService;
+import com.ex.artion.artion.artfollowing.entity.ArtFollowingEntity;
 import com.ex.artion.artion.artimage.entity.ArtImageEntity;
 import com.ex.artion.artion.artimage.respository.ArtImageRepository;
 import com.ex.artion.artion.artimage.service.ArtImageService;
@@ -258,7 +259,13 @@ public class ArtService {
                 .Qurater(artEntity.getQurator() != null ? artEntity.getQurator() : false)
                 .userPk(userEntity.getUser_pk())
                 .userName(userEntity.getUser_name())
+                .isArtFollowing(false)
                 .build();
+
+        Optional<ArtFollowingEntity> artFollowing = artFollowingRepository.findByUserEntityAndArtEntity(userEntity, artEntity);
+        if(artFollowing.isPresent()) {
+            dto.setIsArtFollowing(true);
+        }
 
         // 그림 이미지들
         List<ArtImageEntity> images = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
