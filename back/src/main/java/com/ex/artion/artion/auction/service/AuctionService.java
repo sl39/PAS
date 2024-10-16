@@ -15,6 +15,8 @@ import com.ex.artion.artion.blacklistuser.entity.BlackListUserEntity;
 import com.ex.artion.artion.blacklistuser.repository.BlackListUserRepository;
 import com.ex.artion.artion.global.error.CustomException;
 import com.ex.artion.artion.global.error.ErrorCode;
+import com.ex.artion.artion.order.entity.OrderEntity;
+import com.ex.artion.artion.order.respository.OrderRepostory;
 import com.ex.artion.artion.paying.entity.PayingEntity;
 import com.ex.artion.artion.paying.repository.PayingRepository;
 import com.ex.artion.artion.user.entity.UserEntity;
@@ -40,7 +42,7 @@ public class AuctionService {
     private final ArtFollowingRepository artFollowingRepository;
     private final BlackListUserRepository blackListUserRepository;
     private final PayingRepository payingRepository;
-
+    private final OrderRepostory orderRepostory;
 
 
     public AuctionBitResponseDto updateBid(Integer artPk, AuctionBitRequestDto auctionBitRequestDto){
@@ -161,6 +163,7 @@ public class AuctionService {
         Optional<BlackListUserEntity> blackListUserEntity = blackListUserRepository.findByUserEntityAndArtEntity(userEntity,artEntity);
         LocalDateTime now = LocalDateTime.now();
         Optional<AuctionEntity> auction = auctionRepository.findMax(artEntity.getArt_pk());
+
         // 블랙리스트인지, 블랙리스트 status, 자신의 그림인지
         if(userEntity.getUser_pk() == artEntity.getUserEntity().getUser_pk() || userEntity.getBlack_list_status() == true || blackListUserEntity.isPresent()){
             dto.setState(1);
@@ -169,9 +172,16 @@ public class AuctionService {
         } else if(auction.isEmpty() || auction.get().getBid_user() != userEntity){
             dto.setState(1);
         } else {
-            dto.setState(2);
+
             PayingEntity paying = payingRepository.findByAuction(auction.get()).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
-            dto.setPaying_pk(paying.getPaying_pk());
+            Optional<OrderEntity> order = orderRepostory.findByPaying(paying);
+            if(order.isPresent()){
+                dto.setState(3);
+            } else {
+                dto.setState(2);
+                dto.setPaying_pk(paying.getPaying_pk());
+            }
+
         }
 
         return dto;

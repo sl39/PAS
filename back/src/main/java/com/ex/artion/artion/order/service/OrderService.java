@@ -33,7 +33,7 @@ public class OrderService {
                 .imp_uid(order.getImp_uid())
                 .merchant_uid(order.getMerchant_uid())
                 .phone_number(order.getPhone_number())
-                .name(order.getPhone_number())
+                .name(order.getName())
                 .build();
 
         orderRepostory.save(orderEntity);
