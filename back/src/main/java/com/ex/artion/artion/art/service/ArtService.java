@@ -396,4 +396,10 @@ public class ArtService {
                 .build();
         return pages;
     }
+
+    public List<ArtistSearchResponseDto> getPainter(String keyword) {
+
+        List<ArtistSearchResponseDto> artistSearchResponseDto = userRepository.findByPainterKeyword(keyword);
+        return artistSearchResponseDto;
+    }
 }
