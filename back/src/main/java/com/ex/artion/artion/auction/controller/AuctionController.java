@@ -21,7 +21,6 @@ public class AuctionController {
 
     @PostMapping("/bid/{artPk}")
     public ResponseEntity<AuctionBitResponseDto> bid(@PathVariable(value = "artPk") Integer artPk, @RequestBody AuctionBitRequestDto auctionBitRequestDto){
-        System.out.println(artPk);
         // 해야 될 일
         // 값이 들어왔을 때 유효성 검증
         return new ResponseEntity<>(auctionService.updateBid(artPk,auctionBitRequestDto ),HttpStatus.OK);

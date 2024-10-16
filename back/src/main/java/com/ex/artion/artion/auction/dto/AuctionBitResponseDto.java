@@ -1,15 +1,14 @@
 package com.ex.artion.artion.auction.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Getter
+@Setter
 public class AuctionBitResponseDto {
     private Long currentPrice;
     private Integer userPk;
+    private Integer paying_pk;
 }

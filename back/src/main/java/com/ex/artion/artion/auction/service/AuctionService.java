@@ -58,6 +58,9 @@ public class AuctionService {
             throw new CustomException(ErrorCode.AUCTION_TIME_BAD_REQUEST);
         }
         Long price =  auctionRepository.findMaxPriceByArtPk(artEntity.getArt_pk());
+        if(price == null){
+            price = 0L;
+        }
         if(auctionBitRequestDto.getPrice() < artEntity.getMinP() || auctionBitRequestDto.getPrice() <= price || auctionBitRequestDto.getPrice() > artEntity.getMaxP()){
             throw new CustomException(ErrorCode.AUCTION_PRICE_BAD_REQUEST);
         }
@@ -70,22 +73,26 @@ public class AuctionService {
                 .build();
 
         auctionRepository.save(auction);
-        if(auctionBitRequestDto.getPrice().longValue() == artEntity.getMaxP().longValue()){
-            artEntity.setCurrent_auction_status(2);
-            artRepository.save(artEntity);
-            PayingEntity paying = PayingEntity.builder()
-                    .auction(auction)
-                    .status(0)
-                    .build();
-            payingRepository.save(paying);
-            // 메시지 처리 해야 됨
-        }
-
         AuctionBitResponseDto auctionBitResponseDto = AuctionBitResponseDto.builder()
                 .currentPrice(auction.getCurrent_price())
                 .userPk(auction.getBid_user().getUser_pk())
                 .build();
+        PayingEntity paying = null;
+        if(auctionBitRequestDto.getPrice().longValue() == artEntity.getMaxP().longValue()){
+            artEntity.setCurrent_auction_status(2);
+            artRepository.save(artEntity);
+            paying = PayingEntity.builder()
+                    .auction(auction)
+                    .status(0)
+                    .build();
+            payingRepository.save(paying);
+            auctionBitResponseDto.setPaying_pk(paying.getPaying_pk());
+            // 메시지 처리 해야 됨
+        }
+
         messagingTemplate.convertAndSend("/sub/auction/" + artPk, auctionBitResponseDto);
+
+
         return auctionBitResponseDto;
     }
 
@@ -159,7 +166,10 @@ public class AuctionService {
             dto.setState(1);
         } else {
             dto.setState(2);
+            PayingEntity paying = payingRepository.findByAuction(auction.get()).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+            dto.setPaying_pk(paying.getPaying_pk());
         }
+
         return dto;
     }
 }
