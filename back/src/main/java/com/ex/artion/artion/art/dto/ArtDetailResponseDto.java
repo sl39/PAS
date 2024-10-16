@@ -31,4 +31,5 @@ public class ArtDetailResponseDto {
     private String endTime;
     private String artInfo;
     private Integer AuctionState;
+    private Boolean isArtFollowing;
 }
