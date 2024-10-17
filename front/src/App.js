@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainFeed from "./pages/MainFeed";
 import Search from "./pages/Search";
 import DetailPage from "./pages/DetailPage";
-import ARCanvas from "./components/ARCanvas";
+import ARCanvas from "./pages/ARCanvas";
 
 export default function App() {
   return (

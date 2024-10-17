@@ -1,6 +1,7 @@
 import React, {useEffect, useRef} from "react";
 import * as THREE from 'three';
 import { ARButton } from 'three/examples/jsm/webxr/ARButton.js';
+import { Header, Warning } from "../components";
 
 const ARCanvas = () => {
     const containerRef = useRef();
@@ -241,7 +242,9 @@ const ARCanvas = () => {
 
     return (
         <div ref={containerRef}>
+            <Header />
             <h2 class="header" style={{display: "flex", justifyContent: 'center', marginTop: '30px'}}>사용 전 반드시 읽어주세요</h2>
+            <Warning />
         </div>
     )
 };

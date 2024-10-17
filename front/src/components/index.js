@@ -7,6 +7,7 @@ import ArtworkInProfile from "./ArtworkInProfile";
 import SearchFilter from "./SearchFilter";
 import MainFeedItem from "./MainFeedItem";
 import DetailItem from "./DetailItem";
+import Warning from "./Warning";
 
 export {
   Header,
@@ -18,4 +19,5 @@ export {
   SearchFilter,
   MainFeedItem,
   DetailItem,
+  Warning,
 };
