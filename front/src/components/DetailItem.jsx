@@ -2,24 +2,21 @@ import React, { useState } from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import styled from "styled-components";
 import { Link, useParams } from 'react-router-dom';
-import { IoCamera } from "react-icons/io5";
+import { IoCamera, IoShieldCheckmark } from "react-icons/io5";
 import { GoHeart, GoHeartFill } from "react-icons/go";
 import axios from "axios";
 
 const VerticalContainer = styled.div`
-
     `;
 const DetailItemContainer = styled.div`
     display: flex;
     margin-top: 100px;
     justify-content: center;
     padding: 20px;
-
     border-bottom: 1px solid black
     `;
 const ButtonContainer = styled.div`
     `;
-
 const Title = styled.h2`
     `;
 const Artist = styled.p`
@@ -41,10 +38,11 @@ const Description = styled.p`
     padding: 15px
     `;
 const TimeInfo = styled.p`
+    font-weight: bold;
     margin: 4px;
+    margin-top: 8px;
     padding-left: 2px;
     font-size: 12px
-
     `;
 const GoButton = styled(Link)`
     font-size: 15px;
@@ -58,7 +56,6 @@ const GoButton = styled(Link)`
         border-color: darkgray;
     }
     `;
-
 const MaxPrice = styled.p`
     font-size: 15px;
     border: 1px solid gray;
@@ -86,13 +83,11 @@ const SizeInfo = styled.h6`
     margin: 0;
     margin-right: 20px;
     `;
-
 const ImageContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    
     `;
 const ArtworkImage = styled.img`
     width: 300px;
@@ -104,7 +99,8 @@ const InfoContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     padding-left: 150px;
-    margin-left: 50px;
+    padding-right: 70px;
+    margin-left: 30px;
     `;
 const YearInfoContainer = styled.div`
     display: flex;
@@ -120,7 +116,6 @@ const RightArrow = styled(IoIosArrowForward)`
 const CameraLink = styled(Link)`
     cursor: pointer;
     margin-right: 15px;
-
     `;
 const CameraIcon = styled(IoCamera)`
     margin-top: 5px;
@@ -168,9 +163,9 @@ const FixButton = styled(Link)`
     }
     padding: 3px 12px;
     `;
-
-
-
+const QuraterIcon = styled(IoShieldCheckmark)`
+    color: #0099FF;
+    `;
 //시작
 export default function DetailItem ({ artWork }) {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -260,12 +255,21 @@ export default function DetailItem ({ artWork }) {
                         </>
                     )}
                 </ButtonContainer>
-                <Title>{artWork.artName}</Title>
+                <Title>{artWork.artName}{artWork.qurater ? <QuraterIcon /> : null }</Title>
                 <Artist>작가: {artWork.artistName}</Artist>
                 <Registrant>등록자: {artWork.sellerName}</Registrant>
                 <MaxPrice>즉시판매가: {artWork.maxPrice} 원</MaxPrice>
                 <MinPrice>현재가: {artWork.currentPrice} 원</MinPrice>
-                <GoButton to={`/auction/${art_pk}/:user_pk`}>입찰하러 가기</GoButton>
+                {artWork.isPossible ? (
+                    <>
+                    {/* 경매 페이지로 이동 주소 */}
+                    {artWork.auctionState === 0 && <GoButton>경매 시작 전입니다.</GoButton>}
+                    {artWork.auctionState === 1 && <GoButton to={`/`}>입찰하러 가기</GoButton>}
+                    {artWork.auctionState === 2 && <GoButton to={`/`} style={{textAlign:'center'}}>경매 완료</GoButton>}
+                    {artWork.auctionState === 3 && <GoButton to={`/`}>판매되었습니다.</GoButton>}
+                    </>
+                    ): (<GoButton>경매에 참여할 수 없습니다.</GoButton>)
+                }
                 <TimeInfo>
                     시작 시간: {artWork.startTime}<br/>
                     종료 시간: {artWork.endTime}
