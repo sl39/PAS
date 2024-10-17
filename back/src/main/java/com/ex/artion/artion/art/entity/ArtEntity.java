@@ -4,6 +4,7 @@ package com.ex.artion.artion.art.entity;
 import com.ex.artion.artion.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

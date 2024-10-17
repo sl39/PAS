@@ -43,13 +43,25 @@ public class UserController {
     @GetMapping("/purbid")
     public ResponseEntity<List<Map<String, Object>>> requestPurchaseBid(
             @RequestParam(value = "user_pk") Integer user_pk) {
-        return ResponseEntity.ok(userService.requestPurchaseBid(user_pk));
+        return userService.requestPurchaseBid(user_pk);
     }
 
     @GetMapping("/pursuc")
     public ResponseEntity<List<Map<String, Object>>> requestPurchaseSuccess(
             @RequestParam(value = "user_pk") Integer user_pk) {
-        return ResponseEntity.ok(userService.requestPurchaseSucceess(user_pk));
+        return userService.requestPurchaseSuccess(user_pk);
+    }
+
+    @GetMapping("/purend")
+    public ResponseEntity<List<Map<String, Object>>> requestPurchaseEnd(
+            @RequestParam(value="user_pk") Integer user_pk) {
+        return userService.requestPurchaseEnd(user_pk);
+    }
+
+    @GetMapping("/purall")
+    public ResponseEntity<List<Map<String, Object>>> requestPurchaseAll(
+            @RequestParam(value="user_pk") Integer user_pk) {
+        return userService.requestPurchaseAll(user_pk);
     }
 
     @GetMapping("/salebid")
@@ -63,10 +75,52 @@ public class UserController {
             @RequestParam(value = "user_pk") Integer user_pk) {
         return userService.requestSaleSuccess(user_pk);
     }
+
+    @GetMapping("/saleend")
+    public ResponseEntity<List<Map<String, Object>>> requestSaleEnd(
+            @RequestParam(value = "user_pk") Integer user_pk) {
+        return userService.requestSaleEnd(user_pk);
+    }
+
+    @GetMapping("/saleall")
+    public ResponseEntity<List<Map<String, Object>>> requestSaleAll(
+            @RequestParam(value="user_pk") Integer user_pk) {
+        return userService.requestSaleAll(user_pk);
+    }
+
+    @GetMapping("/myart/{user_pk}")
+    public ResponseEntity<Map<String, Object>> myProfile(
+            @PathVariable(value = "user_pk") Integer user_pk) {
+        return userService.requestMyArt(user_pk);
+    }
+
+    @GetMapping("/myp/{user_pk}")
+    public ResponseEntity<Map<String, Object>> myProfiles(
+            @PathVariable(value = "user_pk") Integer user_pk) {
+        return userService.requestMyProfile(user_pk);
+    }
+
+    @GetMapping("/mypafs/{user_pk}")
+    public ResponseEntity<Map<String, Object>> myProfileAndFollows(
+            @PathVariable(value = "user_pk") Integer user_pk) {
+        return userService.requestMyProfileAndFollows(user_pk);
+    }
+
+    @PostMapping("/artfol/{user_pk}")
+    public ResponseEntity<List<Map<String, Object>>> artFollowing(
+        @PathVariable(value = "user_pk") Integer user_pk) {
+        return userService.requestArtFollowing(user_pk);
+    }
+
+    @PostMapping("/fol/{user_pk}")
+    public ResponseEntity<List<Map<String, Object>>> Following(
+        @PathVariable(value = "user_pk") Integer user_pk) {
+        return userService.requestFollowing(user_pk);
+    }
+
+    @PostMapping("/myfol/{user_pk}")
+    public ResponseEntity<List<Map<String, Object>>> myFollower(
+        @PathVariable(value = "user_pk") Integer user_pk) {
+        return userService.requestMyFollower(user_pk);
+    }
 }
-//    @GetMapping("/salelists")
-//    public ResponseEntity<List<Map<String, Object>>> requestSaleList(
-//            @RequestParam(value = "user_pk") Integer user_pk) {
-//        userService.requestPurchaseList(user_pk);
-//        return ResponseEntity.ok(userService.requestSaleList(user_pk));
-//    }
