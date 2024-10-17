@@ -17,4 +17,6 @@ public class SMSService {
 
         this.messageService = NurigoApp.INSTANCE.initialize(API_KEY, API_SECRET, "https://api.coolsms.co.kr");
     }
+
+
 }
