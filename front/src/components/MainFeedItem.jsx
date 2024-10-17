@@ -3,7 +3,7 @@ import ArtworkItem from "./ArtworkItem";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useRef } from "react";
 
-export default function MainFeedItem({ type, artWorkList }) {
+export default function MainFeedItem({ type, artWorkList, userPk }) {
   // Styled Components
   const MainFeedContainer = styled.div`
     overflow: hidden;
