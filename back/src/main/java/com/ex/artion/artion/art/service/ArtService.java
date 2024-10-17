@@ -257,8 +257,8 @@ public class ArtService {
                 .artName(artEntity.getArt_name())
                 .artistName(artEntity.getPainter())
                 .Qurater(artEntity.getQurator() != null ? artEntity.getQurator() : false)
-                .userPk(userEntity.getUser_pk())
-                .userName(userEntity.getUser_name())
+                .userPk(artEntity.getUserEntity().getUser_pk())
+                .userName(artEntity.getUserEntity().getUser_name())
                 .isArtFollowing(false)
                 .build();
 
