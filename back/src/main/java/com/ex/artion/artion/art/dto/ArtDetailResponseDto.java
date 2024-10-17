@@ -19,8 +19,8 @@ public class ArtDetailResponseDto {
     private Boolean Qurater;
     private String artName;
     private String artistName;
-    private String userName;
-    private Integer userPk;
+    private String sellerName;
+    private Integer sellerPk;
     private Double width;
     private Double depth;
     private Double length;
