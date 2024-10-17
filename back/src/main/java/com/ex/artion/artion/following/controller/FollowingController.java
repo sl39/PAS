@@ -25,14 +25,14 @@ public class FollowingController {
         followingService.follow(customer, seller);
         return "success";
     }
-    @PostMapping("/{customerId}/unfollow/{sellerId}")
+    @DeleteMapping("/{customerId}/unfollow/{sellerId}")
     public String unfollow (@PathVariable Integer customerId, @PathVariable Integer sellerId) {
         UserEntity customer = userService.searchUser(customerId);
         UserEntity seller = userService.searchUser(sellerId);
         followingService.unfollow(customer, seller);
         return "unfollow";
     }
-    @GetMapping("/{customerId}/followings")
+    @GetMapping("/{customerId}")
     public List<FollowingEntity> getFollowings(@PathVariable Integer customerId) {
         UserEntity customer = userService.searchUser(customerId);
         return followingService.getFollowingsByCustomer(customer);
