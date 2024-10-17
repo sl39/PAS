@@ -48,16 +48,33 @@ export default function Search() {
     justify-content: center;
   `;
 
+  const BorderLine = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    justify-content: start;
+    border-top: 1px solid black;
+    width: 850px;
+  `;
+
+  const FilterWrapContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    margin: 10px 30px 50px 30px;
+  `;
+
   const FilterContainer = styled.div`
+    position: relative;
+    max-width: 830px;
+    width: 100%;
     display: flex;
     justify-content: flex-start;
-    align-items: center;
-    margin: 10px 30px 50px 30px;
   `;
 
   const FilterBox = styled.div`
     display: flex;
-    width: 50px;
+
+    min-width: 50px;
     height: 10px;
     border: 1px solid black;
     justify-content: space-between;
@@ -125,22 +142,29 @@ export default function Search() {
       <SearchBarContainer>
         <SearchBar></SearchBar>
       </SearchBarContainer>
-      <FilterContainer>
-        <FilterBox>
-          <NormalParagraph>카테고리</NormalParagraph>
-          <IoIosArrowDown size={10}></IoIosArrowDown>
-        </FilterBox>
-        <FilterBox>
-          <NormalParagraph>가격</NormalParagraph>
-          <IoIosArrowDown size={10}></IoIosArrowDown>
-        </FilterBox>
-        <FilterBox>
-          <NormalParagraph>정렬</NormalParagraph>
-          <IoIosArrowDown size={10}></IoIosArrowDown>
-        </FilterBox>
-      </FilterContainer>
+      <FilterWrapContainer>
+        <FilterContainer>
+          <FilterBox>
+            <NormalParagraph>카테고리</NormalParagraph>
+            <IoIosArrowDown size={10}></IoIosArrowDown>
+          </FilterBox>
+          <FilterBox>
+            <NormalParagraph>가격</NormalParagraph>
+            <IoIosArrowDown size={10}></IoIosArrowDown>
+          </FilterBox>
+          <FilterBox>
+            <NormalParagraph>정렬</NormalParagraph>
+            <IoIosArrowDown size={10}></IoIosArrowDown>
+          </FilterBox>
+        </FilterContainer>
+      </FilterWrapContainer>
       <SearchedItemContainer>
-        <SearchedArtwork artWorkList={searchedItemList}></SearchedArtwork>
+        <BorderLine>
+          <SearchedArtist></SearchedArtist>
+        </BorderLine>
+        <BorderLine>
+          <SearchedArtwork artWorkList={searchedItemList}></SearchedArtwork>
+        </BorderLine>
       </SearchedItemContainer>
     </>
   );

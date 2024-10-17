@@ -18,9 +18,12 @@ export default function SideMenu({ handleToggle, isMenuOpen }) {
     background-color: white;
   `;
 
+  const StyledSearchBar = styled(SearchBar)`
+    margin-bottom: 10px;
+  `;
+
   const CategoryContainer = styled.div`
-    margin-left: 15px;
-    margin-bottom: 15px;
+    margin: 10px 0px 15px 10px;
   `;
 
   const MenuIcon = styled.div`
@@ -55,7 +58,7 @@ export default function SideMenu({ handleToggle, isMenuOpen }) {
       <MenuIcon>
         <TfiClose size={20} onClick={handleToggle} />
       </MenuIcon>
-      <SearchBar></SearchBar>
+      <StyledSearchBar></StyledSearchBar>
       <MenuContent>
         <StyledHeading>Category</StyledHeading>
         <CategoryContainer>

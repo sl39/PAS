@@ -6,7 +6,6 @@ export default function SearchedArtwork({ artWorkList }) {
   const SearchContainer = styled.div`
     overflow: hidden;
     position: relative;
-    border-top: 1px solid black;
     padding: 10px;
     max-width: 830px;
   `;
