@@ -4,6 +4,7 @@ import MainFeed from "./pages/MainFeed";
 import Search from "./pages/Search";
 import DetailPage from "./pages/DetailPage";
 import ARCanvas from "./components/ARCanvas";
+import AuctionPage from "./pages/AuctionPage";
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/detail/:art_pk/:user_pk" element={<DetailPage />} />
         <Route path="/AR/:art_pk" element={<ARCanvas />} />
+        <Route path="/auction/:art_pk/:user_pk" element={<AuctionPage />} />
       </Routes>
     </Router>
   );

@@ -16,24 +16,26 @@ const AuctionInfo = ({
   setWinnerContact,
   setWinnerAddress,
   setShippingMethod,
+  artPk, // artPk를 props로 추가
+  userPk // userPk를 props로 추가
 }) => {
   const [auctionData, setAuctionData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [timeRemaining, setTimeRemaining] = useState(0);
-  const [payingPk, setPayingPk] = useState(null); // paying_pk 상태 추가
+  const [payingPk, setPayingPk] = useState(null);
 
   const fetchAuctionDetails = async () => {
     try {
       const response = await axios.get(`/api/auction/detail`, {
-        params: { artPk: 7, userPk: 7 },
+        params: { artPk, userPk }, // props로 받은 값을 사용
       });
       setAuctionData(response.data);
       const endTime = new Date(response.data.endTime);
       const now = new Date();
       setTimeRemaining(endTime - now);
       if (response.data.paying_pk) {
-        setPayingPk(response.data.paying_pk); // paying_pk 값을 가져옴
+        setPayingPk(response.data.paying_pk);
       }
     } catch (error) {
       setError('경매 정보를 가져오는 데 실패했습니다.');
@@ -73,7 +75,6 @@ const AuctionInfo = ({
 
   return (
     <div className="row text-left">
-      {/* 경매 종료 상태에 따라 AuctionResult 컴포넌트 사용 */}
       {isAuctionEnded ? (
         <AuctionResult
           userBid={myCurrentPrice}
@@ -88,7 +89,7 @@ const AuctionInfo = ({
           setShippingMethod={setShippingMethod}
           isAuctionEnded={isAuctionEnded}
           artName={artName}
-          payingPk={payingPk} // paying_pk 전달
+          payingPk={payingPk}
         />
       ) : (
         <>

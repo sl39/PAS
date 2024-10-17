@@ -265,7 +265,7 @@ export default function DetailItem ({ artWork }) {
                 <Registrant>등록자: {artWork.sellerName}</Registrant>
                 <MaxPrice>즉시판매가: {artWork.maxPrice} 원</MaxPrice>
                 <MinPrice>현재가: {artWork.currentPrice} 원</MinPrice>
-                <GoButton to={`/`}>입찰하러 가기</GoButton>
+                <GoButton to={`/auction/${art_pk}/:user_pk`}>입찰하러 가기</GoButton>
                 <TimeInfo>
                     시작 시간: {artWork.startTime}<br/>
                     종료 시간: {artWork.endTime}
