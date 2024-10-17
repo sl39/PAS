@@ -92,7 +92,6 @@ const AuctionInfo = ({
         />
       ) : (
         <>
-          <hr className="dotted-line" />
           <h3>남은 시간: {formatTime(timeRemaining)}</h3>
           <h2>최대가: KRW {maxPrice?.toLocaleString() || '없음'}</h2>
           <h2>현재가: KRW {currentPrice?.toLocaleString() || '없음'}</h2>

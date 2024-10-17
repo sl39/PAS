@@ -14,13 +14,14 @@ const AuctionResult = ({
   setWinnerAddress,
   setShippingMethod,
   isAuctionEnded,
-  onPaymentComplete, // 결제 완료 핸들러 추가
+  onPaymentComplete,
+  paymentCompleted, // 결제 완료 상태 prop 추가
 }) => {
   const [isImpLoaded, setIsImpLoaded] = useState(false);
-  const [paymentCompleted, setPaymentCompleted] = useState(false);
   const [payingPk, setPayingPk] = useState(null); // paying_pk 상태 추가
 
   useEffect(() => {
+    // 아임포트 스크립트를 동적으로 로드합니다.
     const script = document.createElement('script');
     script.src = 'https://cdn.iamport.kr/v1/iamport.js';
     script.async = true;
@@ -29,8 +30,8 @@ const AuctionResult = ({
   }, []);
 
   const handlePayment = async () => {
-    // 1. 경매 상세 정보에서 paying_pk 가져오기
     try {
+      // 1. 경매 상세 정보에서 paying_pk 가져오기
       const response = await axios.get('/api/auction/detail', {
         params: { artPk: 7, userPk: 7 }, // 필요한 매개변수로 요청
       });
@@ -55,8 +56,7 @@ const AuctionResult = ({
         console.log('결제 요청 결과:', rsp);
         if (rsp.success) {
           alert('결제가 완료되었습니다.');
-          setPaymentCompleted(true); // 결제 완료 상태 업데이트
-
+          // 결제 완료 상태 업데이트
           // 3. 결제 정보를 서버에 전송
           try {
             const orderResponse = await axios.post('/api/order', {
@@ -137,9 +137,9 @@ const AuctionResult = ({
               </>
             ) : (
               <>
-                <h4>낙찰에 실패하였습니다.</h4>
-                <p>최종 낙찰가: KRW {finalPrice?.toLocaleString() || '없음'}</p>
-                <p>내 입찰가: KRW {userBid?.toLocaleString() || '없음'}</p>
+                <h2>낙찰에 실패하였습니다.</h2>
+                <h2>최종 낙찰가: KRW {finalPrice?.toLocaleString() || '없음'}</h2>
+                <h2>내 입찰가: KRW {userBid?.toLocaleString() || '없음'}</h2>
               </>
             )
           )}
@@ -147,7 +147,7 @@ const AuctionResult = ({
       ) : (
         <p>경매가 진행 중입니다.</p>
       )}
-    </div>
+    </div>  
   );
 };
 

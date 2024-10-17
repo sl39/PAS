@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom'; // BrowserRouter import
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
-import Header from './components/Header'; // Header 컴포넌트 import
-import BidModal from './components/BidModal';
-import AuctionInfo from './components/AuctionInfo';
-import AuctionResult from './components/AuctionResult';
+import './App.css'; // 기존 스타일 시트 import
+import Header from '../components/Header'; // Header 컴포넌트 import
+import BidModal from '../components/BidModal'; // BidModal 컴포넌트 import
+import AuctionInfo from '../components/AuctionInfo'; // AuctionInfo 컴포넌트 import
+import AuctionResult from '../components/AuctionResult'; // AuctionResult 컴포넌트 import
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import * as StompJs from "@stomp/stompjs";
@@ -13,7 +13,7 @@ import axios from 'axios';
 
 axios.defaults.baseURL = 'http://artion.site:8080';
 
-const App = () => {
+const ActionPage = () => {
   const artPk = 7;
   const userPk = 7;
 
@@ -181,7 +181,7 @@ const App = () => {
     }));
   };
 
-   return (
+  return (
     <Router> {/* Router로 감싸기 */}
       <div className="container text-center mt-4">
         <Header /> {/* Header 컴포넌트 추가 */}
@@ -200,83 +200,84 @@ const App = () => {
           </div>
         </div>
         <hr className="dotted-line" />
-      {/* 경매 상태에 따라 다르게 렌더링 */}
-      {state === 0 && (
-        <AuctionInfo
-          currentPrice={currentPrice}
-          maxPrice={maxPrice}
-          myCurrentPrice={myCurrentPrice}
-          setShowBidModal={setShowBidModal}
-          isAuctionEnded={false} // 경매 진행 중
-          timeRemaining={timeRemaining}
-        />
-      )}
-      {state === 1 && (
-        <AuctionResult
-          userBid={myCurrentPrice}
-          finalPrice={currentPrice}
-          winnerName={winnerName}
-          winnerContact={winnerContact}
-          winnerAddress={winnerAddress}
-          shippingMethod={shippingMethod}
-          setWinnerName={setWinnerName}
-          setWinnerContact={setWinnerContact}
-          setWinnerAddress={setWinnerAddress}
-          setShippingMethod={setShippingMethod}
-          isAuctionEnded={true} // 낙찰 실패 상태
-          artName={artName}
-          onPaymentComplete={handlePaymentComplete} // 결제 완료 핸들러 전달
-        />
-      )}
-      {state === 2 && (
-        <AuctionResult
-          userBid={myCurrentPrice}
-          finalPrice={currentPrice}
-          winnerName={winnerName}
-          winnerContact={winnerContact}
-          winnerAddress={winnerAddress}
-          shippingMethod={shippingMethod}
-          setWinnerName={setWinnerName}
-          setWinnerContact={setWinnerContact}
-          setWinnerAddress={setWinnerAddress}
-          setShippingMethod={setShippingMethod}
-          isAuctionEnded={true} // 낙찰 성공 상태
-          artName={artName}
-          onPaymentComplete={handlePaymentComplete} // 결제 완료 핸들러 전달
-        />
-      )}
-      {state === 3 && (
-        <AuctionResult
-          userBid={myCurrentPrice}
-          finalPrice={currentPrice}
-          winnerName={winnerName}
-          winnerContact={winnerContact}
-          winnerAddress={winnerAddress}
-          shippingMethod={shippingMethod}
-          setWinnerName={setWinnerName}
-          setWinnerContact={setWinnerContact}
-          setWinnerAddress={setWinnerAddress}
-          setShippingMethod={setShippingMethod}
-          isAuctionEnded={true} // 결제 완료 상태
-          artName={artName}
-          onPaymentComplete={handlePaymentComplete} // 결제 완료 핸들러 전달
-          paymentCompleted={true} // 결제 완료 상태 전달
-        />
-      )}
-
-<BidModal
-          showBidModal={showBidModal}
-          setShowBidModal={setShowBidModal}
-          bidPrice={bidPrice}
-          setBidPrice={setBidPrice}
-          handleBid={handleBid}
-          currentPrice={currentPrice}
-        />
-
-        <ToastContainer />
-      </div>
-    </Router> // Router 종료
-  );
-};
-
-export default App;
+        {/* 경매 상태에 따라 다르게 렌더링 */}
+        {state === 0 && (
+          <AuctionInfo
+            currentPrice={currentPrice}
+            maxPrice={maxPrice}
+            myCurrentPrice={myCurrentPrice}
+            setShowBidModal={setShowBidModal}
+            isAuctionEnded={false} // 경매 진행 중
+            timeRemaining={timeRemaining}
+          />
+        )}
+        {state === 1 && (
+          <AuctionResult
+            userBid={myCurrentPrice}
+            finalPrice={currentPrice}
+            winnerName={winnerName}
+            winnerContact={winnerContact}
+            winnerAddress={winnerAddress}
+            shippingMethod={shippingMethod}
+            setWinnerName={setWinnerName}
+            setWinnerContact={setWinnerContact}
+            setWinnerAddress={setWinnerAddress}
+            setShippingMethod={setShippingMethod}
+            isAuctionEnded={true} // 낙찰 실패 상태
+            artName={artName}
+            onPaymentComplete={handlePaymentComplete} // 결제 완료 핸들러 전달
+          />
+        )}
+        {state === 2 && (
+          <AuctionResult
+            userBid={myCurrentPrice}
+            finalPrice={currentPrice}
+            winnerName={winnerName}
+            winnerContact={winnerContact}
+            winnerAddress={winnerAddress}
+            shippingMethod={shippingMethod}
+            setWinnerName={setWinnerName}
+            setWinnerContact={setWinnerContact}
+            setWinnerAddress={setWinnerAddress}
+            setShippingMethod={setShippingMethod}
+            isAuctionEnded={true} // 낙찰 성공 상태
+            artName={artName}
+            onPaymentComplete={handlePaymentComplete} // 결제 완료 핸들러 전달
+          />
+        )}
+        {state === 3 && (
+          <AuctionResult
+            userBid={myCurrentPrice}
+            finalPrice={currentPrice}
+            winnerName={winnerName}
+            winnerContact={winnerContact}
+            winnerAddress={winnerAddress}
+            shippingMethod={shippingMethod}
+            setWinnerName={setWinnerName}
+            setWinnerContact={setWinnerContact}
+            setWinnerAddress={setWinnerAddress}
+            setShippingMethod={setShippingMethod}
+            isAuctionEnded={true} // 결제 완료 상태
+            artName={artName}
+            onPaymentComplete={handlePaymentComplete} // 결제 완료 핸들러 전달
+            paymentCompleted={true} // 결제 완료 상태 전달
+          />
+        )}
+  
+         <BidModal
+            showBidModal={showBidModal}
+            setShowBidModal={setShowBidModal}
+            bidPrice={bidPrice}
+            setBidPrice={setBidPrice}
+            handleBid={handleBid}
+            currentPrice={currentPrice}
+          />
+  
+          <ToastContainer />
+        </div>
+      </Router> // Router 종료
+    );
+  };
+  
+  export default ActionPage;
+  

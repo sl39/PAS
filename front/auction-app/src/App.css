@@ -2,38 +2,33 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .container {
   max-width: 1200px; /* 최대 너비 설정 */
   margin: auto; /* 중앙 정렬 */
   padding: 0 15px; /* 좌우 패딩 추가 */
 }
 
-.image-container {
-  text-align: center; /* 이미지 중앙 정렬 */
-}
-
 .row {
   margin: 0; /* 기본 마진 제거 */
+  display: flex; /* Flexbox 사용 */
+  flex-wrap: wrap; /* 요소가 넘어갈 때 줄 바꿈 */
 }
 
 .col-md-6 {
   padding: 15px; /* 각 열에 패딩 추가 */
+  flex: 1 1 45%; /* 비율 조정, 최소 너비 설정 */
+  box-sizing: border-box; /* 패딩 포함하여 너비 계산 */
 }
 
 .img-fluid {
   max-width: 100%; /* 이미지가 부모 요소의 너비를 넘지 않도록 설정 */
   height: auto; /* 비율 유지 */
+}
+
+.dotted-line {
+  border: none; /* 기본 경계선 제거 */
+  border-top: 1px dotted #000000; /* 점선 스타일 */
+  margin: 10px 0; /* 위아래 여백 추가 */
 }
 
 @media (max-width: 768px) {
@@ -43,30 +38,6 @@
 
   .col-md-6 {
     width: 100%; /* 너비를 100%로 설정 */
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
   }
 }
 
@@ -82,11 +53,6 @@
   z-index: 1000; /* 모달이 다른 요소 위에 보이도록 설정 */
 }
 
-.modal-content {
-  display: flex;
-  flex-direction: column;
-}
-/* 오른쪽 정보란 스타일 */
 .info-panel {
   font-size: 1.5rem; /* 폰트 크기 설정 (기본값보다 키움) */
   margin-bottom: 20px; /* 아래쪽 여백 추가 */
@@ -100,11 +66,7 @@
 .info-panel p {
   margin: 5px 0; /* 각 내용 사이 여백 조정 */
 }
-.dotted-line {
-  border: none; /* 기본 경계선 제거 */
-  border-top: 1px dotted #000000; /* 점선 스타일 */
-  margin: 10px 0; /* 위아래 여백 추가 */
-}
+
 .select-container {
   position: relative;
 }
@@ -119,7 +81,7 @@
 .select-container::after {
   content: '▼'; /* 역삼각형 아이콘 */
   position: absolute;
-  top: 70%;
+  top: 50%; /* 세로 중앙 정렬 */
   right: 10px; /* 아이콘 위치 조정 */
   transform: translateY(-50%); /* 세로 중앙 정렬 */
   pointer-events: none; /* 아이콘 클릭 방지 */
