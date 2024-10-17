@@ -14,11 +14,11 @@ justify-content: center;
 export default function DetailPage() {
     const [ artwork, setArtwork ] = useState(null);
     const { art_pk, user_pk } = useParams();
-
+    console.log(art_pk)
     useEffect(() => {
         const fetchArtwork = async () => {
             try {
-                const response = await axios.get(`http://artion.site:8080/api/art/detail?artPk=7&userPk=8`);
+                const response = await axios.get(`http://artion.site:8080/api/art/detail?artPk=${art_pk}&userPk=8`);
                 setArtwork(response.data);
             } catch (error) {
                 console.error("Error:", error);

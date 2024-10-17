@@ -12,7 +12,7 @@ export default function App() {
         <Route path="/" element={<MainFeed />} />
         <Route path="/search" element={<Search />} />
         <Route path="/detail/:art_pk/:user_pk" element={<DetailPage />} />
-        <Route path="/arCanvas" element={<ARCanvas />} />
+        <Route path="/AR/:art_pk" element={<ARCanvas />} />
       </Routes>
     </Router>
   );
