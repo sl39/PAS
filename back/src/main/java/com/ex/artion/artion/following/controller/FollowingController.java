@@ -17,7 +17,6 @@ import java.util.List;
 public class FollowingController {
     private final FollowingService followingService;
     private final UserService userService;
-
     @PostMapping("/{customerId}/follow/{sellerId}")
     public String follow (@PathVariable Integer customerId, @PathVariable Integer sellerId) {
         UserEntity customer = userService.searchUser(customerId);
