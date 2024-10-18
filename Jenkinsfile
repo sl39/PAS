@@ -15,7 +15,7 @@ pipeline {
                         reference: '',
                         trackingSubmodules: true]],
                     userRemoteConfigs:
-                        [[credentialsId: 'repo-and-hook-access-token-credentials',
+                        [[credentialsId: 'github_gom5314',
                             url: 'https://github.com/Gom534/PAS.git']]
                     ]
                 )
