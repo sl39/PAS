@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import ArtworkItem from "./ArtworkItem";
+import ArtistItem from "./ArtistItem";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useRef } from "react";
 
-export default function MainFeedItem({ type, artWorkList, userPk }) {
+export default function SearchedArtist() {
   // Styled Components
-  const MainFeedContainer = styled.div`
+  const SearchContainer = styled.div`
     overflow: hidden;
     position: relative;
     padding: 10px;
@@ -13,9 +13,10 @@ export default function MainFeedItem({ type, artWorkList, userPk }) {
   `;
 
   const ContentBox = styled.div`
-    margin: 35px 25px 20px 25px;
+    margin: 10px 25px 0px 25px;
     overflow: hidden;
     display: flex;
+    flex-wrap: nowrap;
     flex-shrink: 0;
     scroll-behavior: smooth;
   `;
@@ -23,14 +24,14 @@ export default function MainFeedItem({ type, artWorkList, userPk }) {
   const LeftArrow = styled(IoIosArrowBack)`
     position: absolute;
     left: 10px;
-    top: 40%;
+    top: 50%;
     cursor: pointer;
   `;
 
   const RightArrow = styled(IoIosArrowForward)`
     position: absolute;
     right: 10px;
-    top: 40%;
+    top: 50%;
     cursor: pointer;
   `;
 
@@ -66,26 +67,20 @@ export default function MainFeedItem({ type, artWorkList, userPk }) {
 
   return (
     <>
-      <MainFeedContainer>
-        {type === "best" ? (
-          <>
-            <BoldParagraph>Most Popular</BoldParagraph>
-            <NormalParagraph>인기 작품</NormalParagraph>
-          </>
-        ) : (
-          <>
-            <BoldParagraph>New Arrivals</BoldParagraph>
-            <NormalParagraph>신규 작품</NormalParagraph>
-          </>
-        )}
+      <SearchContainer>
+        <BoldParagraph>Artist</BoldParagraph>
+        <NormalParagraph>작가</NormalParagraph>
         <LeftArrow onClick={scrollLeft}></LeftArrow>
         <ContentBox ref={contentRef}>
-          {artWorkList.map((item) => (
-            <ArtworkItem key={item.art_pk} artWork={item}></ArtworkItem>
-          ))}
+          <ArtistItem></ArtistItem>
+          <ArtistItem></ArtistItem>
+          <ArtistItem></ArtistItem>
+          <ArtistItem></ArtistItem>
+          <ArtistItem></ArtistItem>
+          <ArtistItem></ArtistItem>
         </ContentBox>
         <RightArrow onClick={scrollRight}></RightArrow>
-      </MainFeedContainer>
+      </SearchContainer>
     </>
   );
 }

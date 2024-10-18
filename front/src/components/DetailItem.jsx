@@ -177,7 +177,12 @@ export default function DetailItem ({ artWork }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isArtFollowing, setIsArtFollowing] = useState(artWork.isArtFollowing);
     const [artFollowingNum, setArtFollowingNum] = useState(artWork.artFollowingNum);
+    const currentTime = new Date();
+    const chstartTime = new Date(artWork.startTime.replace(" ","T"));
+    const chendTime = new Date(artWork.endTime.replace(" ","T"));
     const {art_pk, user_pk} = useParams();
+
+    console.log("시간", chstartTime, chendTime, currentTime)
     console.log(user_pk)
     
     if(!artWork) return null;
@@ -202,8 +207,8 @@ export default function DetailItem ({ artWork }) {
         console.log(art_pk)
         try {
             const url = isArtFollowing 
-                ? `https://artion.site:8080/api/artfollowing/${art_pk}/8/unlike`
-                : `https://artion.site:8080/api/artfollowing/${art_pk}/8`;
+                ? `https://artion.site/api/artfollowing/${art_pk}/8/unlike`
+                : `https://artion.site/api/artfollowing/${art_pk}/8`;
 
             const response = await axios({
                 method: isArtFollowing ? 'delete' : 'post',
@@ -275,7 +280,10 @@ export default function DetailItem ({ artWork }) {
                 {artWork.isPossible ? (
                     <>
                     {/* 경매 페이지로 이동 주소 */}
-                    {artWork.auctionState === 0 && <GoButton>경매 시작 전입니다.</GoButton>}
+                    {artWork.auctionState === 0 && currentTime < chstartTime &&(<GoButton>경매 시작 전입니다.</GoButton>)}
+                    {artWork.auctionState === 0 && currentTime >= chstartTime && currentTime <= chendTime
+                    && (<GoButton>경매 진행 중입니다.</GoButton>)}
+                    {artWork.auctionState === 0 && currentTime > chendTime &&(<GoButton>경매가 종료되었습니다.</GoButton>)}
                     {artWork.auctionState === 1 && <GoButton to={`/`}>입찰하러 가기</GoButton>}
                     {artWork.auctionState === 2 && <GoButton to={`/`}>경매 완료</GoButton>}
                     {artWork.auctionState === 3 && <GoButton to={`/`}>판매되었습니다.</GoButton>}
