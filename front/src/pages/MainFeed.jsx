@@ -5,14 +5,14 @@ import axios from "axios";
 
 export async function NewFeedApi() {
   const response = await axios.get(
-    "http://artion.site:8080/api/art/main/recent"
+    "https://artion.site/api/art/main/recent"
   );
   return response.data;
 }
 
 export async function BestFeedApi() {
   const response = await axios.get(
-    "http://artion.site:8080/api/art/main/popular"
+    "https://artion.site/api/art/main/popular"
   );
   return response.data;
 }

@@ -99,7 +99,7 @@ const AuctionResult = ({
                 <h2>최종 낙찰가: KRW {finalPrice?.toLocaleString() || '없음'}</h2>
                 <h2>내 입찰가: KRW {userBid?.toLocaleString() || '없음'}</h2>
                 <hr className="dotted-line" />
-                <h4>결제 정보 입력</h4>
+                <h2>결제 정보 입력</h2>
                 <div className="form-group">
                   <input
                     type="text"

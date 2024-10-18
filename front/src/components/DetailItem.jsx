@@ -196,8 +196,8 @@ export default function DetailItem ({ artWork }) {
         console.log(art_pk)
         try {
             const url = isArtFollowing 
-                ? `http://artion.site:8080/api/artfollowing/${art_pk}/8/unlike`
-                : `http://artion.site:8080/api/artfollowing/${art_pk}/8`;
+                ? `https://artion.site/api/artfollowing/${art_pk}/8/unlike`
+                : `https://artion.site/api/artfollowing/${art_pk}/8`;
 
             const response = await axios({
                 method: isArtFollowing ? 'delete' : 'post',
@@ -264,9 +264,9 @@ export default function DetailItem ({ artWork }) {
                     <>
                     {/* 경매 페이지로 이동 주소 */}
                     {artWork.auctionState === 0 && <GoButton>경매 시작 전입니다.</GoButton>}
-                    {artWork.auctionState === 1 && <GoButton to={`/auction/${art_pk}/:user_pk`}>입찰하러 가기</GoButton>}
-                    {artWork.auctionState === 2 && <GoButton to={`/auction/${art_pk}/:user_pk`} style={{textAlign:'center'}}>경매 완료</GoButton>}
-                    {artWork.auctionState === 3 && <GoButton to={`/auction/${art_pk}/:user_pk`}>판매되었습니다.</GoButton>}
+                    {artWork.auctionState === 1 && <GoButton to={`/auction/${art_pk}/7`}>입찰하러 가기</GoButton>}
+                    {artWork.auctionState === 2 && <GoButton to={`/auction/${art_pk}/7`} style={{textAlign:'center'}}>경매 완료</GoButton>}
+                    {artWork.auctionState === 3 && <GoButton to={`/auction/${art_pk}/7`}>판매되었습니다.</GoButton>}
                     </>
                     ): (<GoButton>경매에 참여할 수 없습니다.</GoButton>)
                 }

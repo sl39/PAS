@@ -18,7 +18,7 @@ export default function DetailPage() {
     useEffect(() => {
         const fetchArtwork = async () => {
             try {
-                const response = await axios.get(`http://artion.site:8080/api/art/detail?artPk=${art_pk}&userPk=8`);
+                const response = await axios.get(`https://artion.site/api/art/detail?artPk=${art_pk}&userPk=8`);
                 setArtwork(response.data);
             } catch (error) {
                 console.error("Error:", error);
