@@ -202,8 +202,8 @@ export default function DetailItem ({ artWork }) {
         console.log(art_pk)
         try {
             const url = isArtFollowing 
-                ? `http://artion.site:8080/api/artfollowing/${art_pk}/8/unlike`
-                : `http://artion.site:8080/api/artfollowing/${art_pk}/8`;
+                ? `https://artion.site:8080/api/artfollowing/${art_pk}/8/unlike`
+                : `https://artion.site:8080/api/artfollowing/${art_pk}/8`;
 
             const response = await axios({
                 method: isArtFollowing ? 'delete' : 'post',
