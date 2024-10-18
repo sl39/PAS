@@ -385,7 +385,7 @@ public class ArtService {
 
 
 
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.fromString(sort),sortType));
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.fromString(sort),sortType).and(Sort.by("id")));
         Page<ArtSearchKeywordResponseDto> dto = artRepository.findAllWithDetails(keyword,category,minPrice,maxPrice,pageable);
         PageArtSearchResponseDto pages = PageArtSearchResponseDto.builder()
                 .content(dto.getContent())

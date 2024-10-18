@@ -39,3 +39,5 @@ Artion.pem
 ### VS Code ###
 .vscode/
 *.yml
+
+*.pem

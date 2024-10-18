@@ -106,19 +106,19 @@ public class UserController {
         return userService.requestMyProfileAndFollows(user_pk);
     }
 
-    @PostMapping("/artfol/{user_pk}")
+    @GetMapping("/artfol/{user_pk}")
     public ResponseEntity<List<Map<String, Object>>> artFollowing(
         @PathVariable(value = "user_pk") Integer user_pk) {
         return userService.requestArtFollowing(user_pk);
     }
 
-    @PostMapping("/fol/{user_pk}")
+    @GetMapping("/fol/{user_pk}")
     public ResponseEntity<List<Map<String, Object>>> Following(
         @PathVariable(value = "user_pk") Integer user_pk) {
         return userService.requestFollowing(user_pk);
     }
 
-    @PostMapping("/myfol/{user_pk}")
+    @GetMapping("/myfol/{user_pk}")
     public ResponseEntity<List<Map<String, Object>>> myFollower(
         @PathVariable(value = "user_pk") Integer user_pk) {
         return userService.requestMyFollower(user_pk);
