@@ -25,7 +25,7 @@ pipeline {
 
         stage('build') {
             steps {
-                dir('backend') {
+                dir('back') {
                     sh '''
                         echo build start
                         ./gradlew clean bootJar
