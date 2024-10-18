@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Header, LikedArtItem } from "../components";
+import { FollowingItem, Header, LikedArtItem, FollowersItem } from "../components";
 import styled from "styled-components";
 import { IoIosArrowBack } from 'react-icons/io';
 import axios from "axios";
@@ -60,6 +60,14 @@ const ArtworkList = styled.ul`
     margin: 0;
     list-style-type: none;
 `;
+const FollowingList = styled.ul`
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    gap: 10px;
+`;
 // 좋아요
 const LikedArtworks = ({user_pk}) => {
     const [ likedArtworks, setLikedArtworks ] = useState([]);
@@ -91,18 +99,56 @@ const LikedArtworks = ({user_pk}) => {
     );
 };
 // 팔로잉
-const Following = () => {
+const Following = ({ user_pk }) => {
+    const [following, setFollowing] = useState([]);
+    useEffect(() => {
+        const fetchFollowing = async() => {
+            try{
+                const response = await axios.get(`https://artion.site/api/user/fol/1`);
+                setFollowing(response.data);
+            } catch(error){
+                console.error("팔로잉 에러:", error);
+            }
+        };
+        fetchFollowing();
+    }, [user_pk]);
+
     return (
-        <div>
-            <h1>팔로잉</h1>
+        <div style={{marginTop: 50}}>
+            {following.length > 0 ? (
+                <FollowingList>
+                    {following.map((user) => (
+                        <FollowingItem key={user.user_pk} user={user} />
+                    ))}
+                </FollowingList>
+            ): (null)}
         </div>
     );
 };
 // 팔로워
-const Followers = () => {
+const Followers = ({ user_pk }) => {
+    const [followers, setFollowers] = useState([]);
+    useEffect (() => {
+        const fetchFollowers = async() => {
+            try{
+                const response = await axios.get(`https://artion.site/api/user/myfol/1`);
+                console.log("팔로워",response.data);
+                setFollowers(response.data);
+            } catch(error){
+                console.error("팔로워 에러", error);
+            }
+        };
+        fetchFollowers();
+    }, [user_pk]);
     return (
-        <div>
-            <h1>팔로워</h1>
+        <div style={{marginTop: 50}}>
+            {followers.length > 0 ? (
+                <FollowingList>
+                    {followers.map((user) => (
+                        <FollowersItem key={user.user_pk} user={user} />
+                    ))}
+                </FollowingList>
+            ): (null)}
         </div>
     );
 };
@@ -111,15 +157,16 @@ const Followers = () => {
 const FollowingPage = () => {
     const { page } = useParams();
     const [selectedPage, setSelectedPage] = useState(page);
+    const user_pk = 1;
 
     const renderPage = () => {
         switch (selectedPage) {
             case 'liked':
-                return <LikedArtworks />;
+                return <LikedArtworks user_pk={user_pk}/>;
             case 'following':
-                return <Following />;
+                return <Following user_pk={user_pk} />;
             case 'followers':
-                return <Followers />;
+                return <Followers user_pk={user_pk}/>;
             default:
                 return <LikedArtworks />;
         }

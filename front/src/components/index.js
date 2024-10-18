@@ -11,6 +11,8 @@ import Warning from "./Warning";
 import SearchedArtwork from "./SearchedArtwork";
 import SearchedArtist from "./SearchedArtist";
 import LikedArtItem from "./LikedArtItem"
+import FollowingItem from "./FollowingItem";
+import FollowersItem from "./FollowersItem";
 
 export {
   Header,
@@ -26,4 +28,6 @@ export {
   SearchedArtwork,
   SearchedArtist,
   LikedArtItem,
+  FollowingItem,
+  FollowersItem,
 };
