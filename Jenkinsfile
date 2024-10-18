@@ -26,6 +26,7 @@ pipeline {
         stage('build') {
             steps {
                 dir('back') {
+                    sh 'chmod +x gradlew' // 여기서 실행 권한 부여
                     sh '''
                         echo build start
                         ./gradlew clean bootJar
