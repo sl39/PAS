@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/artfollowing")
 public class ArtFollowingController {
+
     private final ArtFollowingService artFollowingService;
    @PostMapping("/{artId}/{userId}")
     public String followingArt (@PathVariable Integer userId, @PathVariable Integer artId){

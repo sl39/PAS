@@ -70,4 +70,7 @@ public interface ArtRepository extends JpaRepository<ArtEntity, Integer> {
             "WHERE a.art_pk = :art_pk "
             ,nativeQuery = true)
     ArtEntity findByArt_pk(Integer art_pk);
+
+
+//    List<ArtEntity> findAllByCreatedAtDesc(Integer user_pk);
 }

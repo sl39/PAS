@@ -18,9 +18,13 @@ public enum ErrorCode {
     PAGESIZE_BAD_REQUEST(HttpStatus.BAD_REQUEST,"PAGE-001","PAGESIZE는 1이상 가능합니다"),
     AUCTION_TIME_BAD_REQUEST(HttpStatus.BAD_REQUEST,"AUCTION-001","AUCTION 가능한 상태가 아닙니다"),
     AUCTION_USER_BAD_REQUEST(HttpStatus.BAD_REQUEST,"AUCTION-002","그림을 등록한 유저는 경매에 참여 할 수 없습니다."),
-    AUCTION_PRICE_BAD_REQUEST(HttpStatus.BAD_REQUEST,"AUCTION-003","경매가가 현재가 보다 적거나 최대값보다 클 수 없습니다.");
+    AUCTION_PRICE_BAD_REQUEST(HttpStatus.BAD_REQUEST,"AUCTION-003","경매가가 현재가 보다 적거나 최대값보다 클 수 없습니다."),
+
+    RELOGIN_REQUIRED(HttpStatus.BAD_REQUEST, "ACCOUNT-004", "재로그인이 필요합니다."),
+    TOKEN_NOT_VALID(HttpStatus.UNAUTHORIZED, "ACCOUNT-008", "유효하지 않은 인증 정보입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;
+
 }

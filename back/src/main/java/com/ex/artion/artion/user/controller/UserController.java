@@ -5,9 +5,14 @@ import com.ex.artion.artion.user.dto.UserCreateDto;
 import com.ex.artion.artion.user.dto.UserUpdateDto;
 import com.ex.artion.artion.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
 
 import java.util.List;
 import java.util.Map;
@@ -106,19 +111,19 @@ public class UserController {
         return userService.requestMyProfileAndFollows(user_pk);
     }
 
-    @PostMapping("/artfol/{user_pk}")
+    @GetMapping("/artfol/{user_pk}")
     public ResponseEntity<List<Map<String, Object>>> artFollowing(
         @PathVariable(value = "user_pk") Integer user_pk) {
         return userService.requestArtFollowing(user_pk);
     }
 
-    @PostMapping("/fol/{user_pk}")
+    @GetMapping("/fol/{user_pk}")
     public ResponseEntity<List<Map<String, Object>>> Following(
-        @PathVariable(value = "user_pk") Integer user_pk) {
+            @PathVariable(value = "user_pk") Integer user_pk) {
         return userService.requestFollowing(user_pk);
     }
 
-    @PostMapping("/myfol/{user_pk}")
+    @GetMapping("/myfol/{user_pk}")
     public ResponseEntity<List<Map<String, Object>>> myFollower(
         @PathVariable(value = "user_pk") Integer user_pk) {
         return userService.requestMyFollower(user_pk);
