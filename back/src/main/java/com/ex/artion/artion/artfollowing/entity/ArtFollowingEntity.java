@@ -14,14 +14,15 @@ import lombok.Setter;
                 columnNames = {"art_entity_art_pk", "user_entity_user_pk"})
 })
 public class ArtFollowingEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer art_following_pk;
 
     @ManyToOne
+    @JoinColumn(name = "user_entity_user_pk", referencedColumnName = "user_pk")
     private UserEntity userEntity;
 
     @ManyToOne
+    @JoinColumn(name = "art_entity_art_pk", referencedColumnName = "art_pk")
     private ArtEntity artEntity;
 }

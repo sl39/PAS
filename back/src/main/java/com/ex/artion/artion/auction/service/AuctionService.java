@@ -75,7 +75,6 @@ public class AuctionService {
                 .build();
 
         auctionRepository.save(auction);
-
         AuctionBitResponseDto auctionBitResponseDto = AuctionBitResponseDto.builder()
                 .currentPrice(auction.getCurrent_price())
                 .userPk(auction.getBid_user().getUser_pk())
