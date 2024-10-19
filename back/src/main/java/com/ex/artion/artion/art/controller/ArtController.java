@@ -88,4 +88,9 @@ public class ArtController {
 
         return new ResponseEntity<>(artService.getSearch(keyword, category, minPrice, maxPrice, sortBy, sort, page, pageSize), HttpStatus.OK);
     }
+
+    @GetMapping("/search/painter")
+    public ResponseEntity<List<ArtistSearchResponseDto>> getPainter(@RequestParam(value = "keyword", defaultValue = "") String keyword){
+        return new ResponseEntity<>(artService.getPainter(keyword), HttpStatus.OK);
+    }
 }

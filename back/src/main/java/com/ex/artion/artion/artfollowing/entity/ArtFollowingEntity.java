@@ -9,6 +9,10 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
+@Table(name = "art_following_entity",uniqueConstraints = {
+        @UniqueConstraint(name = "likes_uk",
+                columnNames = {"art_entity_art_pk", "user_entity_user_pk"})
+})
 public class ArtFollowingEntity {
 
     @Id

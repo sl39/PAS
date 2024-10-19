@@ -31,4 +31,5 @@ public class AuctionDetailResponseDto {
     private String endTime;
     private String artInfo;
     private Integer state;
+    private Integer paying_pk;
 }

@@ -25,6 +25,8 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-oauth2-authorization-server")
+	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -36,10 +38,7 @@ dependencies {
 	implementation("net.datafaker:datafaker:2.4.0")
 	implementation ("org.springframework.boot:spring-boot-starter-websocket")
 
-	//로그인, 권한관련
-	implementation("org.springframework.boot:spring-boot-starter-oauth2-authorization-server")
-	implementation("org.springframework.boot:spring-boot-starter-security")
-	//인가코드 받고 액세스 토큰, 리프레쉬 토큰 받기 위해 사용
+    //인가코드 받고 액세스 토큰, 리프레쉬 토큰 받기 위해 사용
 	implementation("org.json:json:20231013")
 	implementation("com.googlecode.json-simple:json-simple:1.1.1")
 
@@ -47,9 +46,6 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 	implementation("org.springframework.boot:spring-boot-starter-web")
-//	implementation("org.springframework.security:spring-security-oauth2-client")
-//	implementation("org.springframework.security:spring-security-oauth2-client:6.2.4")
-//	implementation("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.6.8")
 
 	//jjwt 관련
 	implementation("io.jsonwebtoken:jjwt-api:0.11.5")

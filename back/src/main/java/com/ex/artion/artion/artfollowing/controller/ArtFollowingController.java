@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 public class ArtFollowingController {
 
     private final ArtFollowingService artFollowingService;
-   @PostMapping("/{artId}/{userId}")
+    @PostMapping("/{artId}/{userId}")
     public String followingArt (@PathVariable Integer userId, @PathVariable Integer artId){
        return artFollowingService.Followingart(userId,artId);
    }
@@ -18,5 +18,4 @@ public class ArtFollowingController {
     public String unlike (@PathVariable Integer userId, @PathVariable Integer artId){
        return artFollowingService.unlikeartfollowing(userId,artId);
     }
-
 }

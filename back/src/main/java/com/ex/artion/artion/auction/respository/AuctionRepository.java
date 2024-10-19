@@ -1,8 +1,10 @@
 package com.ex.artion.artion.auction.respository;
 
+import com.ex.artion.artion.art.entity.ArtEntity;
 import com.ex.artion.artion.auction.entity.AuctionEntity;
 import com.ex.artion.artion.user.dto.UserMaxDto;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -50,6 +52,21 @@ public interface AuctionRepository extends JpaRepository<AuctionEntity, Integer>
             "(SELECT MAX(b.current_price) FROM auction_entity b WHERE b.art_entity_art_pk = :artPk)" , nativeQuery = true
     )
     Optional<AuctionEntity> findMax(@Param("artPk") Integer artPk);
+
+    @Query( value = "" +
+            "SELECT a.* " +
+            "FROM auction_entity as a " +
+            "WHERE a.art_entity_art_pk = :artPk AND a.current_price = (SELECT MAX(b.current_price) FROM auction_entity as b WHERE b.art_entity_art_pk= :artPk) "
+            , nativeQuery = true
+    )
+    Optional<AuctionEntity> findByIdAndMaxPrice(@Param(value = "artPk") Integer artPk);
+
+    @Modifying
+    @org.springframework.transaction.annotation.Transactional
+    @Query("DELETE FROM AuctionEntity a WHERE a.art_entity.art_pk = :artPk")
+    void deleteAllByArt_entity(@Param(value = "artPk") Integer artPk);
+
+
 
 
 

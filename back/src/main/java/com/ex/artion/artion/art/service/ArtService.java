@@ -8,6 +8,7 @@ import com.ex.artion.artion.artcategory.entity.ArtCategoryEntity;
 import com.ex.artion.artion.artcategory.respository.ArtArtCategoryRepository;
 import com.ex.artion.artion.artcategory.respository.ArtCategoryRepository;
 import com.ex.artion.artion.artcategory.service.ArtCategoryService;
+import com.ex.artion.artion.artfollowing.entity.ArtFollowingEntity;
 import com.ex.artion.artion.artimage.entity.ArtImageEntity;
 import com.ex.artion.artion.artimage.respository.ArtImageRepository;
 import com.ex.artion.artion.artimage.service.ArtImageService;
@@ -241,10 +242,12 @@ public class ArtService {
         UserEntity userEntity = user.get();
         ArtEntity artEntity = art.get();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        Double width = Math.round(artEntity.getWidth() * 10) / 10.0;
+        Double depth = Math.round(artEntity.getDepth() * 10) / 10.0;
+        Double length = Math.round(artEntity.getHeight() * 10) / 10.0;
 
         String start = artEntity.getStartTime().format(formatter);
         String end = artEntity.getEndTime().format(formatter);
-
         ArtDetailResponseDto dto = ArtDetailResponseDto.builder()
                 .created(artEntity.getCreatedAt())
                 .artInfo(artEntity.getArt_info())
@@ -252,15 +255,21 @@ public class ArtService {
                 .endTime(end)
                 .startTime(start)
                 .maxPrice(artEntity.getMaxP())
-                .width(artEntity.getWidth())
-                .depth(artEntity.getDepth())
-                .length(artEntity.getHeight())
+                .width(width)
+                .depth(depth)
+                .length(length)
                 .artName(artEntity.getArt_name())
                 .artistName(artEntity.getPainter())
-                .Qurater(artEntity.getQurator())
-                .userPk(userEntity.getUser_pk())
-                .userName(userEntity.getUser_name())
+                .Qurater(artEntity.getQurator() != null ? artEntity.getQurator() : false)
+                .sellerPk(artEntity.getUserEntity().getUser_pk())
+                .sellerName(artEntity.getUserEntity().getUser_name())
+                .isArtFollowing(false)
                 .build();
+
+        Optional<ArtFollowingEntity> artFollowing = artFollowingRepository.findByUserEntityAndArtEntity(userEntity, artEntity);
+        if(artFollowing.isPresent()) {
+            dto.setIsArtFollowing(true);
+        }
 
         // 그림 이미지들
         List<ArtImageEntity> images = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
@@ -276,12 +285,13 @@ public class ArtService {
 
         // 그림의 최대값과 최솟값
         List<Object[]> results = auctionRepository.findMaxPriceAndUserMaxPriceByArtPkAndUserPkNative(artEntity.getArt_pk(), userPk);
-        Long maxPrice = null;
-        Long userMaxPrice = null;
+        Long maxPrice = 0L;
+        Long userMaxPrice = 0L;
         for (Object[] result : results) {
-            maxPrice = result[0] != null ? ((Number) result[0]).longValue() : null;  // 첫 번째 값 (전체 경매의 최대값)
-            userMaxPrice = result[1] != null ? ((Number) result[1]).longValue() : null;  // 두 번째 값 (유저의 입찰 중 최대값)
+            maxPrice = result[0] != null ? ((Number) result[0]).longValue() : 0;  // 첫 번째 값 (전체 경매의 최대값)
+            userMaxPrice = result[1] != null ? ((Number) result[1]).longValue() : 0;  // 두 번째 값 (유저의 입찰 중 최대값)
         }
+        maxPrice = Math.max(artEntity.getMinP(), maxPrice);
         dto.setCurrentPrice(maxPrice);
         dto.setMyCurrentPrice(userMaxPrice);
 
@@ -311,7 +321,7 @@ public class ArtService {
                 result.setPrice(art.getMinP());
             } else  {
                 Long price = art.getMinP();
-                Long auctionPrice = auctionRepository.findMaxPriceByArtPk(art.getArt_pk());
+                Long auctionPrice = auctionRepository.findMaxPriceByArtPk(art.getArt_pk()) != null ? auctionRepository.findMaxPriceByArtPk(art.getArt_pk()) : 0 ;
                 if(auctionPrice > price){
                     price = auctionPrice;
                 }
@@ -379,7 +389,7 @@ public class ArtService {
 
 
 
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.fromString(sort),sortType));
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.fromString(sort),sortType).and(Sort.by("id")));
         Page<ArtSearchKeywordResponseDto> dto = artRepository.findAllWithDetails(keyword,category,minPrice,maxPrice,pageable);
         PageArtSearchResponseDto pages = PageArtSearchResponseDto.builder()
                 .content(dto.getContent())
@@ -389,5 +399,11 @@ public class ArtService {
                 .page(dto.getNumber())
                 .build();
         return pages;
+    }
+
+    public List<ArtistSearchResponseDto> getPainter(String keyword) {
+
+        List<ArtistSearchResponseDto> artistSearchResponseDto = userRepository.findByPainterKeyword(keyword);
+        return artistSearchResponseDto;
     }
 }
