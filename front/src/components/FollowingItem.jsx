@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 const ItemContainer = styled.li`
@@ -54,6 +54,10 @@ const UserPage = styled(Link)`
 `;
 
 const FollowingItem = ({ user }) => {
+    const { user_pk} = useParams();
+    const seller_pk = user.user_pk;
+    const customer_pk = user_pk;
+
     if (!user) {
         return null;
     }
