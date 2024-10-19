@@ -55,7 +55,6 @@ const SelectLink = styled(Link)`
 const ArtworkList = styled.ul`
     display: flex;
     flex-wrap: wrap;
-    justify-content: start;
     padding: 0
     margin: 0;
     list-style-type: none;
@@ -71,6 +70,7 @@ const FollowingList = styled.ul`
 // 좋아요
 const LikedArtworks = ({user_pk}) => {
     const [ likedArtworks, setLikedArtworks ] = useState([]);
+    const [selectedArtPk, setSelectedArtPk] = useState(null);
 
     useEffect(() => {
         const fetchLikedArtworks = async() =>{
@@ -84,15 +84,24 @@ const LikedArtworks = ({user_pk}) => {
         fetchLikedArtworks();
     }, [user_pk])
 
+    const handleSelectArtwork = (art_pk) => {
+        setSelectedArtPk(art_pk === selectedArtPk ? null : art_pk); 
+    };
+
     return (
-        <div style={{marginTop: 50}}>
-            {likedArtworks.length > 0? (
+        <div style={{ marginTop: 50 }}>
+            {likedArtworks.length > 0 ? (
                 <ArtworkList>
-                {likedArtworks.map((artWork) => (
-                  <LikedArtItem key={artWork.art_pk} artWork={artWork}/>  
-                ))}
-            </ArtworkList>
-            ): (
+                    {likedArtworks.map((artWork) => (
+                        <LikedArtItem
+                            key={artWork.art_pk}
+                            artWork={artWork}
+                            isSelected={artWork.art_pk === selectedArtPk} 
+                            onClick={handleSelectArtwork} 
+                        />
+                    ))}
+                </ArtworkList>
+            ) : (
                 null
             )}
         </div>
@@ -105,6 +114,7 @@ const Following = ({ user_pk }) => {
         const fetchFollowing = async() => {
             try{
                 const response = await axios.get(`https://artion.site/api/user/fol/1`);
+                console.log(response.data)
                 setFollowing(response.data);
             } catch(error){
                 console.error("팔로잉 에러:", error);
@@ -132,7 +142,6 @@ const Followers = ({ user_pk }) => {
         const fetchFollowers = async() => {
             try{
                 const response = await axios.get(`https://artion.site/api/user/myfol/1`);
-                console.log("팔로워",response.data);
                 setFollowers(response.data);
             } catch(error){
                 console.error("팔로워 에러", error);

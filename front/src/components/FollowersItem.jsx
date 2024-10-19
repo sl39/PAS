@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const ItemContainer = styled.li`
@@ -30,6 +31,12 @@ const UserName = styled.span`
   margin-left: 15px;
 `;
 
+const UserPage = styled(Link)`
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+`;
 const FollowersItem = ({ user }) => {
   if (!user) {
     return null; 
@@ -37,12 +44,15 @@ const FollowersItem = ({ user }) => {
 
   return (
     <ItemContainer>
-      {user.user_image ? (
-        <UserImage src={user.user_image} alt={user.user_name} />
-      ) : (
-        <PlaceholderImage />
-      )}
-      <UserName>{user.user_name}</UserName>
+      {/* user_pk 넣어야함 */}
+        <UserPage to={`/test`}>
+        {user.user_image ? (
+          <UserImage src={user.user_image} alt={user.user_name} />
+        ) : (
+          <PlaceholderImage />
+        )}
+        <UserName>{user.user_name}</UserName>
+        </UserPage>
     </ItemContainer>
   );
 };
