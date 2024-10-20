@@ -186,8 +186,9 @@ const FollowingPage = () => {
     };
 
     return (
+        <div>
+        <Header />
         <FollowingContainer>
-            <Header />
             <HeadContainer>
                 <ButtonContainer>
                     <Link to={`/test`}>
@@ -211,6 +212,7 @@ const FollowingPage = () => {
                 {renderPage()}
             </div>
         </FollowingContainer>
+        </div>
     );
 };
 
