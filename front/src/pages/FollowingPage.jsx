@@ -114,7 +114,6 @@ const Following = ({ user_pk }) => {
         const fetchFollowing = async() => {
             try{
                 const response = await axios.get(`https://artion.site/api/user/fol/1`);
-                console.log(response.data)
                 setFollowing(response.data);
             } catch(error){
                 console.error("팔로잉 에러:", error);
@@ -122,13 +121,15 @@ const Following = ({ user_pk }) => {
         };
         fetchFollowing();
     }, [user_pk]);
-
+const handleUnSubscribe = (seller_pk) => {
+    setFollowing(following.filter(user => user.user_pk !== seller_pk));
+};
     return (
         <div style={{marginTop: 50}}>
             {following.length > 0 ? (
                 <FollowingList>
                     {following.map((user) => (
-                        <FollowingItem key={user.user_pk} user={user} />
+                        <FollowingItem key={user.user_pk} user={user} onUnSubscribe={handleUnSubscribe} />
                     ))}
                 </FollowingList>
             ): (null)}

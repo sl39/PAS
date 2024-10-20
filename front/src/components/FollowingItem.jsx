@@ -1,5 +1,4 @@
 import axios from 'axios';
-import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -53,7 +52,7 @@ const UserPage = styled(Link)`
     color: black;
 `;
 
-const FollowingItem = ({ user }) => {
+const FollowingItem = ({ user, onUnSubscribe}) => {
     const { user_pk} = useParams();
     const seller_pk = user.user_pk;
     const customer_pk = user_pk;
@@ -61,11 +60,15 @@ const FollowingItem = ({ user }) => {
     if (!user) {
         return null;
     }
-    // const handleCancelSubscription = async() => {
-    //     try {
-    //         const response = await axios.
-    //     }
-    // }
+    // 구독취소 부분
+    const handleCancelSubscription = async() => {
+        try {
+            await axios.delete(`https://artion.site/api/following/${customer_pk}/unfollow/${seller_pk}`);
+            onUnSubscribe(seller_pk);
+        } catch(error){
+            console.error("구독취소 실패:", error);
+        }
+    };
 
     return (
         <ItemContainer>
@@ -78,7 +81,7 @@ const FollowingItem = ({ user }) => {
             )}
             <UserName>{user.user_name}</UserName>
             </UserPage>
-            <CancelButton>구독 취소</CancelButton>
+            <CancelButton onClick={handleCancelSubscription}>구독 취소</CancelButton>
         </ItemContainer>
     );
 };
