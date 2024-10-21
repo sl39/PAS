@@ -42,9 +42,8 @@ const ARCanvas = () => {
         const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
         scene.add(light);
 
+        //이미지
         const textureLoader = new THREE.TextureLoader();
-        // const artworkTexture = textureLoader.load(`https://gi.esmplus.com/yesi1/can2734/c2734_vinci_monarisa.jpg`) // 이미지를 텍스처로 로드
-        // const artworkTexture = textureLoader.load(`https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-in-the-style-of-digital-art-image_2958544.jpg`);
         const artworkTexture = textureLoader.load(image);
         // //평면 감지를 위한 표적 생성 - 미리보기 레티클
         // let reticle = new THREE.Mesh(
