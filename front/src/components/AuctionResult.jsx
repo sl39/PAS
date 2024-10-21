@@ -17,15 +17,11 @@ const AuctionResult = ({
   onPaymentComplete,
   paymentCompleted, // 결제 완료 상태 prop 추가
 }) => {
-  const [isImpLoaded, setIsImpLoaded] = useState(false);
-  const [payingPk, setPayingPk] = useState(null); // paying_pk 상태 추가
-
   useEffect(() => {
     // 아임포트 스크립트를 동적으로 로드합니다.
     const script = document.createElement('script');
     script.src = 'https://cdn.iamport.kr/v1/iamport.js';
     script.async = true;
-    script.onload = () => setIsImpLoaded(true);
     document.body.appendChild(script);
   }, []);
 
@@ -36,7 +32,6 @@ const AuctionResult = ({
         params: { artPk: 7, userPk: 7 }, // 필요한 매개변수로 요청
       });
       const fetchedPayingPk = response.data.paying_pk; // 서버에서 받아온 paying_pk
-      setPayingPk(fetchedPayingPk); // 상태에 저장
 
       // 2. 결제 요청
       const IMP = window.IMP; // 아임포트 객체
@@ -56,10 +51,9 @@ const AuctionResult = ({
         console.log('결제 요청 결과:', rsp);
         if (rsp.success) {
           alert('결제가 완료되었습니다.');
-          // 결제 완료 상태 업데이트
           // 3. 결제 정보를 서버에 전송
           try {
-            const orderResponse = await axios.post('/api/order', {
+            await axios.post('/api/order', {
               address_order: winnerAddress,  // 배송 주소
               delivery_type: shippingMethod,  // 배송 방법
               imp_uid: rsp.imp_uid,           // 결제 승인 번호

@@ -63,7 +63,7 @@ const AuctionInfo = ({
   if (loading) return <p>로딩 중...</p>;
   if (error) return <p>{error}</p>;
 
-  const { artImages, created, artistName, artName } = auctionData;
+  const { artName } = auctionData;
 
   const formatTime = (time) => {
     const seconds = Math.floor((time / 1000) % 60);

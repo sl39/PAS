@@ -15,7 +15,7 @@ axios.defaults.baseURL = 'https://artion.site';
 const ActionPage = () => {
   const { art_pk } = useParams(); // URL 파라미터에서 artPk와 userPk 가져오기
   const artPk = Number(art_pk); // 숫자로 변환
-  const userPk = 7; // 숫자로 변환
+  const userPk = 6; // 숫자로 변환
 
   const [auctionData, setAuctionData] = useState(null);
   const [showBidModal, setShowBidModal] = useState(false);
