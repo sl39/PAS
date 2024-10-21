@@ -13,6 +13,7 @@ import SearchedArtist from "./SearchedArtist";
 import LikedArtItem from "./LikedArtItem"
 import FollowingItem from "./FollowingItem";
 import FollowersItem from "./FollowersItem";
+import ARCanvasItem from "./ARCanvasItem";
 
 export {
   Header,
@@ -30,4 +31,5 @@ export {
   LikedArtItem,
   FollowingItem,
   FollowersItem,
+  ARCanvasItem,
 };

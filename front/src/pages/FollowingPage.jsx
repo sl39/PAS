@@ -75,7 +75,7 @@ const LikedArtworks = ({user_pk}) => {
     useEffect(() => {
         const fetchLikedArtworks = async() =>{
             try{
-                const response = await axios.get(`https://artion.site/api/user/artfol/1`);
+                const response = await axios.get(`https://artion.site/api/user/artfol/${user_pk}`);
                 setLikedArtworks(response.data);
             } catch(error){
                 console.error("작품 좋아요 오류 :", error);
@@ -113,7 +113,7 @@ const Following = ({ user_pk }) => {
     useEffect(() => {
         const fetchFollowing = async() => {
             try{
-                const response = await axios.get(`https://artion.site/api/user/fol/1`);
+                const response = await axios.get(`https://artion.site/api/user/fol/${user_pk}`);
                 setFollowing(response.data);
             } catch(error){
                 console.error("팔로잉 에러:", error);

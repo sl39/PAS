@@ -77,7 +77,7 @@ const LikedArtworkItem = ({ artWork, isSelected, onClick }) => {
                     </Link>
                 </Option>
                 <Option>
-                    <Link to={`/test`} style={{ textDecoration: 'none', color: 'inherit'}}>
+                    <Link to={`/test/${user_pk}`} style={{ textDecoration: 'none', color: 'inherit'}}>
                     프로필 보기
                     </Link>
                 </Option>

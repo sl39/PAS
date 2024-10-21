@@ -38,6 +38,8 @@ const UserPage = styled(Link)`
   color: black;
 `;
 const FollowersItem = ({ user }) => {
+  const user_pk = user.user_pk;
+
   if (!user) {
     return null; 
   }
@@ -45,7 +47,7 @@ const FollowersItem = ({ user }) => {
   return (
     <ItemContainer>
       {/* user_pk 넣어야함 */}
-        <UserPage to={`/test`}>
+        <UserPage to={`/test/${user_pk}`}>
         {user.user_image ? (
           <UserImage src={user.user_image} alt={user.user_name} />
         ) : (
