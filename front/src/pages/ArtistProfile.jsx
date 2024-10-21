@@ -12,7 +12,7 @@ const ArtistContainer = styled.div`
 const ProfileBox = styled.div`
   width: 100%;
   max-width: 850px;
-  margin: 30px 0px 50px 0px;
+  margin: 20px 0px 20px 0px;
   display: flex;
   justify-content: start;
   align-items: start;
@@ -61,7 +61,7 @@ const BoxContainer = styled.div`
 const TopBox = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 20px 30px 0px 20px;
+  padding: 0px 30px 0px 20px;
 `;
 
 const BottomBox = styled.div`
@@ -108,8 +108,9 @@ const SettingBox = styled.div`
 `;
 
 const ImageContainer = styled.div`
-  width: 110px;
-  height: 110px;
+  width: 80px;
+  min-width: 80px;
+  height: 80px;
   margin-left: 30px;
   border-radius: 70%;
   border: 2px solid black;
@@ -200,7 +201,6 @@ export default function ArtistProfile() {
         <ArtworkBox>
           <BorderLine>
             <ContentBox>
-              <ArtworkInProfile></ArtworkInProfile>
               <ArtworkInProfile></ArtworkInProfile>
               <ArtworkInProfile></ArtworkInProfile>
               <ArtworkInProfile></ArtworkInProfile>
