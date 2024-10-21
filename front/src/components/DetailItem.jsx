@@ -265,9 +265,9 @@ export default function DetailItem ({ artWork }) {
             </ImageContainer>
             <YearInfoContainer>
                     <YearInfo>제작년도<br/>{artWork.created}</YearInfo>
-                    <SizeInfo>{artWork.length} x {artWork.width} x {artWork.depth} cm
+                    <SizeInfo>{artWork.width} x {artWork.length} x {artWork.depth} cm
                         <br/>
-                        <CameraLink to={`/AR/${art_pk}`}>
+                        <CameraLink to={`/AR/${art_pk}?image=${artWork.artImages[0]}&width=${(artWork.width / 100).toFixed(2)}&length=${(artWork.length / 100).toFixed(2)}`}>
                             <CameraIcon />
                         </CameraLink>
                         <div onClick={handleLikeToggle} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>

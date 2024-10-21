@@ -2,6 +2,7 @@ import React, {useEffect, useRef} from "react";
 import * as THREE from 'three';
 import { ARButton } from 'three/examples/jsm/webxr/ARButton.js';
 import { Header, Warning } from "../components";
+import { useLocation } from "react-router-dom";
 
 const ARCanvas = () => {
     const containerRef = useRef();
@@ -15,6 +16,12 @@ const ARCanvas = () => {
     //Pinch
     const initalPinchDistance = useRef(null);
     const lastArtworkZ = useRef(0);
+    //이미지
+    const location = useLocation();
+    const querryParams = new URLSearchParams(location.search);
+    const image = querryParams.get('image');
+    const width = querryParams.get('width');
+    const length = querryParams.get('length');
 
 
     useEffect(() => {
@@ -37,8 +44,8 @@ const ARCanvas = () => {
 
         const textureLoader = new THREE.TextureLoader();
         // const artworkTexture = textureLoader.load(`https://gi.esmplus.com/yesi1/can2734/c2734_vinci_monarisa.jpg`) // 이미지를 텍스처로 로드
-        const artworkTexture = textureLoader.load(`https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-in-the-style-of-digital-art-image_2958544.jpg`);
-
+        // const artworkTexture = textureLoader.load(`https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-in-the-style-of-digital-art-image_2958544.jpg`);
+        const artworkTexture = textureLoader.load(image);
         // //평면 감지를 위한 표적 생성 - 미리보기 레티클
         // let reticle = new THREE.Mesh(
         //     new THREE.PlaneGeometry(0.3, 0.3),
@@ -70,7 +77,7 @@ const ARCanvas = () => {
                 const angleY = Math.atan2(direction.x, direction.z);
                 artworkRef.current.rotation.set(0, angleY, 0);
             }else {
-                const geometry = new THREE.PlaneGeometry(1,1); //크기 조절
+                const geometry = new THREE.PlaneGeometry(width,length); //크기 조절
                 const material = new THREE.MeshBasicMaterial({ map: artworkTexture, side: THREE.DoubleSide });
                 const artwork = new THREE.Mesh(geometry, material);
                 artwork.position.copy(position);
@@ -238,7 +245,7 @@ const ARCanvas = () => {
             }
             renderer.dispose();
         };
-    }, []);
+    }, [image, width, length]);
 
     return (
         <div ref={containerRef}>
