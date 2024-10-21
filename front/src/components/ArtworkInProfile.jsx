@@ -5,12 +5,12 @@ import { GoHeartFill } from "react-icons/go";
 // Styled Components
 const ArtworkContainer = styled.div`
   margin: 10px;
-  width: 140px;
+  width: 90px;
 `;
 
 const ImageContainer = styled.div`
-  width: 140px;
-  height: 140px;
+  width: 90px;
+  height: 90px;
   overflow: hidden;
   margin-bottom: 3px;
 `;

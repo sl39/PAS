@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import {
   Header,
@@ -8,38 +8,12 @@ import {
 } from "../components";
 import axios from "axios";
 import { IoIosArrowDown } from "react-icons/io";
-
-//prettier-ignore
-export async function searchArtworkApi(options) {
-  const response = await axios.get("https://artion.site/api/art/search", {
-    params: {
-      keyword: options.keyword,
-      category: options.category,
-      minPrice: options.minPrice,
-      maxPrice: options.maxPrice,
-      sortBy: options.sortBy,
-      sort: options.sort,
-      page: options.page,   // 현재 페이지
-      pageSize: 15,         // 페이지당 작품 개수
-    },
-  });
-  return response.data;
-}
-
-//prettier-ignore
-export async function searchArtistApi(options) {
-  const response = await axios.get("https://artion.site/api/art/search/painter", {
-    params: {
-      keyword: options.keyword
-    },
-  });
-  return response.data;
-}
+import { useInView } from "react-intersection-observer";
 
 const SearchBarContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin: 40px 30px 0px 30px;
+  margin: 20px 30px 0px 30px;
 `;
 
 const SearchedItemContainer = styled.div`
@@ -61,7 +35,7 @@ const BorderLine = styled.div`
 const FilterWrapContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin: 10px 30px 50px 30px;
+  margin: 10px 30px 30px 30px;
 `;
 
 const FilterContainer = styled.div`
@@ -76,7 +50,7 @@ const FilterBox = styled.div`
   display: flex;
 
   min-width: 50px;
-  height: 10px;
+  height: 20px;
   border: 1px solid black;
   justify-content: space-between;
   align-items: center;
@@ -92,15 +66,46 @@ const NormalParagraph = styled.p`
   margin: 0px;
 `;
 
+//prettier-ignore
+export async function searchArtworkApi(options) {
+  const response = await axios.get("https://artion.site/api/art/search", {
+    params: {
+      keyword: options.keyword,
+      category: options.category,
+      minPrice: options.minPrice,
+      maxPrice: options.maxPrice,
+      sortBy: options.sortBy,
+      sort: options.sort,
+      page: options.page,   // 현재 페이지
+      pageSize: 20,         // 페이지당 작품 개수
+    },
+  });
+  return response.data;
+}
+
+//prettier-ignore
+export async function searchArtistApi(options) {
+  const response = await axios.get("https://artion.site/api/art/search/painter", {
+    params: {
+      keyword: options.keyword
+    },
+  });
+  return response.data;
+}
+
 export default function Search() {
+  // 작가, 작품 리스트
   const [artistList, setArtistList] = useState([]);
   const [searchedItemList, setSearchedItemList] = useState([]);
 
   // 무한스크롤
-  const [page, setPage] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+  const page = useRef(1);
+  const [hasNextPage, setHasNextPage] = useState(true);
+  const [ref, inView] = useInView({
+    threshold: 1, // 컴포넌트의 100%가 보일 때 inView가 true로 변경
+  });
 
+  // 작가 리스트 가져오기
   useEffect(() => {
     const options = {
       keyword: "",
@@ -114,10 +119,12 @@ export default function Search() {
         console.error("데이터를 가져오는 중에 오류가 발생했습니다: ", error);
       }
     };
+
     fetchData();
   });
 
-  useEffect(() => {
+  // 작품 리스트 가져오기
+  const fetchItemList = useCallback(async () => {
     const options = {
       keyword: "",
       category: "",
@@ -128,41 +135,25 @@ export default function Search() {
       page: page, // 현재 페이지
     };
 
-    const fetchData = async () => {
-      if (isLoading || !hasMore) return;
-      setIsLoading(true);
-
-      try {
-        const response = await searchArtworkApi(options);
-        setSearchedItemList((prev) => [...prev, ...response.content]);
-        setHasMore(response.content.length > 0);
-      } catch (error) {
-        console.error("데이터를 가져오는 중에 오류가 발생했습니다: ", error);
-      } finally {
-        setIsLoading(false);
+    try {
+      // 작품 리스트 fetch
+      const artworkList = await searchArtworkApi(options);
+      setSearchedItemList((prevList) => [...prevList, ...artworkList]);
+      // 다음에 불러올 페이지를 +1 증가
+      setHasNextPage(artworkList.length === 20);
+      if (artworkList.length) {
+        page.current += 1;
       }
-    };
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
-    fetchData();
-  }, [page]); // useState의 page가 바뀔 때마다 해당 useEffect 실행
-
-  // 스크롤 이벤트 등록하기
   useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop !==
-          document.documentElement.offsetHeight ||
-        isLoading
-      ) {
-        return;
-      }
-      setPage((prev) => prev + 1);
-      console.log("페이지 추가 : " + page);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  });
+    if (inView && hasNextPage) {
+      fetchItemList();
+    }
+  }, [fetchItemList, hasNextPage, inView]);
 
   return (
     <>
@@ -191,7 +182,10 @@ export default function Search() {
           <SearchedArtist artistList={artistList}></SearchedArtist>
         </BorderLine>
         <BorderLine>
-          <SearchedArtwork artWorkList={searchedItemList}></SearchedArtwork>
+          <SearchedArtwork
+            ref={ref}
+            artWorkList={searchedItemList}
+          ></SearchedArtwork>
         </BorderLine>
       </SearchedItemContainer>
     </>

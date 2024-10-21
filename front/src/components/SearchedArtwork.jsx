@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import ArtworkItem from "./ArtworkItem";
+import { forwardRef } from "react";
 
 // Styled Components
 const SearchContainer = styled.div`
   overflow: hidden;
   position: relative;
-  padding: 10px;
+  padding: 5px;
   max-width: 830px;
 `;
 
@@ -31,18 +32,18 @@ const NormalParagraph = styled.p`
   margin-left: 30px;
 `;
 
-export default function SearchedArtwork({ artWorkList }) {
+const SearchedArtwork = forwardRef(({ artWorkList }, ref) => {
   return (
-    <>
-      <SearchContainer>
-        <BoldParagraph>Art</BoldParagraph>
-        <NormalParagraph>작품</NormalParagraph>
-        <ContentBox>
-          {artWorkList.map((item) => (
-            <ArtworkItem key={item.art_pk} artWork={item}></ArtworkItem>
-          ))}
-        </ContentBox>
-      </SearchContainer>
-    </>
+    <SearchContainer>
+      <BoldParagraph>Art</BoldParagraph>
+      <NormalParagraph>작품</NormalParagraph>
+      <ContentBox ref={ref}>
+        {artWorkList.map((item) => (
+          <ArtworkItem key={item.art_pk} artWork={item} />
+        ))}
+      </ContentBox>
+    </SearchContainer>
   );
-}
+});
+
+export default SearchedArtwork;
