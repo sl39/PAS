@@ -9,8 +9,8 @@ const SearchContainer = styled.div`
   align-items: center;
   padding-right: 12px;
   border: 1px solid #000;
-  max-width: 835px;
   width: 100%;
+  max-width: 835px;
 `;
 
 const SearchInput = styled.input`
@@ -23,6 +23,8 @@ const SearchInput = styled.input`
 `;
 
 const UnstyledLink = styled(Link)`
+  display: flex;
+  align-items: center;
   cursor: pointer;
   text-decoration: none;
   color: inherit;

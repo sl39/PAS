@@ -16,7 +16,7 @@ export async function bestFeedApi() {
 const SearchBarContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin: 40px 30px 50px 30px;
+  margin: 20px 30px 40px 30px;
 `;
 
 const MainFeedContainer = styled.div`

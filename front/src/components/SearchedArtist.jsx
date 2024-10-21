@@ -7,12 +7,12 @@ import { useRef } from "react";
 const SearchContainer = styled.div`
   overflow: hidden;
   position: relative;
-  padding: 10px;
+  padding: 5px;
   max-width: 830px;
 `;
 
 const ContentBox = styled.div`
-  margin: 10px 25px 0px 25px;
+  margin: 0px 20px 0px 20px;
   overflow: hidden;
   display: flex;
   flex-wrap: nowrap;

@@ -2,7 +2,6 @@ import { TfiClose } from "react-icons/tfi";
 import styled from "styled-components";
 import React from "react";
 import { Link } from "react-router-dom";
-import SearchBar from "./SearchBar";
 
 const MenuContainer = styled.div`
   position: fixed;
@@ -12,13 +11,9 @@ const MenuContainer = styled.div`
   bottom: 0;
   left: 0;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  z-index: 1;
   padding: 20px 35px 20px 20px;
   background-color: white;
-`;
-
-const StyledSearchBar = styled(SearchBar)`
-  margin-bottom: 10px;
 `;
 
 const CategoryContainer = styled.div`
@@ -27,7 +22,7 @@ const CategoryContainer = styled.div`
 
 const MenuIcon = styled.div`
   cursor: pointer;
-  margin-bottom: 43px;
+  margin-bottom: 30px;
 `;
 
 const MenuContent = styled.div`
@@ -41,14 +36,17 @@ const StyledLink = styled(Link)`
 `;
 
 const StyledParagraph = styled.p`
-  margin: 1px 0;
+  margin: 0px;
+  font-weight: 500;
+  font-size: 15px;
   user-select: none;
 `;
 
 const StyledHeading = styled.h3`
   margin-top: 10px;
-  margin-bottom: 5px;
+  margin-bottom: 0px;
   font-weight: 500;
+  font-size: 18px;
   user-select: none;
 `;
 
@@ -58,7 +56,6 @@ export default function SideMenu({ handleToggle, isMenuOpen }) {
       <MenuIcon>
         <TfiClose size={20} onClick={handleToggle} />
       </MenuIcon>
-      <StyledSearchBar></StyledSearchBar>
       <MenuContent>
         <StyledHeading>Category</StyledHeading>
         <CategoryContainer>
