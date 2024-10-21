@@ -132,7 +132,8 @@ const ArtworkImage = styled.img`
 
     @media (max-width: 840px) {
         flex-direction: column;
-        align-items: center; 
+        align-items: left;
+        gap: 10px;
     }
 `;
 const LeftArrow = styled(IoIosArrowBack)`
@@ -263,17 +264,19 @@ export default function DetailItem ({ artWork }) {
                 <RightArrow onClick={handleNext} />
             </ImageContainer>
             <YearInfoContainer>
-                    <YearInfo>제작년도<br/>{artWork.created}</YearInfo>
-                    <SizeInfo>{artWork.width} x {artWork.length} x {artWork.depth} cm
-                        <br/>
-                        <CameraLink to={`/AR/${art_pk}?image=${artWork.artImages[0]}&width=${(artWork.width / 100).toFixed(2)}&length=${(artWork.length / 100).toFixed(2)}`}>
-                            <CameraIcon />
-                        </CameraLink>
-                        <div onClick={handleLikeToggle} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>
-                            {isArtFollowing ? <HeartIconFill/> : <HeartIcon/>}
-                            <FollowingNum>{artFollowingNum}</FollowingNum>
-                        </div>
-                    </SizeInfo>
+                <YearInfo>제작년도<br/>{artWork.created}</YearInfo>
+                <SizeInfo>{artWork.width} x {artWork.length} x {artWork.depth} cm
+                <br/>
+                    <div style={{ display: 'flex', alignItems: 'center',justifyContent: 'flex-end' }}>
+                    <CameraLink to={`/AR/${art_pk}?image=${artWork.artImages[0]}&width=${(artWork.width / 100).toFixed(2)}&length=${(artWork.length / 100).toFixed(2)}`}>
+                        <CameraIcon />
+                    </CameraLink>
+                    <div onClick={handleLikeToggle} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>
+                        {isArtFollowing ? <HeartIconFill/> : <HeartIcon/>}
+                        <FollowingNum>{artFollowingNum}</FollowingNum>
+                    </div>
+                    </div>
+                </SizeInfo>
             </YearInfoContainer>
             </div>
             <InfoContainer>
