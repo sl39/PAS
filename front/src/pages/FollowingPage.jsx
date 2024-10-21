@@ -23,7 +23,9 @@ const ButtonContainer = styled.div`
 `;
 const BackButton = styled(IoIosArrowBack)`
     cursor: pointer;
-    font-size: 30px;
+    color: black;
+    font-size: 25px;
+    
 `;
 const Title = styled.h1`
     margin: 0;
@@ -34,17 +36,22 @@ const Title = styled.h1`
 const SelectContainer = styled.div`
     margin-top: 10px;
     display: flex;
-    justify-content: center;
-    gap: 80px;
+    justify-content: space-around;
     border-bottom: 1px solid lightgray;
 `;
+
 const SelectButton = styled.button`
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
     background-color: white;
-    border: 0px;
-    border-bottom: ${(props) => (props.selected ? '1px solid black' : 'none')};
+    border: 0;
+    border-bottom: ${(props) => (props.selected ? '2px solid black' : 'none')};
     cursor: pointer;
+    flex: 1;
+    padding: 10px; 
+    margin: 0 5px;
+    text-align: center;
+    
     &:focus {
         outline: none;
     }
@@ -53,9 +60,10 @@ const SelectLink = styled(Link)`
     text-decoration: none;
 `;
 const ArtworkList = styled.ul`
-    display: flex;
-    flex-wrap: wrap;
-    padding: 0
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 0;
     margin: 0;
     list-style-type: none;
 `;
@@ -142,7 +150,7 @@ const Followers = ({ user_pk }) => {
     useEffect (() => {
         const fetchFollowers = async() => {
             try{
-                const response = await axios.get(`https://artion.site/api/user/myfol/1`);
+                const response = await axios.get(`https://artion.site/api/user/myfol/${user_pk}`);
                 setFollowers(response.data);
             } catch(error){
                 console.error("팔로워 에러", error);

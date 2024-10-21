@@ -3,24 +3,23 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const ItemContainer = styled.li`
-    margin: 20px;
-    list-style-type: none;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
     position: relative;
+    margin: 0 5px 0 5px;
 `;
 
 const ArtworkImage = styled.img`
-    width: 150px;
+    width: 100%;
     height: auto;
-    margin-right: 10px;
-    cursor: pointer;
+    max-width: 150px;
 `;
 
 const PlaceholderImage = styled.div`
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: auto;
     background-color: lightgray;
     margin-right: 10px;
     cursor: pointer;
@@ -46,11 +45,11 @@ const SelectMessage = styled.div`
 `;
 
 const Option = styled.div`
-    padding: 5px 10px;
     cursor: pointer;
 
     &:hover{
         background-color: lightgray;
+        border-radius: 3px;
     }
 `;
 
@@ -72,12 +71,12 @@ const LikedArtworkItem = ({ artWork, isSelected, onClick }) => {
             <ArtworkTitle>{artWork.art_name}</ArtworkTitle>
             <SelectMessage visible={isSelected}>
                 <Option>
-                    <Link to={`/detail/${art_pk}/${user_pk}`} style={{ textDecoration: 'none', color: 'inherit'}}>
+                    <Link to={`/detail/${art_pk}/${user_pk}`} style={{ textDecoration: 'none', color: 'inherit', fontSize: 14}}>
                     작품 보기
                     </Link>
                 </Option>
                 <Option>
-                    <Link to={`/test/${user_pk}`} style={{ textDecoration: 'none', color: 'inherit'}}>
+                    <Link to={`/test/${user_pk}`} style={{ textDecoration: 'none', color: 'inherit', fontSize: 14}}>
                     프로필 보기
                     </Link>
                 </Option>
