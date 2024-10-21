@@ -204,7 +204,6 @@ export default function DetailItem ({ artWork }) {
     const chendTime = new Date(artWork.endTime.replace(" ","T"));
     const {art_pk, user_pk} = useParams();
 
-    console.log("시간", chstartTime, chendTime, currentTime)
     console.log(user_pk)
     
     if(!artWork) return null;
