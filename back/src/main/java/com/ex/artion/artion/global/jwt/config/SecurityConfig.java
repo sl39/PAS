@@ -5,6 +5,7 @@ import com.ex.artion.artion.global.auth.service.Oauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,8 +17,12 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,19 +49,19 @@ public class SecurityConfig {
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors(withDefaults())
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(
                                 "/",
-                                "/oauth/**",
-                                "/oauth2/**",
-                                "/login/**",
-                                "/error/**",
-                                "/kapi/**",
-                                "/api/user/**",
-                                "/api/art/**",
-                                "/kakao/**"
+                                "/api/**"
+//                                "/oauth2/**",
+//                                "/login/**",
+//                                "/error/**",
+//                                "/kapi/**",
+//                                "/api/user/**",
+//                                "/api/art/**",
+//                                "/kakao/**"
                         ).permitAll() // 카카오 콜백 URL 허용
                         .anyRequest().authenticated())
 
@@ -71,6 +76,22 @@ public class SecurityConfig {
                 );
 
         return http.build();
+    }
+
+
+
+    @Bean //cors 에러 잡기 위해서 추가한 것
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://43.202.31.55"));
+        config.setAllowedMethods(Arrays.asList("HEAD","POST","GET","DELETE","PUT"));
+        config.setAllowedHeaders(Arrays.asList("*"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }
 

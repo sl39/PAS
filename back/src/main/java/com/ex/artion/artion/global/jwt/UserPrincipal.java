@@ -76,4 +76,9 @@ public class UserPrincipal implements UserDetails, OAuth2User {
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
+    public Integer getUserPk() {
+        return userEntity.getUser_pk();
+    }
+
 }

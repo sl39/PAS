@@ -11,6 +11,7 @@ import com.ex.artion.artion.auction.respository.AuctionRepository;
 import com.ex.artion.artion.following.entity.FollowingEntity;
 import com.ex.artion.artion.following.respository.FollowingRepository;
 import com.ex.artion.artion.global.auth.repository.AuthRepository;
+import com.ex.artion.artion.global.jwt.UserPrincipal;
 import com.ex.artion.artion.paying.entity.PayingEntity;
 import com.ex.artion.artion.paying.repository.PayingRepository;
 import com.ex.artion.artion.order.respository.OrderRepostory;
@@ -24,6 +25,7 @@ import org.apache.catalina.User;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,19 +52,17 @@ public class UserService {
     // 소셜로그인 전 기본적인 유저 생성 테스트
     public void createUser(@RequestBody UserCreateDto dto) {
 
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer userId = userPrincipal.getUserPk();
 
-        UserEntity user = new UserEntity();
-//        UserEntity user = authRepository
-//                .findByKakao_pk(kakao_pk)
-//                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
 
         user.setPhone_number(dto.getPhone_number());
         user.setBank_name(dto.getBank_name());
         user.setAddress(dto.getAddress());
         user.setUser_name(dto.getUser_name());
         user.setUser_account(dto.getUser_account());
-        user.setKakao_pk(dto.getKakao_pk());
-
         user.setBlack_list_status(false);
         user.setUser_cash(Long.valueOf(0));
 

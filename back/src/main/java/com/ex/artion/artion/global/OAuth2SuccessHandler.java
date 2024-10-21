@@ -70,9 +70,6 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         response.addHeader("Set-Cookie", createCookie("refreshToken", refreshToken).toString());
 
         redirectStrategy.sendRedirect(request, response, url);
-        System.out.println("이거 jwt 요청임? " + request);
-        System.out.println("이거 jwt 응답임? " + response);
-        System.out.println("url는 뭐임? " + url);
     }
 
     private ResponseCookie createCookie(String key, String value) {
