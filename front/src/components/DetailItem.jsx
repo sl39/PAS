@@ -306,9 +306,9 @@ export default function DetailItem ({ artWork }) {
                     {artWork.auctionState === 0 && currentTime >= chstartTime && currentTime <= chendTime
                     && (<GoButton>경매 진행 중입니다.</GoButton>)}
                     {artWork.auctionState === 0 && currentTime > chendTime &&(<GoButton>경매가 종료되었습니다.</GoButton>)}
-                    {artWork.auctionState === 1 && <GoButton to={`/`}>입찰하러 가기</GoButton>}
-                    {artWork.auctionState === 2 && <GoButton to={`/`}>경매 완료</GoButton>}
-                    {artWork.auctionState === 3 && <GoButton to={`/`}>판매되었습니다.</GoButton>}
+                    {artWork.auctionState === 1 && <GoButton to={`/auction/${art_pk}/7`}>입찰하러 가기</GoButton>}
+                    {artWork.auctionState === 2 && <GoButton to={`/auction/${art_pk}/7`}>경매 완료</GoButton>}
+                    {artWork.auctionState === 3 && <GoButton to={`/auction/${art_pk}/7`}>판매되었습니다.</GoButton>}
                     </>
                     ): (<GoButton>경매에 참여할 수 없습니다.</GoButton>)
                 }

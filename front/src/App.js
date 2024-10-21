@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ArtistProfile, MainFeed, Search, ARCanvas, DetailPage, FollowingPage } from "./pages";
+import { ArtistProfile, MainFeed, Search, ARCanvas, DetailPage, FollowingPage, AuctionPage } from "./pages";
 
 export default function App() {
   
@@ -13,6 +13,7 @@ export default function App() {
         <Route path="/AR/:art_pk" element={<ARCanvas />} />
         <Route path="/test" element={<ArtistProfile />} />
         <Route path="/following/:page" element={<FollowingPage />} />
+        <Route path="/auction/:art_pk/:user_pk" element={<AuctionPage />} />
       </Routes>
     </Router>
   );
