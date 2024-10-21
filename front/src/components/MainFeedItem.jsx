@@ -3,51 +3,51 @@ import ArtworkItem from "./ArtworkItem";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useRef } from "react";
 
-export default function MainFeedItem({ type, artWorkList, userPk }) {
-  // Styled Components
-  const MainFeedContainer = styled.div`
-    overflow: hidden;
-    position: relative;
-    padding: 10px;
-    max-width: 830px;
-  `;
+// Styled Components
+const MainFeedContainer = styled.div`
+  overflow: hidden;
+  position: relative;
+  padding: 10px;
+  max-width: 830px;
+`;
 
-  const ContentBox = styled.div`
-    margin: 35px 25px 20px 25px;
-    overflow: hidden;
-    display: flex;
-    flex-shrink: 0;
-    scroll-behavior: smooth;
-  `;
+const ContentBox = styled.div`
+  margin: 35px 25px 20px 25px;
+  overflow: hidden;
+  display: flex;
+  flex-shrink: 0;
+  scroll-behavior: smooth;
+`;
 
-  const LeftArrow = styled(IoIosArrowBack)`
-    position: absolute;
-    left: 10px;
-    top: 40%;
-    cursor: pointer;
-  `;
+const LeftArrow = styled(IoIosArrowBack)`
+  position: absolute;
+  left: 10px;
+  top: 40%;
+  cursor: pointer;
+`;
 
-  const RightArrow = styled(IoIosArrowForward)`
-    position: absolute;
-    right: 10px;
-    top: 40%;
-    cursor: pointer;
-  `;
+const RightArrow = styled(IoIosArrowForward)`
+  position: absolute;
+  right: 10px;
+  top: 40%;
+  cursor: pointer;
+`;
 
-  const BoldParagraph = styled.p`
-    font-weight: 600;
-    font-size: 17px;
-    margin: 0px;
-    margin-left: 30px;
-  `;
+const BoldParagraph = styled.p`
+  font-weight: 600;
+  font-size: 17px;
+  margin: 0px;
+  margin-left: 30px;
+`;
 
-  const NormalParagraph = styled.p`
-    font-weight: 500;
-    font-size: 11px;
-    margin: 0px;
-    margin-left: 30px;
-  `;
+const NormalParagraph = styled.p`
+  font-weight: 500;
+  font-size: 11px;
+  margin: 0px;
+  margin-left: 30px;
+`;
 
+export default function MainFeedItem({ type, artWorkList }) {
   const contentRef = useRef(null);
 
   const scrollLeft = () => {
