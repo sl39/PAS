@@ -1,23 +1,17 @@
-import logo from "./logo.svg";
-import "./App.css";
+import Profile from "./element/profile";
+import Login from "./pages/login";
+import MyPage from "./pages/info";
+import SettingPage from "./pages/setting";
+import Info from "./pages/info";
+import InfoBar from "./element/infoBar";
+import HistoryBox from "./element/historyBox";
+import Register from "./pages/register";
+import PurchaseHistory from "./pages/purchaseHistory";
+import Receipt from "./pages/receipt";
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>PAS 프론트~~!</p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Login />
   );
 }
-
-export default App;
+//style={{maxWidth: '1000px', margin: 'auto'}}
