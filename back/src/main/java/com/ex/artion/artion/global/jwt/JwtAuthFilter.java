@@ -6,9 +6,12 @@ import com.ex.artion.artion.global.error.ErrorCode;
 import com.ex.artion.artion.global.error.ErrorResponseEntity;
 import com.ex.artion.artion.user.entity.UserEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
@@ -16,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +48,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final Oauth2UserService userService;
     private final BlacklistRepository blacklistRepository;
 
+    @Value("${jwt.secret_key}")
+    private String secretKey;
+
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -52,7 +59,33 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException
     {
         try {
-            String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+            Cookie[] cookies = request.getCookies();
+            String accessToken = null;
+
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if ("accessToken".equals(cookie.getName())) {
+                        accessToken = cookie.getValue();
+                        break;
+                    }
+                }
+            }
+
+            jwtTokenProvider.validateJwtToken(accessToken);
+
+            log.info("jwt 검증 통과");
+
+//            if (accessToken != null) {
+//                Claims claims = Jwts.parser()
+//                        .setSigningKey(secretKey)
+//                        .parseClaimsJws(accessToken)
+//                        .getBody();
+//
+//            }
+//            Header 사용하지 않음.(쿠키 사용)
+//            String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+//            String jwt = header.split(" ")[1];
+//            log.info("jwt 추출 : {}", jwt);
 
 //            if (header == null || !header.startsWith("Bearer ")) {
 //                log.info("헤더에 엑세스 토큰이 없습니다.");
@@ -63,22 +96,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 //                }
 //            }
 
-            System.out.println("header 있긴 함? : " + header);
-
-            String jwt = header.split(" ")[1];
-            log.info("jwt 추출 : {}", jwt);
-
-            jwtTokenProvider.validateJwtToken(jwt);
-
-            log.info("jwt 검증 통과");
-
             // BlackList 확인
-            Optional<BlacklistEntity> entity = blacklistRepository.findByToken(jwt);
+            Optional<BlacklistEntity> entity = blacklistRepository.findByToken(accessToken);
             if (entity.isPresent()) {
                 throw new CustomException(ErrorCode.RELOGIN_REQUIRED);
             }
 
-            Integer userPk = jwtTokenProvider.getPkFromJwtToken(jwt);
+            Integer userPk = jwtTokenProvider.getPkFromJwtToken(accessToken);
             UserDetails userDetails = userService.loadUserByPk(userPk);
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

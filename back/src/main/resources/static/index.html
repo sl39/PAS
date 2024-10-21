@@ -12,50 +12,42 @@
 <script>
 
 // JWT 디코딩 함수
-function parseJwt(token) {
-const base64Url = token.split('.')[1];
-const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-}).join(''));
-
-return JSON.parse(jsonPayload);
-}
-
-// 버튼 클릭 이벤트
-document.getElementById('testApiBtn').addEventListener('click', function() {
-const accessToken = document.cookie.split('; ').find(row => row.startsWith('accessToken=')).split('=')[1];
-
-if (!accessToken) {
-alert("Access Token이 없습니다. 로그인하세요.");
-return;
-}
-
-// JWT에서 userId 추출
-const decodedToken = parseJwt(accessToken);
-
-console.log(decodedToken)
-const userId = decodedToken.sub;
-
-    console.log("유저 아이디는 뭘까요?", userId)
-
-// API 호출 (JWT를 Authorization 헤더에 추가)
-fetch(`/api/user/fol/${userId}`, {
-method: 'GET',
-headers: {
-'Authorization': 'Bearer ' + accessToken
-}
+fetch('/api/user/fol', {
+    method: 'GET',
+    credentials: 'include' // 쿠키를 포함하여 요청하도록 설정
 })
-.then(response => response.json())
-.then(data => {
-console.log("API 응답:", data);
-alert("API 호출 성공: " + JSON.stringify(data));
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("API 응답:", data);
+        // 응답 처리
+    })
+    .catch(error => {
+        console.error("API 호출 오류:", error);
+    });
+
+fetch('/api/user/create', {
+    method: 'POST',
+    credentials: 'include', // 쿠키를 포함하여 요청하도록 설정
+    headers: {
+        'Content-Type': 'application/json' // 요청이 JSON 형식임을 명시
+    },
+    body: JSON.stringify({
+        user_name: '원미상',
+        address: '부산부산부산부산부산',
+        phone_number: '01034567891',
+        user_account: '123-456-7891234',
+        bank_name : '외국'
+
+    })
 })
-.catch(error => {
-console.error("API 호출 오류:", error);
-alert("API 호출 실패");
-});
-});
+    .then(response => response.json()) // 응답을 JSON 형식으로 파싱
+    .then(data => console.log(data)) // 받은 데이터를 처리
+    .catch(error => console.error('Error:', error));
 </script>
 </body>
 </html>

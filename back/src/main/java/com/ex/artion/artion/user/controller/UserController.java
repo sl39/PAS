@@ -1,6 +1,7 @@
 package com.ex.artion.artion.user.controller;
 
 
+import com.ex.artion.artion.global.jwt.UserPrincipal;
 import com.ex.artion.artion.user.dto.UserCreateDto;
 import com.ex.artion.artion.user.dto.UserUpdateDto;
 import com.ex.artion.artion.user.service.UserService;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +26,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/create")
-    public ResponseEntity<String> createUser(
-            @RequestBody UserCreateDto dto) {
+    public ResponseEntity<String> createUser(@RequestBody UserCreateDto dto) {
+
         userService.createUser(dto);
         return ResponseEntity.ok("회원가입 성공!");
     }
@@ -117,10 +119,13 @@ public class UserController {
         return userService.requestArtFollowing(user_pk);
     }
 
-    @GetMapping("/fol/{user_pk}")
-    public ResponseEntity<List<Map<String, Object>>> Following(
-            @PathVariable(value = "user_pk") Integer user_pk) {
-        return userService.requestFollowing(user_pk);
+    @GetMapping("/fol")
+    public ResponseEntity<List<Map<String, Object>>> Following() {
+
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer userId = userPrincipal.getUserPk();
+
+        return userService.requestFollowing(userId);
     }
 
     @GetMapping("/myfol/{user_pk}")
