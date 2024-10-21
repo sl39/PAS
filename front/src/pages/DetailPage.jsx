@@ -18,6 +18,7 @@ export default function DetailPage() {
     useEffect(() => {
         const fetchArtwork = async () => {
             try {
+                // 수정 - user_pk 바꾸기
                 const response = await axios.get(`https://artion.site/api/art/detail?artPk=${art_pk}&userPk=8`);
                 setArtwork(response.data);
             } catch (error) {

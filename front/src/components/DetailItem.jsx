@@ -46,7 +46,9 @@ const TimeInfo = styled.p`
     `;
 const GoButton = styled(Link)`
     font-size: 15px;
+    font-weight: bold;
     text-decoration: none;
+    text-align: center;
     border: 1px solid gray;
     border-radius: 7px;
     margin-top: 14px;
@@ -56,15 +58,19 @@ const GoButton = styled(Link)`
         border-color: darkgray;
     }
     `;
-const MaxPrice = styled.p`
+const MaxPrice = styled.div`
+    display: flex;
     font-size: 15px;
+    justify-content: space-between;
     border: 1px solid gray;
     padding: 5px;
     border-radius: 7px
     `;
-const MinPrice = styled.p`
-    margin: 0;
+const MinPrice = styled.div`
+    margin-top: 14px;
+    display: flex;
     font-size: 15px;
+    justify-content: space-between;
     border: 1px solid gray;
     padding: 5px;
     border-radius: 7px
@@ -171,7 +177,12 @@ export default function DetailItem ({ artWork }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isArtFollowing, setIsArtFollowing] = useState(artWork.isArtFollowing);
     const [artFollowingNum, setArtFollowingNum] = useState(artWork.artFollowingNum);
+    const currentTime = new Date();
+    const chstartTime = new Date(artWork.startTime.replace(" ","T"));
+    const chendTime = new Date(artWork.endTime.replace(" ","T"));
     const {art_pk, user_pk} = useParams();
+
+    console.log("시간", chstartTime, chendTime, currentTime)
     console.log(user_pk)
     
     if(!artWork) return null;
@@ -258,15 +269,24 @@ export default function DetailItem ({ artWork }) {
                 <Title>{artWork.artName}{artWork.qurater ? <QuraterIcon /> : null }</Title>
                 <Artist>작가: {artWork.artistName}</Artist>
                 <Registrant>등록자: {artWork.sellerName}</Registrant>
-                <MaxPrice>즉시판매가: {artWork.maxPrice} 원</MaxPrice>
-                <MinPrice>현재가: {artWork.currentPrice} 원</MinPrice>
+                <MaxPrice>
+                    <span>즉시판매가 :</span>
+                    <span>{artWork.maxPrice}원</span>
+                </MaxPrice>
+                <MinPrice>
+                    <span>현재가 :</span>
+                    <span>{artWork.currentPrice}원</span>
+                </MinPrice>
                 {artWork.isPossible ? (
                     <>
                     {/* 경매 페이지로 이동 주소 */}
-                    {artWork.auctionState === 0 && <GoButton>경매 시작 전입니다.</GoButton>}
-                    {artWork.auctionState === 1 && <GoButton to={`/auction/${art_pk}/7`}>입찰하러 가기</GoButton>}
-                    {artWork.auctionState === 2 && <GoButton to={`/auction/${art_pk}/7`} style={{textAlign:'center'}}>경매 완료</GoButton>}
-                    {artWork.auctionState === 3 && <GoButton to={`/auction/${art_pk}/7`}>판매되었습니다.</GoButton>}
+                    {artWork.auctionState === 0 && currentTime < chstartTime &&(<GoButton>경매 시작 전입니다.</GoButton>)}
+                    {artWork.auctionState === 0 && currentTime >= chstartTime && currentTime <= chendTime
+                    && (<GoButton>경매 진행 중입니다.</GoButton>)}
+                    {artWork.auctionState === 0 && currentTime > chendTime &&(<GoButton>경매가 종료되었습니다.</GoButton>)}
+                    {artWork.auctionState === 1 && <GoButton to={`/`}>입찰하러 가기</GoButton>}
+                    {artWork.auctionState === 2 && <GoButton to={`/`}>경매 완료</GoButton>}
+                    {artWork.auctionState === 3 && <GoButton to={`/`}>판매되었습니다.</GoButton>}
                     </>
                     ): (<GoButton>경매에 참여할 수 없습니다.</GoButton>)
                 }

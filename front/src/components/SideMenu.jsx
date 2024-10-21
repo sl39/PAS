@@ -7,22 +7,23 @@ import SearchBar from "./SearchBar";
 export default function SideMenu({ handleToggle, isMenuOpen }) {
   const MenuContainer = styled.div`
     position: fixed;
-    width: 30%;
-    min-width: 250px;
-    max-width: 350px;
+    width: 200px;
     height: 100%;
     top: 0;
     bottom: 0;
     left: 0;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     z-index: 1000;
-    padding: 30px;
+    padding: 20px 35px 20px 20px;
     background-color: white;
   `;
 
+  const StyledSearchBar = styled(SearchBar)`
+    margin-bottom: 10px;
+  `;
+
   const CategoryContainer = styled.div`
-    margin-left: 15px;
-    margin-bottom: 15px;
+    margin: 10px 0px 15px 10px;
   `;
 
   const MenuIcon = styled.div`
@@ -31,7 +32,7 @@ export default function SideMenu({ handleToggle, isMenuOpen }) {
   `;
 
   const MenuContent = styled.div`
-    margin-top: 50px;
+    margin-top: 0px;
   `;
 
   const StyledLink = styled(Link)`
@@ -55,9 +56,9 @@ export default function SideMenu({ handleToggle, isMenuOpen }) {
   return (
     <MenuContainer>
       <MenuIcon>
-        <TfiClose size={30} onClick={handleToggle} />
+        <TfiClose size={20} onClick={handleToggle} />
       </MenuIcon>
-      <SearchBar></SearchBar>
+      <StyledSearchBar></StyledSearchBar>
       <MenuContent>
         <StyledHeading>Category</StyledHeading>
         <CategoryContainer>

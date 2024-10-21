@@ -3,14 +3,14 @@ import styled from "styled-components";
 import { Header, MainFeedItem, SearchBar } from "../components";
 import axios from "axios";
 
-export async function NewFeedApi() {
+export async function newFeedApi() {
   const response = await axios.get(
     "https://artion.site/api/art/main/recent"
   );
   return response.data;
 }
 
-export async function BestFeedApi() {
+export async function bestFeedApi() {
   const response = await axios.get(
     "https://artion.site/api/art/main/popular"
   );
@@ -24,7 +24,7 @@ export default function MainFeed() {
   const SearchBarContainer = styled.div`
     display: flex;
     justify-content: center;
-    margin: 40px 30px 0px 30px;
+    margin: 40px 30px 50px 30px;
   `;
 
   const MainFeedContainer = styled.div`
@@ -34,11 +34,21 @@ export default function MainFeed() {
     justify-content: center;
   `;
 
+  const BorderLine = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    justify-content: start;
+    border-top: 1px solid black;
+    width: 850px;
+  `;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const newItemList = await NewFeedApi();
+        const newItemList = await newFeedApi();
         setNewItemList(newItemList);
+        console.log(newItemList);
       } catch (error) {
         console.error("데이터를 가져오는 중에 오류가 발생했습니다: ", error);
       }
@@ -49,7 +59,7 @@ export default function MainFeed() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const bestItemList = await BestFeedApi();
+        const bestItemList = await bestFeedApi();
         setBestItemList(bestItemList);
       } catch (error) {
         console.error("데이터를 가져오는 중에 오류가 발생했습니다: ", error);
@@ -65,8 +75,12 @@ export default function MainFeed() {
         <SearchBar></SearchBar>
       </SearchBarContainer>
       <MainFeedContainer>
-        <MainFeedItem type={"best"} artWorkList={bestItemList}></MainFeedItem>
-        <MainFeedItem type={"new"} artWorkList={newItemList}></MainFeedItem>
+        <BorderLine>
+          <MainFeedItem type={"best"} artWorkList={bestItemList}></MainFeedItem>
+        </BorderLine>
+        <BorderLine>
+          <MainFeedItem type={"new"} artWorkList={newItemList}></MainFeedItem>
+        </BorderLine>
       </MainFeedContainer>
     </>
   );

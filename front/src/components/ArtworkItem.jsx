@@ -7,6 +7,7 @@ export default function ArtworkItem({ artWork, userPk }) {
   const ArtworkContainer = styled.div`
     margin: 5px;
     width: 120px;
+    margin-bottom: 20px;
   `;
 
   const ImageContainer = styled.div`

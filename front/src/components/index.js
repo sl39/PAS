@@ -8,6 +8,11 @@ import SearchFilter from "./SearchFilter";
 import MainFeedItem from "./MainFeedItem";
 import DetailItem from "./DetailItem";
 import Warning from "./Warning";
+import SearchedArtwork from "./SearchedArtwork";
+import SearchedArtist from "./SearchedArtist";
+import LikedArtItem from "./LikedArtItem"
+import FollowingItem from "./FollowingItem";
+import FollowersItem from "./FollowersItem";
 
 export {
   Header,
@@ -20,4 +25,9 @@ export {
   MainFeedItem,
   DetailItem,
   Warning,
+  SearchedArtwork,
+  SearchedArtist,
+  LikedArtItem,
+  FollowingItem,
+  FollowersItem,
 };
