@@ -14,7 +14,8 @@ const ItemContainer = styled.li`
 const ArtworkImage = styled.img`
     width: 100%;
     height: auto;
-    max-width: 150px;
+    aspect-ratio: 1;
+    object-fit: cover;
 `;
 
 const PlaceholderImage = styled.div`
@@ -27,7 +28,14 @@ const PlaceholderImage = styled.div`
 
 const ArtworkTitle = styled.span`
     font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%; 
+    max-width: 150px; 
+    text-align: center;
 `;
+
 const SelectMessage = styled.div`
     position: absolute;
     top: 100%;
