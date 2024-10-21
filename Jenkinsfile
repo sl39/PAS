@@ -5,21 +5,10 @@ pipeline {
         stage('github clone') {
             steps {
                 checkout(
-                    [$class: 'GitSCM',
-                    branches: [[name: '*/back/feat/AR']],  // 수정된 부분
-                    extensions: [
-                        [$class: 'SubmoduleOption',
-                            disableSubmodules: false,
-                            parentCredentials: true,
-                            recursiveSubmodules: false,
-                            reference: '',
-                            trackingSubmodules: true]
-                    ],
-                    userRemoteConfigs: [[
+                    branches: name: '*/back/feat/AR',  // 수정된 부분                  
                         credentialsId: 'github_gom5314',  // 확인해야 할 ID
                         url: 'https://github.com/Gom534/PAS.git'
-                    ]]
-                ])
+                )}
             }
         }
 
