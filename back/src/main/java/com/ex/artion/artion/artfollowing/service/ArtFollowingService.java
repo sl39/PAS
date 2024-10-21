@@ -47,6 +47,8 @@ public class ArtFollowingService {
         if(existingLike.isPresent()) {
             artfollowingRepository.deleteByUserEntityAndArtEntity(user, art);
             return "unliked";
+
+            
         }
         else{
             return "not liked";
