@@ -37,6 +37,7 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	implementation("net.datafaker:datafaker:2.4.0")
 	implementation ("org.springframework.boot:spring-boot-starter-websocket")
+	implementation("net.nurigo:sdk:4.3.0")
 
     //인가코드 받고 액세스 토큰, 리프레쉬 토큰 받기 위해 사용
 	implementation("org.json:json:20231013")
