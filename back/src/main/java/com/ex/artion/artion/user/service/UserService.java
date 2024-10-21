@@ -10,6 +10,8 @@ import com.ex.artion.artion.auction.entity.AuctionEntity;
 import com.ex.artion.artion.auction.respository.AuctionRepository;
 import com.ex.artion.artion.following.entity.FollowingEntity;
 import com.ex.artion.artion.following.respository.FollowingRepository;
+import com.ex.artion.artion.global.auth.repository.AuthRepository;
+import com.ex.artion.artion.global.jwt.UserPrincipal;
 import com.ex.artion.artion.paying.entity.PayingEntity;
 import com.ex.artion.artion.paying.repository.PayingRepository;
 import com.ex.artion.artion.order.respository.OrderRepostory;
@@ -19,9 +21,11 @@ import com.ex.artion.artion.user.dto.UserUpdateDto;
 import com.ex.artion.artion.user.entity.UserEntity;
 import com.ex.artion.artion.user.respository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -42,17 +47,22 @@ public class UserService {
     private final ArtImageRepository artImageRepository;
     private final ArtFollowingRepository artFollowingRepository;
     private final FollowingRepository followingRepository;
+    private final AuthRepository authRepository;
 
     // 소셜로그인 전 기본적인 유저 생성 테스트
     public void createUser(@RequestBody UserCreateDto dto) {
 
-        UserEntity user = new UserEntity();
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer userId = userPrincipal.getUserPk();
+
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+
         user.setPhone_number(dto.getPhone_number());
         user.setBank_name(dto.getBank_name());
         user.setAddress(dto.getAddress());
         user.setUser_name(dto.getUser_name());
         user.setUser_account(dto.getUser_account());
-
         user.setBlack_list_status(false);
         user.setUser_cash(Long.valueOf(0));
 
@@ -574,7 +584,6 @@ public class UserService {
         UserEntity user;
         Map<String, Object> result = new HashMap<>();
         List<Map<String, Object>> itemList = new ArrayList<>();
-        Map<String, Object> itemData = new HashMap<>();
         try {
             user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
@@ -584,14 +593,27 @@ public class UserService {
         }
         Map<String, Object> mainData = new HashMap<>();
 
-        // 소셜로그인 시 여기서 이미지 불러와야 함
+//         소셜로그인 시 여기서 이미지 불러와야 함
+        String user_Image = user.getKakao_image();
+        result.put("user_Image", user_Image);
+
         String User_name = user.getUser_name();
         result.put("User_name", User_name);
 
         List<FollowingEntity> Follow = followingRepository.findBySeller(user);
         result.put("Follow", Follow.size());
 
+//        List<ArtEntity> art = artRepository.findAllByCreatedAtDesc(user.getUser_pk());
         List<ArtEntity> art = artRepository.findAllByUser_pk(user.getUser_pk());
+
+        List<ArtEntity> artDESC = art.stream()
+                        .sorted(Comparator.comparing(ArtEntity::getCreatedAt).reversed())
+//                        .collect(Collectors.toList());
+                        .toList();
+
+        System.out.println(art);
+        System.out.println(artDESC);
+
         if (art.isEmpty()) {
             result.put("에러", "사용자가 등록한 그림이 없습니다");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
@@ -603,6 +625,7 @@ public class UserService {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
                 } else {
                     if (artEntity.getCurrent_auction_status() != 0) {
+                        Map<String, Object> itemData = new HashMap<>();
                         Integer art_pk = artEntity.getArt_pk();
                         String art_name = artEntity.getArt_name();
                         Long price = auctionRepository.findMaxPriceByArtPk(art_pk);
@@ -631,12 +654,13 @@ public class UserService {
                         itemList.add(itemData);
                         result.put("artList", itemList);
                     } else {
+                        Map<String, Object> itemData = new HashMap<>();
                         Integer art_pk = artEntity.getArt_pk();
                         String art_name = artEntity.getArt_name();
                         Long price = artEntity.getMinP();
                         List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
 
-                        if (artImage != null) {
+                        if (!artImage.isEmpty() && artImage != null) {
                             String image = String.valueOf(artImage.get(0).getArt_image_url());
                             itemData.put("image", image);
                         } else {
@@ -681,7 +705,7 @@ public class UserService {
         String User_name = user.getUser_name();
 
         // 카카오 로그인 시 이미지 불러오기 해야함.
-        String Image = "https://png.pngtree.com/thumb_back/fh260/background/20230613/pngtree-small-white-rabbit-in-the-grass-image_2915502.jpg";
+        String Image = user.getKakao_image();
 
         result.put("User_name", User_name);
         result.put("User_image", Image);
@@ -703,7 +727,7 @@ public class UserService {
         String User_name = user.getUser_name();
 
         // 카카오 로그인 시 이미지 불러오기 해야함.
-        String Image = "https://png.pngtree.com/thumb_back/fh260/background/20230613/pngtree-small-white-rabbit-in-the-grass-image_2915502.jpg";
+        String Image = user.getKakao_image();
 
         result.put("User_name", User_name);
         result.put("User_image", Image);
@@ -783,11 +807,11 @@ public class UserService {
                 Integer Seller_pk = followingEntity.getSeller().getUser_pk();
 
                 // 카카오 로그인 시 이미지 불러오기 해야함.
-                String user_image = "https://png.pngtree.com/thumb_back/fh260/background/20230613/pngtree-small-white-rabbit-in-the-grass-image_2915502.jpg";
+                String user_image = user.getKakao_image();
 
                 String user_name = followingEntity.getSeller().getUser_name();
 
-//                카톡 이미지가 없을 수도 있으니까 일단 남겨놓자.
+//                카톡 이미지가 없을 수도 있으니까 일단 남겨놓자. - 카톡이미지 없으면 디폴트 이미지 줄거라 상관없음
 //                List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(art_pk);
 //                if (!artImage.isEmpty()) {
 //                    String image = String.valueOf(artImage.get(0).getArt_image_url());
@@ -826,10 +850,10 @@ public class UserService {
                 Map<String, Object> map = new HashMap<>();
 
                 // 필요없겠지?
-//                Integer Seller_pk = followingEntity.getCustomer().getUser_pk();
+                Integer Customer_pk = followingEntity.getCustomer().getUser_pk();
 
                 // 카카오 로그인 시 이미지 불러오기 해야함.
-                String user_image = "https://png.pngtree.com/thumb_back/fh260/background/20230613/pngtree-small-white-rabbit-in-the-grass-image_2915502.jpg";
+                String user_image = user.getKakao_image();
 
                 String user_name = followingEntity.getCustomer().getUser_name();
 
@@ -842,7 +866,7 @@ public class UserService {
 //                    String image = null;
 //                    map.put("image", image);
 //                }
-
+                map.put("user_pk", Customer_pk);
                 map.put("user_image", user_image);
                 map.put("user_name", user_name);
                 result.add(map);

@@ -113,49 +113,51 @@ public class ArtService {
         ArtEntity art = artRepository.findById(art_pk)
                 .orElseThrow(() -> new IllegalArgumentException("해당 그림이 없습니다!"));
 
-        art.setArt_name(dto.getArt_name());
-        art.setPainter(dto.getPainter());
-        art.setCreatedAt(dto.getCreatedAt());
-        art.setWidth(dto.getWidth());
-        art.setDepth(dto.getDepth());
-        art.setHeight(dto.getHeight());
+        if (art.getCurrent_auction_status() == 0) {
+            art.setArt_name(dto.getArt_name());
+            art.setPainter(dto.getPainter());
+            art.setCreatedAt(dto.getCreatedAt());
+            art.setWidth(dto.getWidth());
+            art.setDepth(dto.getDepth());
+            art.setHeight(dto.getHeight());
 
-        art.setStartTime(dto.getStartTime());
-        art.setEndTime(dto.getEndTime());
-        art.setMinP(dto.getMinP());
-        art.setMaxP(dto.getMaxP());
-        art.setArt_info(dto.getArt_info());
+            art.setStartTime(dto.getStartTime());
+            art.setEndTime(dto.getEndTime());
+            art.setMinP(dto.getMinP());
+            art.setMaxP(dto.getMaxP());
+            art.setArt_info(dto.getArt_info());
 
-        art.setUpload(LocalDate.now());
+            art.setUpload(LocalDate.now());
 
-        List<ArtImageEntity> beforeImages = artImageRepository.findAllByArtEntity(art_pk);
-        List<String> imagesToAdd = new ArrayList<>(dto.getArtImage());
-        artImageRepository.deleteAll(beforeImages);
+            List<ArtImageEntity> beforeImages = artImageRepository.findAllByArtEntity(art_pk);
+            List<String> imagesToAdd = new ArrayList<>(dto.getArtImage());
+            artImageRepository.deleteAll(beforeImages);
 
-        for (String imageUrl : imagesToAdd) {
-            ArtImageEntity newImage = new ArtImageEntity();
-            newImage.setArt_entity(art);
-            newImage.setArt_image_url(imageUrl);
-            artImageRepository.save(newImage);
-            System.out.println(newImage);
-        }
+            for (String imageUrl : imagesToAdd) {
+                ArtImageEntity newImage = new ArtImageEntity();
+                newImage.setArt_entity(art);
+                newImage.setArt_image_url(imageUrl);
+                artImageRepository.save(newImage);
+                System.out.println(newImage);
+            }
 
-        List<ArtArtCategory> beforeCates = artArtCategoryRepository.findByArtEntity(art_pk);
-        artArtCategoryRepository.deleteAll(beforeCates);
-        // 입력한 카테고리에 해당하는 pk 반환
-        for (String category : dto.getArtCategory()) {
-            System.out.println("카테고리" + category);
+            List<ArtArtCategory> beforeCates = artArtCategoryRepository.findByArtEntity(art_pk);
+            artArtCategoryRepository.deleteAll(beforeCates);
+            // 입력한 카테고리에 해당하는 카테고리_pk return
+            for (String category : dto.getArtCategory()) {
+                System.out.println("카테고리" + category);
 
-            ArtCategoryEntity cateId = artCategoryRepository.findIdByArtCategoryName(category);
+                ArtCategoryEntity cateId = artCategoryRepository.findIdByArtCategoryName(category);
 
-            System.out.println("카테고리 id" + cateId);
+                System.out.println("카테고리 id" + cateId);
                 // 새로운 Cates 추가
                 ArtArtCategory newCates = new ArtArtCategory();
                 newCates.setArt(art);
                 newCates.setArt_category(cateId);
                 artArtCategoryRepository.save(newCates);
+            }
+            artRepository.save(art);
         }
-        artRepository.save(art);
     }
 
     public void changedArt(@RequestBody ArtBidDto dto, @RequestParam(value = "art_pk") Integer art_pk) {
@@ -172,13 +174,15 @@ public class ArtService {
         ArtEntity art = artRepository.findById(art_pk)
                 .orElseThrow(() -> new IllegalArgumentException("해당 그림이 없습니다!"));
 
-        List<ArtImageEntity> beforeImges = artImageRepository.findAllByArtEntity(art_pk);
-        List<ArtArtCategory> beforeCates = artArtCategoryRepository.findByArtEntity(art_pk);
-        if(beforeImges != null || beforeCates != null) {
-            artImageRepository.deleteAll(beforeImges);
-            artArtCategoryRepository.deleteAll(beforeCates);
+        if (art.getCurrent_auction_status() == 0) {
+            List<ArtImageEntity> beforeImges = artImageRepository.findAllByArtEntity(art_pk);
+            List<ArtArtCategory> beforeCates = artArtCategoryRepository.findByArtEntity(art_pk);
+            if (beforeImges != null || beforeCates != null) {
+                artImageRepository.deleteAll(beforeImges);
+                artArtCategoryRepository.deleteAll(beforeCates);
+            }
+            this.artRepository.delete(art);
         }
-        this.artRepository.delete(art);
     }
 
     public ResponseEntity <Map<String, Object>> orderedArt(@PathVariable(value = "art_pk") Integer art_pk) {

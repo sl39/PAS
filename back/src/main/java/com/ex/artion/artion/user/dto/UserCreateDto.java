@@ -11,4 +11,5 @@ public class UserCreateDto {
     private String phone_number;
     private String user_account;
     private String bank_name;
+    private String kakao_pk;
 }

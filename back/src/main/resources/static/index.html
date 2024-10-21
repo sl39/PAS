@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>소셜로그인 테스트</title>
+</head>
+<body>
+<h1>OAuth2 소셜로그인 테스트</h1>
+<a href="/oauth2/authorization/kakao">카카오 로그인</a><br>
+<button id="testApiBtn">API 호출</button>
+
+<script>
+
+// JWT 디코딩 함수
+fetch('/api/user/fol', {
+    method: 'GET',
+    credentials: 'include' // 쿠키를 포함하여 요청하도록 설정
+})
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("API 응답:", data);
+        // 응답 처리
+    })
+    .catch(error => {
+        console.error("API 호출 오류:", error);
+    });
+
+fetch('/api/user/create', {
+    method: 'POST',
+    credentials: 'include', // 쿠키를 포함하여 요청하도록 설정
+    headers: {
+        'Content-Type': 'application/json' // 요청이 JSON 형식임을 명시
+    },
+    body: JSON.stringify({
+        user_name: '원미상',
+        address: '부산부산부산부산부산',
+        phone_number: '01034567891',
+        user_account: '123-456-7891234',
+        bank_name : '외국'
+
+    })
+})
+    .then(response => response.json()) // 응답을 JSON 형식으로 파싱
+    .then(data => console.log(data)) // 받은 데이터를 처리
+    .catch(error => console.error('Error:', error));
+</script>
+</body>
+</html>
+
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>소셜로그인 테스트</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>OAuth2 소셜로그인 테스트</h1>-->
+<!--<a href="/oauth2/authorization/kakao">카카오 로그인</a><br>-->
+
+<!--<button id="testApiBtn">API 요청 테스트</button>-->
+
+<!--<script>-->
+<!--    // 로그인 후, 백엔드에서 JWT 토큰을 Set-Cookie로 설정한다면, 아래 코드를 통해 쿠키에서 JWT를 가져와 LocalStorage에 저장-->
+<!--    document.getElementById('testApiBtn').addEventListener('click', function() {-->
+<!--        // 쿠키에서 accessToken 추출-->
+<!--        const cookies = document.cookie.split(';');-->
+<!--        let accessToken = null;-->
+
+<!--        for (let i = 0; i < cookies.length; i++) {-->
+<!--            const cookie = cookies[i].trim();-->
+<!--            if (cookie.startsWith('accessToken=')) {-->
+<!--                accessToken = cookie.split('=')[1];-->
+<!--                break;-->
+<!--            }-->
+<!--        }-->
+
+<!--        if (!accessToken) {-->
+<!--            alert("Access Token이 없습니다. 로그인하세요.");-->
+<!--            return;-->
+<!--        }-->
+
+<!--        console.log("액세스 토큰이 있긴 함? ", accessToken)-->
+<!--        console.log("쿠키는 있음?? ", cookies)-->
+
+<!--        // API 호출 (JWT를 Authorization 헤더에 추가)-->
+<!--        fetch('/api/user/fol/1', {-->
+<!--            method: 'GET',-->
+<!--            headers: {-->
+<!--                'Authorization': 'Bearer ' + accessToken-->
+<!--            }-->
+<!--        })-->
+<!--            .then(response => {-->
+<!--                if (!response.ok) {-->
+<!--                    throw new Error("네트워크 응답이 실패했습니다.");-->
+<!--                }-->
+<!--                return response.json();-->
+<!--            })-->
+<!--            .then(data => {-->
+<!--                console.log("API 응답:", data);-->
+<!--                alert("API 호출 성공: " + JSON.stringify(data));-->
+<!--            })-->
+<!--            .catch(error => {-->
+<!--                console.error("API 호출 오류:", error);-->
+<!--                alert("API 호출 실패");-->
+<!--            });-->
+<!--    });-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
