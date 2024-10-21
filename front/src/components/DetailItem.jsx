@@ -11,10 +11,15 @@ const VerticalContainer = styled.div`
 const DetailItemContainer = styled.div`
     display: flex;
     margin-top: 100px;
-    justify-content: center;
+    justify-content: space-between;
     padding: 20px;
-    border-bottom: 1px solid black
-    `;
+    border-bottom: 1px solid black;
+
+    @media (max-width: 840px) {
+        flex-direction: column;
+        align-items: center; 
+    }
+`;
 const ButtonContainer = styled.div`
     `;
 const Title = styled.h2`
@@ -62,6 +67,7 @@ const MaxPrice = styled.div`
     display: flex;
     font-size: 15px;
     justify-content: space-between;
+    flex-direction: column;
     border: 1px solid gray;
     padding: 5px;
     border-radius: 7px
@@ -70,6 +76,7 @@ const MinPrice = styled.div`
     margin-top: 14px;
     display: flex;
     font-size: 15px;
+    flex-direction: column;
     justify-content: space-between;
     border: 1px solid gray;
     padding: 5px;
@@ -89,30 +96,45 @@ const SizeInfo = styled.h6`
     margin: 0;
     margin-right: 20px;
     `;
-const ImageContainer = styled.div`
+    const ImageContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    `;
+    
+    @media (max-width: 840px) {
+        flex-direction: row;
+    }
+`;
 const ArtworkImage = styled.img`
     width: 300px;
     height: auto;
     margin: 5px;
     `;
-const InfoContainer = styled.div`
+    const InfoContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
     padding-left: 150px;
     padding-right: 70px;
     margin-left: 30px;
-    `;
-const YearInfoContainer = styled.div`
+
+    @media (max-width: 840px) {
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: 0;
+    }
+`;
+    const YearInfoContainer = styled.div`
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; 
     width: 100%;
-    `;
+
+    @media (max-width: 840px) {
+        flex-direction: column;
+        align-items: center; 
+    }
+`;
 const LeftArrow = styled(IoIosArrowBack)`
     left: 10px;
     `;
@@ -243,9 +265,9 @@ export default function DetailItem ({ artWork }) {
             </ImageContainer>
             <YearInfoContainer>
                     <YearInfo>제작년도<br/>{artWork.created}</YearInfo>
-                    <SizeInfo>{artWork.length} x {artWork.width} x {artWork.depth} cm
+                    <SizeInfo>{artWork.width} x {artWork.length} x {artWork.depth} cm
                         <br/>
-                        <CameraLink to={`/AR/${art_pk}`}>
+                        <CameraLink to={`/AR/${art_pk}?image=${artWork.artImages[0]}&width=${(artWork.width / 100).toFixed(2)}&length=${(artWork.length / 100).toFixed(2)}`}>
                             <CameraIcon />
                         </CameraLink>
                         <div onClick={handleLikeToggle} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>
@@ -271,11 +293,11 @@ export default function DetailItem ({ artWork }) {
                 <Registrant>등록자: {artWork.sellerName}</Registrant>
                 <MaxPrice>
                     <span>즉시판매가 :</span>
-                    <span>{artWork.maxPrice}원</span>
+                    <span style={{textAlign: "right"}}>{artWork.maxPrice}원</span>
                 </MaxPrice>
                 <MinPrice>
                     <span>현재가 :</span>
-                    <span>{artWork.currentPrice}원</span>
+                    <span style={{textAlign: "right"}}>{artWork.currentPrice}원</span>
                 </MinPrice>
                 {artWork.isPossible ? (
                     <>
