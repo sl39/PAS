@@ -10,7 +10,7 @@ import Info from "./info";
 import PurchaseHistory from "./purchaseHistory";
 import PutRegister from "./putRegister";
 import Receipt from "./receipt";
-import Register from "./Register";
+import Register from "./register";
 import SaleHistory from "./saleHistory";
 import SettingPage from "./setting";
 
