@@ -7,7 +7,7 @@ import ArtworkInProfile from "./ArtworkInProfile";
 import SearchFilter from "./SearchFilter";
 import MainFeedItem from "./MainFeedItem";
 import DetailItem from "./DetailItem";
-import Warning from "./Warning";
+import Guide from "./Guide";
 import SearchedArtwork from "./SearchedArtwork";
 import SearchedArtist from "./SearchedArtist";
 import LikedArtItem from "./LikedArtItem"
@@ -24,7 +24,7 @@ export {
   SearchFilter,
   MainFeedItem,
   DetailItem,
-  Warning,
+  Guide,
   SearchedArtwork,
   SearchedArtist,
   LikedArtItem,
