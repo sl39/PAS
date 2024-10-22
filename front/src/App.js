@@ -1,6 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ArtistProfile, MainFeed, Search, ARCanvas, DetailPage, FollowingPage, AuctionPage, Login, SettingPage, Info, Register, PurchaseHistory, SaleHistory, PutRegister, Receipt } from "./pages";
+import { ArtistProfile, MainFeed, Search, DetailPage, FollowingPage, AuctionPage, Login, SettingPage, Info, Register, PurchaseHistory, SaleHistory, PutRegister, Receipt,
+  Guide, ARCanvas
+ } from "./pages";
 
 export default function App() {
   
@@ -10,7 +12,8 @@ export default function App() {
         <Route path="/" element={<MainFeed />} />
         <Route path="/search" element={<Search />} />
         <Route path="/detail/:art_pk/:user_pk" element={<DetailPage />} />
-        <Route path="/AR/:art_pk" element={<ARCanvas />} />
+        <Route path="/guide/:art_pk" element={<Guide />} />
+        <Route path="/ar/:art_pk" element={<ARCanvas />} />
         <Route path="/test" element={<ArtistProfile />} />
         <Route path="/following/:page" element={<FollowingPage />} />
         <Route path="/auction/:art_pk/:user_pk" element={<AuctionPage />} />

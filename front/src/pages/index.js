@@ -13,5 +13,8 @@ import Receipt from "./receipt";
 import Register from "./register";
 import SaleHistory from "./saleHistory";
 import SettingPage from "./setting";
+import Guide from "./Guide";
 
-export { MainFeed, Search, ArtistProfile, DetailPage, ARCanvas, FollowingPage, AuctionPage, Login, Info, PurchaseHistory, PutRegister, Receipt, Register, SaleHistory, SettingPage };
+export { MainFeed, Search, ArtistProfile, DetailPage, ARCanvas, FollowingPage, AuctionPage, Login, Info, PurchaseHistory, PutRegister, Receipt, Register, SaleHistory, SettingPage,
+    Guide,
+ };

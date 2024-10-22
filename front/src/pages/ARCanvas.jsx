@@ -1,7 +1,7 @@
 import React, {useEffect, useRef} from "react";
 import * as THREE from 'three';
 import { ARButton } from 'three/examples/jsm/webxr/ARButton.js';
-import { Header, Guide } from "../components";
+import { Header } from "../components";
 import { useLocation } from "react-router-dom";
 
 const ARCanvas = () => {
@@ -254,10 +254,11 @@ const ARCanvas = () => {
     }, [image, width, length]);
 
     return (
-        <div ref={containerRef} >
+        <div>
             <Header />
-            <Guide />
+            <div ref={containerRef}></div>
         </div>
+       
     )
 };
 
