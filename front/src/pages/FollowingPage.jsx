@@ -97,7 +97,7 @@ const LikedArtworks = ({user_pk}) => {
     };
 
     return (
-        <div style={{ marginTop: 50 }}>
+        <div style={{ marginTop: 50, display: "flex" }}>
             {likedArtworks.length > 0 ? (
                 <ArtworkList>
                     {likedArtworks.map((artWork) => (
