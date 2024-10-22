@@ -1,46 +1,18 @@
 pipeline {
-    agent any 
+    agent any
+
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub')  // DockerHub 자격 증명 ID
+        REPO_NAME = "wjddntyvld/artion" // DockerHub 리포지토리 이름
+        GITHUB_REPO_URL = 'https://github.com/Gom534/PAS.git' // GitHub 리포지토리 URL
+        BRANCH_NAME = 'back/feat/AR' // 클론할 브랜치 이름
+    }    
 
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                // GitHub에서 코드 체크아웃
-                git url: 'https://github.com/Gom534/PAS/', branch : 'back/feat/AR',credentialsId: 'github_gom5314'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                script {
-                    
-                    // 빌드 명령어 (Maven, Gradle 등 사용에 따라 수정)
-                    sh 'cd /home/ubuntu/artion && ./gradlew build'
-                }
-            }
-        }
-
-        stage('Copy WAR File') {
-            steps {
-                // 빌드된 WAR 파일 복사
-                script {
-                    // WAR 파일의 경로를 정확하게 지정합니다.
-                    def warFile = '/home/ubuntu/artion/build/libs/artion-0.0.1-SNAPSHOT.jar'
-                    def targetDir = '/var/lib/jenkins/workspace/pipeline/'
-                    
-                    // 권한 문제를 피하기 위해 Jenkins 사용자가 접근 가능한 디렉토리로 복사
-                    sh "cp ${warFile} ${targetDir}"
-                }
-            }
-        }
-
-        stage('Login to Docker') {
-            steps {
-                script {
-                    // Docker Hub 로그인
-                    withCredentials([usernamePassword(credentialsId: 'DOCKERHUB_CREDENTIALS', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                        sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
-                    }
-                }
+                // GitHub 리포지토리 클론
+                git branch: "${BRANCH_NAME}", url: "${GITHUB_REPO_URL}", credentialsId: 'github_credentials_id'
             }
         }
 
@@ -48,27 +20,32 @@ pipeline {
             steps {
                 script {
                     // Docker 이미지 빌드
-                    sh 'docker build -t artion .'
+                    sh "docker build -t ${REPO_NAME}:latest ."
                 }
             }
         }
 
-        stage('Deploy Docker Image') {
+        stage('Push Docker Image') {
             steps {
                 script {
-                    // Docker 컨테이너 배포
-                    sh 'docker run -d -p 8080:8080 artion'
-                }
+                    // DockerHub 로그인
+                    sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+                    // Docker 이미지 푸시
+                    sh "docker push ${REPO_NAME}:latest"
+                 }
             }
         }
     }
 
     post {
+        always {
+            echo 'Build process completed.'
+        }
         success {
-            echo 'Pipeline completed successfully!'
+            echo 'Docker image was successfully built and pushed.'
         }
         failure {
-            echo 'Pipeline failed.'
+            echo 'Build or push failed.'
         }
     }
 }
