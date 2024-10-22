@@ -131,6 +131,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String[] excludePathList = {
                 "/", "/index.html", // 소셜로그인 테스트 페이지
+                "/api/socket/**",
                 "/api/user/**", // user 관련 pai
                 "/api/art/**", // art 관련 api
                 "/api/following/**", // following 관련 api
