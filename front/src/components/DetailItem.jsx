@@ -196,11 +196,36 @@ const FixButton = styled(Link)`
 const QuraterIcon = styled(IoShieldCheckmark)`
     color: #0099FF;
     `;
+
+const MessageModal = styled.div`
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 8px;
+    padding: 20px;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+`;
+
+const Overlay = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+`;
+
 //시작
 export default function DetailItem ({ artWork }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isArtFollowing, setIsArtFollowing] = useState(artWork.isArtFollowing);
     const [artFollowingNum, setArtFollowingNum] = useState(artWork.artFollowingNum);
+    const [showMessage, setShowMessage] = useState(false);
     const currentTime = new Date();
     const chstartTime = new Date(artWork.startTime.replace(" ","T"));
     const chendTime = new Date(artWork.endTime.replace(" ","T"));
@@ -254,6 +279,12 @@ export default function DetailItem ({ artWork }) {
             setArtFollowingNum(isArtFollowing ? artFollowingNum -1: artFollowingNum +1);
         }
     }
+    const handleQuraterIconClick = () => {
+        setShowMessage(true);
+    }
+    const closeMessage = () => {
+        setShowMessage(false);
+    }
  
     return(
         <VerticalContainer>
@@ -291,7 +322,7 @@ export default function DetailItem ({ artWork }) {
                         </>
                     )}
                 </ButtonContainer>
-                <Title>{artWork.artName}{artWork.qurater ? <QuraterIcon /> : null }</Title>
+                <Title>{artWork.artName}{artWork.qurater ? <QuraterIcon onClick={handleQuraterIconClick} /> : null }</Title>
                 <Artist>작가: {artWork.artistName}</Artist>
                 <Registrant>등록자: {artWork.sellerName}</Registrant>
                 <MaxPrice>
@@ -322,8 +353,16 @@ export default function DetailItem ({ artWork }) {
                 
             </InfoContainer>
         </DetailItemContainer>
-            <DescriptionTitle>작품 설명</DescriptionTitle>
-            <Description>{artWork.artInfo}</Description>
+        <DescriptionTitle>작품 설명</DescriptionTitle>
+        <Description>{artWork.artInfo}</Description>
+        {showMessage && (
+                <>
+                    <Overlay onClick={closeMessage} />
+                    <MessageModal>
+                        <p>이 작품은 큐레이터의 검증을 받은 작품입니다.</p>
+                    </MessageModal>
+                </>
+            )}
         </VerticalContainer>
     );
 }

@@ -122,7 +122,7 @@ const Following = ({ user_pk }) => {
     useEffect(() => {
         const fetchFollowing = async() => {
             try{
-                const response = await axios.get(`https://artion.site/api/user/fol/${user_pk}`);
+                const response = await axios.get(`https://artion.site/api/user/fol?user_pk=1`);
                 setFollowing(response.data);
             } catch(error){
                 console.error("팔로잉 에러:", error);
@@ -151,7 +151,7 @@ const Followers = ({ user_pk }) => {
     useEffect (() => {
         const fetchFollowers = async() => {
             try{
-                const response = await axios.get(`https://artion.site/api/user/myfol/${user_pk}`);
+                const response = await axios.get(`https://artion.site/api/user/myfol?user_pk=1`);
                 setFollowers(response.data);
             } catch(error){
                 console.error("팔로워 에러", error);
