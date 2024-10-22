@@ -12,8 +12,9 @@ pipeline {
         stage('Build') {
             steps {
                 script {
+                    
                     // 빌드 명령어 (Maven, Gradle 등 사용에 따라 수정)
-                    sh 'cd artion && ./gradlew build'
+                    sh 'cd /home/ubuntu/artion && ./gradlew build'
                 }
             }
         }
