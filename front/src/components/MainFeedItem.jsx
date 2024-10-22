@@ -12,7 +12,7 @@ const MainFeedContainer = styled.div`
 `;
 
 const ContentBox = styled.div`
-  margin: 35px 25px 20px 25px;
+  margin: 25px 25px 0px 25px;
   overflow: hidden;
   display: flex;
   flex-shrink: 0;

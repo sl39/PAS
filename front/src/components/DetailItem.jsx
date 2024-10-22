@@ -36,8 +36,7 @@ const DescriptionTitle = styled.p`
     font-weight: bold
     `;
 const Description = styled.p`
-    margin-top: 10px;
-    margin-left: 15px;
+    margin: 10px 15px 0 15px;
     background-color: lightgray;
     border-radius: 15px;
     padding: 15px
@@ -123,6 +122,7 @@ const ArtworkImage = styled.img`
         padding-left: 0;
         padding-right: 0;
         margin-left: 0;
+        width: 100%;
     }
 `;
     const YearInfoContainer = styled.div`
@@ -164,6 +164,7 @@ const HeartIconFill = styled(GoHeartFill)`
 const FollowingNum = styled.span`
     color: gray;
     font-size: 12px;
+    margin-left: 2px;
     `;
 const RetryButton = styled(Link)`
     cursor: pointer;
@@ -285,8 +286,8 @@ export default function DetailItem ({ artWork }) {
                     {2 === artWork.sellerPk && (
                         <>
                          {/* to={`/작품 등록페이지로 이동`} */}
-                    <FixButton to={`/`}>수정하기</FixButton>
-                    <RetryButton to={`/`}>재경매</RetryButton>
+                         {artWork.auctionState === 0 && currentTime < chstartTime && <FixButton to={`/`}>수정하기</FixButton>}
+                         {artWork.auctionState === 0 && currentTime > chendTime && <RetryButton to={`/`}>재경매</RetryButton>}
                         </>
                     )}
                 </ButtonContainer>
@@ -295,11 +296,11 @@ export default function DetailItem ({ artWork }) {
                 <Registrant>등록자: {artWork.sellerName}</Registrant>
                 <MaxPrice>
                     <span>즉시판매가 :</span>
-                    <span style={{textAlign: "right"}}>{artWork.maxPrice}원</span>
+                    <span style={{textAlign: "right"}}>{artWork.maxPrice} 원</span>
                 </MaxPrice>
                 <MinPrice>
                     <span>현재가 :</span>
-                    <span style={{textAlign: "right"}}>{artWork.currentPrice}원</span>
+                    <span style={{textAlign: "right"}}>{artWork.currentPrice} 원</span>
                 </MinPrice>
                 {artWork.isPossible ? (
                     <>

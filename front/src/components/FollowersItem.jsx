@@ -9,7 +9,7 @@ const ItemContainer = styled.li`
   border: 2px solid gray;
   border-radius: 15px;
   padding: 10px;
-  margin-bottom: 10px;
+  margin: 0 10px 10px 10px;
 `;
 
 const UserImage = styled.img`

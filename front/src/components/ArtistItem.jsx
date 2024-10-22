@@ -3,17 +3,21 @@ import { Link } from "react-router-dom";
 
 // Styled Components
 const ArtistContainer = styled.div`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
   margin: 10px 10px;
-  width: 70px;
+  width: 50px;
 `;
 
 const ImageContainer = styled.div`
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   border-radius: 70%;
   border: 1px solid black;
   overflow: hidden;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
 `;
 
 const CircleImage = styled.img`
@@ -36,7 +40,7 @@ const BoldParagraph = styled.p`
   white-space: nowrap;
   text-overflow: ellipsis;
   font-weight: bold;
-  font-size: 11px;
+  font-size: 12px;
   margin: 0px;
 `;
 
@@ -59,7 +63,7 @@ export default function ArtistItem({ artist }) {
           <CircleImage src={artist.painter_img}></CircleImage>
         </ImageContainer>
         <BoldParagraph>{artist.painter_name}</BoldParagraph>
-        <NormalParagraph>팔로잉 {artist.painter_following_num}</NormalParagraph>
+        <NormalParagraph>팔로워 {artist.painter_following_num}</NormalParagraph>
       </ArtistContainer>
     </StyledLink>
   );
