@@ -10,7 +10,7 @@ pipeline {
           steps { 
               script { 
                sh '''
-		 cp /home/ubuntu/artion/build/libs/artion-0.0.1-SNAPSHOT.war /var/lib/jenkins/workspace/pipeline/
+		 cp /home/ubuntu/artion/build/libs/artion-0.0.1-SNAPSHOT.jar /var/lib/jenkins/workspace/pipeline/
 		'''
                   dockerImage = docker.build repository + ":$BUILD_NUMBER" 
               }
