@@ -1,4 +1,3 @@
-sudo vi /var/lib/jenkins/workspace/pipeline/Dockerfile
 # 베이스 이미지 선택 (Java 17)
 FROM openjdk:17-jdk-slim
 
