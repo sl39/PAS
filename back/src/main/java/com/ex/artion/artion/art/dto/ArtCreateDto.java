@@ -38,7 +38,4 @@ public class ArtCreateDto {
     private List<String> artImage = new ArrayList<>();
 
     private List<String> artCategory = new ArrayList<>();
-
-    @ManyToOne
-    private UserEntity userEntity;
 }
