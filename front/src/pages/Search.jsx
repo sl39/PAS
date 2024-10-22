@@ -9,6 +9,7 @@ import {
 import axios from "axios";
 import { IoIosArrowDown } from "react-icons/io";
 import { useInView } from "react-intersection-observer";
+import { useLocation } from "react-router-dom";
 
 const SearchBarContainer = styled.div`
   display: flex;
@@ -66,7 +67,6 @@ const NormalParagraph = styled.p`
   margin: 0px;
 `;
 
-//prettier-ignore
 export async function searchArtworkApi(options) {
   const response = await axios.get("https://artion.site/api/art/search", {
     params: {
@@ -76,8 +76,8 @@ export async function searchArtworkApi(options) {
       maxPrice: options.maxPrice,
       sortBy: options.sortBy,
       sort: options.sort,
-      page: options.page,   // 현재 페이지
-      pageSize: 20,         // 페이지당 작품 개수
+      page: 0, // 현재 페이지
+      pageSize: 20, // 페이지당 작품 개수
     },
   });
   return response.data;
@@ -98,6 +98,12 @@ export default function Search() {
   const [artistList, setArtistList] = useState([]);
   const [searchedItemList, setSearchedItemList] = useState([]);
 
+  // 검색어, 카테고리 추출
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const textParams = queryParams.get("keyword");
+  const categoryParams = queryParams.get("category");
+
   // 무한스크롤
   const page = useRef(1);
   const [hasNextPage, setHasNextPage] = useState(true);
@@ -108,7 +114,7 @@ export default function Search() {
   // 작가 리스트 가져오기
   useEffect(() => {
     const options = {
-      keyword: "",
+      keyword: textParams,
     };
 
     const fetchData = async () => {
@@ -121,13 +127,13 @@ export default function Search() {
     };
 
     fetchData();
-  });
+  }, [textParams]);
 
   // 작품 리스트 가져오기
   const fetchItemList = useCallback(async () => {
     const options = {
-      keyword: "",
-      category: "",
+      keyword: textParams,
+      category: categoryParams,
       minPrice: 0,
       maxPrice: 2036854000000,
       sortBy: "LIKE",
@@ -138,7 +144,8 @@ export default function Search() {
     try {
       // 작품 리스트 fetch
       const artworkList = await searchArtworkApi(options);
-      setSearchedItemList((prevList) => [...prevList, ...artworkList]);
+      console.log(artworkList.totalElements);
+      setSearchedItemList((prevList) => [...prevList, ...artworkList.content]);
       // 다음에 불러올 페이지를 +1 증가
       setHasNextPage(artworkList.length === 20);
       if (artworkList.length) {
@@ -147,7 +154,7 @@ export default function Search() {
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  }, [textParams, categoryParams]);
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -178,9 +185,11 @@ export default function Search() {
         </FilterContainer>
       </FilterWrapContainer>
       <SearchedItemContainer>
-        <BorderLine>
-          <SearchedArtist artistList={artistList}></SearchedArtist>
-        </BorderLine>
+        {textParams && (
+          <BorderLine>
+            <SearchedArtist artistList={artistList}></SearchedArtist>
+          </BorderLine>
+        )}
         <BorderLine>
           <SearchedArtwork
             ref={ref}
