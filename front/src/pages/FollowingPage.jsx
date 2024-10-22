@@ -67,6 +67,7 @@ const ArtworkList = styled.ul`
     margin: 0;
     list-style-type: none;
 `;
+
 const FollowingList = styled.ul`
     display: flex;
     flex-direction: column;
@@ -83,7 +84,7 @@ const LikedArtworks = ({user_pk}) => {
     useEffect(() => {
         const fetchLikedArtworks = async() =>{
             try{
-                const response = await axios.get(`https://artion.site/api/user/artfol/${user_pk}`);
+                const response = await axios.get(`https://artion.site/api/user/artfol?user_pk=1`);
                 setLikedArtworks(response.data);
             } catch(error){
                 console.error("작품 좋아요 오류 :", error);
