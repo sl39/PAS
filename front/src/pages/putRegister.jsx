@@ -177,7 +177,7 @@ export default function PutRegister(){
   }
 
   const addList = () => {
-    if (selectedOption == "default") {
+    if (selectedOption === "default") {
       alert("선택불가능한 옵션입니다.");
       return; // 함수 종료
   }
@@ -226,7 +226,7 @@ export default function PutRegister(){
 
   // 그림 등록 부분
   useEffect(()=>{
-    if(submit == true ){
+    if(submit === true ){
     async function postArt() {
       try{
         const request = await axios.post('https://artion.site/post/api/create?user_pk=3',{
