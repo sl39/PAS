@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ArtistProfile, MainFeed, Search, ARCanvas, DetailPage, FollowingPage, AuctionPage } from "./pages";
-import {Login, SettingPage, Info, Register, PurchaseHistory, SaleHistory, PutRegister, Receipt} from "./pages";
+import { ArtistProfile, MainFeed, Search, ARCanvas, DetailPage, FollowingPage, AuctionPage, Login, SettingPage, Info, Register, PurchaseHistory, SaleHistory, PutRegister, Receipt } from "./pages";
 
 export default function App() {
   
