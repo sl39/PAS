@@ -12,7 +12,6 @@ pipeline {
                sh '''
 		 cp /var/lib/jenkins/workspace/<correct-path>/artion/build/libs/artion-0.0.1-SNAPSHOT.war /var/lib/jenkins/workspace/pipeline/
 		'''
-
                   dockerImage = docker.build repository + ":$BUILD_NUMBER" 
               }
           } 
