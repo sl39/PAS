@@ -48,11 +48,17 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
 
         // 2. 기존 회원인지 체크하고 회원가입
 
-        KakaoUserInfo kakaoUserInfo = KakaoUserInfo.ofKakao(oAuth2User.getAttributes());;
+        KakaoUserInfo kakaoUserInfo = KakaoUserInfo.ofKakao(oAuth2User.getAttributes());
+
+        System.out.println(kakaoUserInfo);
 
         UserEntity userEntity = authRepository.findByKakao_pk(kakao_id)
                 .orElseGet(() -> userRepository.save(kakaoUserInfo.toEntity()));
 
+        if(!userEntity.getKakao_image().equals(kakaoUserInfo.getImage())) {
+            userEntity.setKakao_image(kakaoUserInfo.getImage());
+            userRepository.save(userEntity);
+        }
 
 //        UserEntity userEntity = authRepository.findByKakao_pk(kakao_id)
 //                .orElseGet(() -> {
@@ -64,9 +70,13 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
 //                    return authRepository.save(newUser);
 //                });
 
-        System.out.println("oauth2 userEntity : {}" + userEntity);
+        System.out.println("oauth2 userEntity : " + userEntity);
 
-        return new UserPrincipal(userEntity, oAuth2User.getAttributes());
+        UserPrincipal userPrincipal = new UserPrincipal(userEntity, oAuth2User.getAttributes());
+
+        System.out.println(userPrincipal.getName());
+
+        return userPrincipal;
     }
 
     public UserDetails loadUserByPk(Integer userPk) {

@@ -136,7 +136,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 "/api/following/**", // following 관련 api
                 "/api/artfollowing/**", // artfollowing 관련 api
                 "/api/auction/**", // auction 관련 api
-                "/api/order/**" // order 관련 api
+                "/api/order/**", // order 관련 api
+                "/localhost:3000/api/**"
         };
 
         AntPathMatcher antPathMatcher = new AntPathMatcher();

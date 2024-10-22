@@ -81,4 +81,7 @@ public class UserPrincipal implements UserDetails, OAuth2User {
         return userEntity.getUser_pk();
     }
 
+    @Override
+    public boolean isEnabled() { return true; }
+
 }
