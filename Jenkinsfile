@@ -3,16 +3,14 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')  // DockerHub 자격 증명 ID
-        REPO_NAME = "wjddntyvld/artion" // DockerHub 리포지토리 이름
-        GITHUB_REPO_URL = 'https://github.com/Gom534/PAS.git' // GitHub 리포지토리 URL
-        BRANCH_NAME = "back/feat/AR" // 클론할 브랜치 이름
+        REPO_NAME = "wjddntyvld/artion" // DockerHub 리포지토리 이름        
     }    
 
     stages {
        stage('Clone Repository') {
             steps {
                 // GitHub 리포지토리 클론
-                git branch: "${BRANCH_NAME}", url: "${GITHUB_REPO_URL}", credentialsId: 'github_gom5314'
+                git branch: 'back/feat/AR, credentialsId: 'github_gom5314', url: 'https://github.com/Gom534/PAS.git'
             }
         }
 
