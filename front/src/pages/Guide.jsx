@@ -71,12 +71,12 @@ export default function Guide() {
             <BodyContainer>
                 <BodyContent>해당 기능은 <UnderLineColor>안드로이드 모바일 Chrome</UnderLineColor>에서만 제공합니다.</BodyContent>
                 <BodyContent>실제 사이즈와 <UnderLineColor>차이</UnderLineColor>가 있을 수 있습니다.</BodyContent>
-                <BodyContent>바닥을 인식해주세요 (벽면은 인식 불가능합니다.)</BodyContent>
-                <BodyContent>원형이 있을때만 작품이 생성됩니다.</BodyContent>
+                <BodyContent>바닥을 인식해 주세요 (벽면은 인식 불가능합니다.)</BodyContent>
+                <BodyContent>원형(레티클)이 있을 경우에만 작품이 생성됩니다.</BodyContent>
                 <P>사용방법</P>
                 <UseList>
                     <UseContent>원형이 최대한 벽면에 가도록 해주세요.</UseContent>
-                    <UseContent>화면을 <UnderLine>두번 터치</UnderLine>하면 작품이 생성됩니다.</UseContent>
+                    <UseContent>화면을 <UnderLine>두 번 터치</UnderLine>하면 작품이 생성됩니다.</UseContent>
                     <UseContent>작품 생성 후 드래그로 상하좌우 조절 가능합니다.</UseContent>
                 </UseList>
             </BodyContainer>
