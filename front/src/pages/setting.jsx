@@ -22,7 +22,7 @@ const Div = styled.div`
 `;
 
 const InputSize = styled.input`
-  width: 50%;
+  width: 80%;
   height: 40%;
   font-size: 20px;
   padding: 5px;
@@ -36,7 +36,8 @@ const SubmitButton = styled.button`
 const AddressDiv = styled.div`
   display: flex;
   flex-direction: column;
-
+  width: 80%;
+  
   &>*{
   width: 100%;
   margin-bottom: 10px;
@@ -47,11 +48,13 @@ const AddressDiv = styled.div`
 const P = styled.p`
   font-size : 20px;
   margin: 10px;
+   width: 80%;
 `;
 
 const AccountDiv = styled.div`
   display: flex;
   flex-direction: column;
+  width: 80%;
    &>*{
   width: 100%;
   margin-bottom: 10px;
@@ -78,7 +81,7 @@ export default function SettingPage() {
     if(submit){
     async function postUserData() {
       try{
-    const request = await axios.post("http://artion.site:8080/api/user/create",{
+    const request = await axios.post("https://artion.site:8080/api/user/create",{
           user_name : text,
           phone_number : phone,
           bank_name : bankName,

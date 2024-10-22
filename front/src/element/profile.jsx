@@ -2,19 +2,22 @@ import { CgProfile } from "react-icons/cg";
 import styled from "styled-components";
 
 const ProfileLogo = styled(CgProfile)`
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
+     margin-left: 5%;
 `;
 
 const P = styled.p`
-  font-size: 50px;
-  margin-left: 20px;
+  font-size: 100%;
+  margin-right: 40%;
 `;
 
 const Div = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
+
 `;
 
 export default function Profile() {
