@@ -6,12 +6,12 @@ import { forwardRef } from "react";
 const SearchContainer = styled.div`
   overflow: hidden;
   position: relative;
-  padding: 5px;
+  padding: 10px;
   max-width: 830px;
 `;
 
 const ContentBox = styled.div`
-  margin: 35px 25px 20px 25px;
+  margin: 15px 25px 20px 25px;
   overflow: hidden;
   display: flex;
   flex-wrap: wrap;
@@ -32,18 +32,16 @@ const NormalParagraph = styled.p`
   margin-left: 30px;
 `;
 
-const SearchedArtwork = forwardRef(({ artWorkList }, ref) => {
+export default function SearchedArtwork({ artWorkList }) {
   return (
     <SearchContainer>
       <BoldParagraph>Art</BoldParagraph>
       <NormalParagraph>작품</NormalParagraph>
-      <ContentBox ref={ref}>
+      <ContentBox>
         {artWorkList.map((item) => (
           <ArtworkItem key={item.art_pk} artWork={item} />
         ))}
       </ContentBox>
     </SearchContainer>
   );
-});
-
-export default SearchedArtwork;
+}

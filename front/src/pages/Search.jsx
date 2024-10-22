@@ -76,10 +76,11 @@ export async function searchArtworkApi(options) {
       maxPrice: options.maxPrice,
       sortBy: options.sortBy,
       sort: options.sort,
-      page: 0, // 현재 페이지
+      page: options.page, // 현재 페이지
       pageSize: 20, // 페이지당 작품 개수
     },
   });
+
   return response.data;
 }
 
@@ -105,10 +106,10 @@ export default function Search() {
   const categoryParams = queryParams.get("category");
 
   // 무한스크롤
-  const page = useRef(1);
+  const page = useRef(0);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [ref, inView] = useInView({
-    threshold: 1, // 컴포넌트의 100%가 보일 때 inView가 true로 변경
+    threshold: 0.5, // 컴포넌트의 100%가 보일 때 inView가 true로 변경
   });
 
   // 작가 리스트 가져오기
@@ -138,18 +139,19 @@ export default function Search() {
       maxPrice: 2036854000000,
       sortBy: "LIKE",
       sort: "DESC",
-      page: page, // 현재 페이지
+      page: page.current, // 현재 페이지
     };
 
     try {
       // 작품 리스트 fetch
       const artworkList = await searchArtworkApi(options);
-      console.log(artworkList.totalElements);
+      console.log("현재 페이지: ", artworkList.page);
       setSearchedItemList((prevList) => [...prevList, ...artworkList.content]);
       // 다음에 불러올 페이지를 +1 증가
-      setHasNextPage(artworkList.length === 20);
-      if (artworkList.length) {
+      setHasNextPage(artworkList.content.length === 20);
+      if (artworkList.content.length) {
         page.current += 1;
+        console.log("페이지 증가: ", page.current);
       }
     } catch (error) {
       console.error(error);
@@ -159,6 +161,7 @@ export default function Search() {
   useEffect(() => {
     if (inView && hasNextPage) {
       fetchItemList();
+      console.log("fetchItemList() 호출");
     }
   }, [fetchItemList, hasNextPage, inView]);
 
@@ -191,10 +194,8 @@ export default function Search() {
           </BorderLine>
         )}
         <BorderLine>
-          <SearchedArtwork
-            ref={ref}
-            artWorkList={searchedItemList}
-          ></SearchedArtwork>
+          <SearchedArtwork artWorkList={searchedItemList}></SearchedArtwork>
+          <BorderLine ref={ref}></BorderLine>
         </BorderLine>
       </SearchedItemContainer>
     </>
