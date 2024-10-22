@@ -3,10 +3,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // /back 디렉토리로 이동 후 체크아웃
-                dir('/back') {
+               
                     checkout scm
-                }
+                
             }
         }
         stage('Build') {
