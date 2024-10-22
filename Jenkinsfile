@@ -20,7 +20,7 @@ pipeline {
             steps {
                 script {
                     // Docker Hub에 로그인 후 이미지 푸시
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
+                    docker.withRegistry('https://hub.docker.com', 'dockerhub') {
                         image.push("latest") // or specify a version tag
                     }
                 }
