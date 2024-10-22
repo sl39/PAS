@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     // Docker 이미지 빌드
-                    sh "docker build -t ${REPO_NAME}:latest ."
+                    sh "docker build -t ${REPO_NAME}:latest -f ./back/Dockerfile ."
                 }
             }
         }
