@@ -1,12 +1,5 @@
-import Login from "./pages/login";
-import SettingPage from "./pages/setting";
-import Info from "./pages/info";
-import Register from "./pages/register";
-import PurchaseHistory from "./pages/purchaseHistory";
-import Receipt from "./pages/receipt";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SaleHistory from "./pages/saleHistory";
-import PutRegister from "./pages/putRegister";
+import {Login, SettingPage, Info, Register, PurchaseHistory, SaleHistory, PutRegister, Receipt} from "./pages";
 
 export default function App() {
   return (

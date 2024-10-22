@@ -107,7 +107,7 @@ const Button = styled.button`
   padding: 5px;
 `;
 
-export default function Register(){
+export default function PutRegister(){
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [minP, setMinP] = useState('');
