@@ -12,7 +12,9 @@ pipeline {
             steps {
                 script {
                     // Docker 이미지 빌드
-                    def image = docker.build("artionimage")
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+                        def image = docker.build("artionimage")
+                    }
                 }
             }
         }
