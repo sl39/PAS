@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 
 const AuctionResult = ({
@@ -15,10 +15,11 @@ const AuctionResult = ({
   setShippingMethod,
   isAuctionEnded,
   onPaymentComplete,
-  paymentCompleted, // 결제 완료 상태 prop 추가
+  paymentCompleted,
+  artPk, // artPk를 props로 추가
+  userPk, // userPk를 props로 추가
 }) => {
   useEffect(() => {
-    // 아임포트 스크립트를 동적으로 로드합니다.
     const script = document.createElement('script');
     script.src = 'https://cdn.iamport.kr/v1/iamport.js';
     script.async = true;
@@ -27,44 +28,40 @@ const AuctionResult = ({
 
   const handlePayment = async () => {
     try {
-      // 1. 경매 상세 정보에서 paying_pk 가져오기
       const response = await axios.get('/api/auction/detail', {
-        params: { artPk: 7, userPk: 7 }, // 필요한 매개변수로 요청
+        params: { artPk, userPk }, // props로 받은 값을 사용
       });
-      const fetchedPayingPk = response.data.paying_pk; // 서버에서 받아온 paying_pk
+      const fetchedPayingPk = response.data.paying_pk;
 
-      // 2. 결제 요청
-      const IMP = window.IMP; // 아임포트 객체
-      IMP.init("imp08864537"); // 가맹점 식별코드
+      const IMP = window.IMP;
+      IMP.init("imp08864537");
 
       IMP.request_pay({
-        pg: 'html5_inicis', // 결제 서비스 제공자
-        pay_method: 'card', // 결제 방식
-        merchant_uid: `merchant_${new Date().getTime()}`, // 결제 고유 번호
-        name: artName, // 상품명
-        amount: finalPrice, // 가격
-        buyer_name: winnerName, // 구매자 이름
-        buyer_tel: winnerContact, // 구매자 연락처
-        buyer_addr: winnerAddress, // 구매자 주소
-        buyer_postcode: '123-456', // 구매자 우편번호
+        pg: 'html5_inicis',
+        pay_method: 'card',
+        merchant_uid: `merchant_${new Date().getTime()}`,
+        name: artName,
+        amount: finalPrice,
+        buyer_name: winnerName,
+        buyer_tel: winnerContact,
+        buyer_addr: winnerAddress,
+        buyer_postcode: '123-456',
       }, async function (rsp) {
-        console.log('결제 요청 결과:', rsp);
         if (rsp.success) {
           alert('결제가 완료되었습니다.');
-          // 3. 결제 정보를 서버에 전송
+
           try {
             await axios.post('/api/order', {
-              address_order: winnerAddress,  // 배송 주소
-              delivery_type: shippingMethod,  // 배송 방법
-              imp_uid: rsp.imp_uid,           // 결제 승인 번호
-              merchant_uid: rsp.merchant_uid, // 결제 고유 번호
-              paying_pk: fetchedPayingPk,     // 자동 생성된 paying_pk
-              name: winnerName,               // 구매자 이름
-              phone_number: winnerContact,     // 구매자 연락처
+              address_order: winnerAddress,
+              delivery_type: shippingMethod,
+              imp_uid: rsp.imp_uid,
+              merchant_uid: rsp.merchant_uid,
+              paying_pk: fetchedPayingPk,
+              name: winnerName,
+              phone_number: winnerContact,
             });
 
-            // 결제 완료 후 상위 컴포넌트에게 상태 변경 요청
-            onPaymentComplete(); // state 값을 3으로 변경
+            onPaymentComplete();
             alert('주문이 성공적으로 처리되었습니다.');
           } catch (error) {
             console.error('주문 전송 오류:', error.response ? error.response.data : error.message);
@@ -80,11 +77,15 @@ const AuctionResult = ({
     }
   };
 
+  const isFormValid = () => {
+    return winnerName && winnerContact && winnerAddress && shippingMethod;
+  };
+
   return (
     <div>
       {isAuctionEnded ? (
         <>
-          {paymentCompleted ? ( // 결제 완료 상태 확인
+          {paymentCompleted ? (
             <h2>결제가 완료되었습니다.</h2>
           ) : (
             userBid > 0 && userBid >= finalPrice ? (
@@ -124,7 +125,11 @@ const AuctionResult = ({
                     <option value="일반배송">일반배송</option>
                     <option value="빠른배송">빠른배송</option>
                   </select>
-                  <button className="btn btn-success mt-2" onClick={handlePayment}>
+                  <button 
+                    className="btn btn-success mt-2" 
+                    onClick={handlePayment}
+                    disabled={!isFormValid()} // 유효성 검사 추가
+                  >
                     결제하기
                   </button>
                 </div>

@@ -28,7 +28,7 @@ const AuctionInfo = ({
   const fetchAuctionDetails = async () => {
     try {
       const response = await axios.get(`/api/auction/detail`, {
-        params: { artPk: 7, userPk:7 }, // props로 받은 값을 사용
+        params: { artPk, userPk }, // props로 받은 값을 사용
       });
       setAuctionData(response.data);
       const endTime = new Date(response.data.endTime);
