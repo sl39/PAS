@@ -1,17 +1,27 @@
-import Profile from "./element/profile";
 import Login from "./pages/login";
-import MyPage from "./pages/info";
 import SettingPage from "./pages/setting";
 import Info from "./pages/info";
-import InfoBar from "./element/infoBar";
-import HistoryBox from "./element/historyBox";
 import Register from "./pages/register";
 import PurchaseHistory from "./pages/purchaseHistory";
 import Receipt from "./pages/receipt";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SaleHistory from "./pages/saleHistory";
+import PutRegister from "./pages/putRegister";
 
 export default function App() {
   return (
-    <Login />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/create" element={<SettingPage />} />
+        <Route path="/postArt" element={<Register />} />
+        <Route path="/salesHistory" element={<SaleHistory />} />
+        <Route path="/purchaseHistory" element={<PurchaseHistory />} />
+        <Route path="/putRegister" element={<PutRegister />} />
+        <Route path="/info" element={<Info />} />
+        <Route path="/reciept" element={<Receipt />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 //style={{maxWidth: '1000px', margin: 'auto'}}
