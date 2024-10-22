@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                chmod +x gradlew
+                chmod +x gradlew,
                 sh './gradlew build' // Gradle 빌드 명령어
             }
         }
