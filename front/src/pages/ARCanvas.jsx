@@ -38,7 +38,8 @@ const ARCanvas = () => {
 
         //AR 버튼 추가(AR 세션 시작 버튼)
         arButtonRef.current = ARButton.createButton(renderer, {requiredFeatures: ['hit-test']});
-        document.body.appendChild(arButtonRef.current);
+        containerRef.current.appendChild(arButtonRef.current);
+        // document.body.appendChild(arButtonRef.current);
         // document.body.appendChild(ARButton.createButton(renderer, {requiredFeatures: ['hit-test']}))
 
         //조명 추가
@@ -239,9 +240,9 @@ const ARCanvas = () => {
         animate();
 
         return() => {
-            if(arButtonRef.current){
-                document.body.removeChild(arButtonRef.current);
-            }
+            // if(arButtonRef.current){
+            //     document.body.removeChild(arButtonRef.current);
+            // }
             window.removeEventListener('touchstart', onTouchStart);
             window.removeEventListener('touchmove', onTouchMove);
             window.removeEventListener('touchend', onTouchEnd);
