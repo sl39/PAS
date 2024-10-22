@@ -1,12 +1,14 @@
 import React from "react";
 import styled from 'styled-components';
+import Header from "../components/Header";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 const GuideContainer = styled.div`
 `;
 
 const HeadTitle = styled.h2`
     text-align: center;
-    margin: 50px 0;
+    margin: 30px 0 20px 0;
     font-weight: bold;
 `;
 
@@ -44,10 +46,26 @@ const UseContent = styled.li`
     list-style-type: circle;
     margin: 20px 0;
 `;
+const ARMoveButton = styled(Link)`
+    border: 1px solid gray;
+    padding: 8px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: black;
+`;
 
 export default function Guide() {
+    const { art_pk } = useParams();
+    const location = useLocation();
+
+    const params = new URLSearchParams(location.search);
+    const image = params.get('image');
+    const width = params.get('width');
+    const length = params.get('length');
 
     return(
+        <>
+        <Header />
         <GuideContainer>
             <HeadTitle>사용 전 반드시 읽어주세요</HeadTitle>
             <BodyContainer>
@@ -62,6 +80,10 @@ export default function Guide() {
                     <UseContent>작품 생성 후 드래그로 상하좌우 조절 가능합니다.</UseContent>
                 </UseList>
             </BodyContainer>
+            <div style={{display: "flex", justifyContent: "center", marginTop: 20}}>
+            <ARMoveButton to={`/ar/${art_pk}?image=${image}&width=${width}&length=${length}`}>확인했습니다</ARMoveButton>
+            </div>
         </GuideContainer>
+        </>
     );
 }

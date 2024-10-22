@@ -269,7 +269,7 @@ export default function DetailItem ({ artWork }) {
                 <SizeInfo>{artWork.width} x {artWork.length} x {artWork.depth} cm
                     <br/>
                     <div style={{ display: 'flex', alignItems: 'center',justifyContent: 'flex-end' }}>
-                    <CameraLink to={`/AR/${art_pk}?image=${artWork.artImages[0]}&width=${(artWork.width / 100).toFixed(2)}&length=${(artWork.length / 100).toFixed(2)}`}>
+                    <CameraLink to={`/guide/${art_pk}?image=${artWork.artImages[0]}&width=${(artWork.width / 100).toFixed(2)}&length=${(artWork.length / 100).toFixed(2)}`}>
                         <CameraIcon />
                     </CameraLink>
                     <div onClick={handleLikeToggle} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>

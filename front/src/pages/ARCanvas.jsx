@@ -1,7 +1,7 @@
 import React, {useEffect, useRef} from "react";
 import * as THREE from 'three';
 import { ARButton } from 'three/examples/jsm/webxr/ARButton.js';
-import { Header, Guide } from "../components";
+import { Header } from "../components";
 import { useLocation } from "react-router-dom";
 
 const ARCanvas = () => {
@@ -38,7 +38,8 @@ const ARCanvas = () => {
 
         //AR 버튼 추가(AR 세션 시작 버튼)
         arButtonRef.current = ARButton.createButton(renderer, {requiredFeatures: ['hit-test']});
-        document.body.appendChild(arButtonRef.current);
+        containerRef.current.appendChild(arButtonRef.current);
+        // document.body.appendChild(arButtonRef.current);
         // document.body.appendChild(ARButton.createButton(renderer, {requiredFeatures: ['hit-test']}))
 
         //조명 추가
@@ -239,9 +240,9 @@ const ARCanvas = () => {
         animate();
 
         return() => {
-            if(arButtonRef.current){
-                document.body.removeChild(arButtonRef.current);
-            }
+            // if(arButtonRef.current){
+            //     document.body.removeChild(arButtonRef.current);
+            // }
             window.removeEventListener('touchstart', onTouchStart);
             window.removeEventListener('touchmove', onTouchMove);
             window.removeEventListener('touchend', onTouchEnd);
@@ -253,10 +254,11 @@ const ARCanvas = () => {
     }, [image, width, length]);
 
     return (
-        <div ref={containerRef} >
+        <div>
             <Header />
-            <Guide />
+            <div ref={containerRef}></div>
         </div>
+       
     )
 };
 
