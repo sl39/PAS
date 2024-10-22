@@ -12,7 +12,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 // GitHub 리포지토리 클론
-                git branch: "${BRANCH_NAME}", url: "${GITHUB_REPO_URL}", credentialsId: 'github_credentials_id'
+                git branch: "${BRANCH_NAME}", url: "${GITHUB_REPO_URL}", credentialsId: 'github_gom5314'
             }
         }
 
