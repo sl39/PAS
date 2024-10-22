@@ -1,6 +1,5 @@
 pipeline {
     agent any
-
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')  // DockerHub 자격 증명 ID
         REPO_NAME = "wjddntyvld/artion" // DockerHub 리포지토리 이름        
@@ -34,17 +33,4 @@ pipeline {
                  }
             }
         }
-    }
-
-    post {
-        always {
-            echo 'Build process completed.'
-        }
-        success {
-            echo 'Docker image was successfully built and pushed.'
-        }
-        failure {
-            echo 'Build or push failed.'
-        }
-    }
-}
+  }
