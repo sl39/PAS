@@ -1,38 +1,35 @@
-pipeline {
-    agent any
-    stages {
-        stage('Clone repository') {
-            steps {
-                // GitHub에서 소스 코드 클론
-                git branch: 'back/feat/AR',
-                    credentialsId: 'github_gom5314', url: 'https://github.com/Gom534/PAS.git'
-            }
-        }
-        stage('Build with Gradle') {
-            steps {
-                script {
-                    // Gradle 빌드 실행
-                    sh './gradlew build'
-                }
-            }
-        }
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    // Docker 이미지 빌드, Dockerfile 위치를 지정
-                    def image = docker.build("artionimage", "-f back/Dockerfile .")
-                }
-            }
-        }
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    // Docker 이미지를 레지스트리에 푸시
-                    docker.withRegistry('https://your-docker-registry', 'docker_credentials_id') {
-                        image.push()
-                    }
-                }
-            }
-        }
+pipeline { 
+    environment { 
+        repository = "wjddntyvld/myjenkns"  //docker hub id와 repository 이름
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub') // jenkins에 등록해 놓은 docker hub credentials 이름
+        dockerImage = '' 
+  }
+  agent any 
+  stages { 
+      stage('Building our image') { 
+          steps { 
+              script { 
+                  sh "cp /var/lib/jenkins/workspace/artion/build/libs/artion-0.0.1-SNAPSHOT.war /var/lib/jenkins/workspace/pipeline/" // war 파일을 현재 위치로 복사 
+                  dockerImage = docker.build repository + ":$BUILD_NUMBER" 
+              }
+          } 
+      }
+      stage('Login'){
+          steps{
+              sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-wjddn123@@!' // docker hub 로그인
+          }
+      }
+      stage('Deploy our image') { 
+          steps { 
+              script {
+                sh 'docker push $repository:$BUILD_NUMBER' //docker push
+              } 
+          }
+      } 
+      stage('Cleaning up') { 
+		  steps { 
+              sh "docker rmi $repository:$BUILD_NUMBER" // docker image 제거
+          }
+      } 
+  }
     }
-}
