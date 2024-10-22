@@ -56,7 +56,7 @@ pipeline {
             steps {
                 script {
                     // Docker 컨테이너 배포
-                    sh 'docker run -d -p 8080:8080 artione'
+                    sh 'docker run -d -p 8080:8080 artion'
                 }
             }
         }
