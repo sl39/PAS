@@ -2,6 +2,7 @@ import styled from "styled-components"
 import BaseAppBar from "../element/appBar";
 import { createGlobalStyle } from 'styled-components';
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -24,31 +25,31 @@ const Div = styled.div`
 
 const P = styled.p`
   font-size: 20px;
-  width: 50%;
+  width: 80%;
   padding-left: 0;
 `;
 
 const DetailP = styled.p`
-  width: 50%;
+  width: 80%;
   margin: 0 0 5px 0;
   color: darkgray;
 `;
 
 const InputSize = styled.input`
-  width: 50%;
+  width: 80%;
   height: 40%;
   font-size: 20px;
 `;
 
 const TextBox = styled.textarea`
-  width: 50%;
+  width: 80%;
   height: 100px;
   font-size: 20px;
   resize: none;
 `;
 
 const SelectSize = styled.select`
-  width: 50%;
+  width: 80%;
   height:31px;
   font-size: 20px;
 `;
@@ -56,7 +57,7 @@ const SelectSize = styled.select`
 const ArtSize = styled.div`
   display: flex;
   flex-direction: row;
-  width: calc(50% + 10px);
+  width: calc(80% + 10px);
   padding: 0;
   
   &> * {
@@ -69,7 +70,7 @@ const ArtSize = styled.div`
 const SelectList = styled.div`
   display: flex;
   flex-direction: row;
-  width: calc(50% + 10px);
+  width: calc(80% + 10px);
   padding: 0;
 
   &> *{
@@ -83,7 +84,7 @@ const SelectList = styled.div`
 const AddList = styled.div`
   display: flex;
   flex-direction: row;
-  width: calc(50% + 10px);
+  width: calc(80% + 10px);
   padding: 0;
 
 
@@ -107,10 +108,68 @@ const Button = styled.button`
 `;
 
 export default function PutRegister(){
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [minP, setMinP] = useState('');
+  const [maxP, setMaxP] = useState('');
+  const [width, setWidth]= useState('');
+  const [depth, setDepth]= useState('');
+  const [height, setHeight] = useState('');
+  const [created, setCreated] = useState('');
+  const [start, setStart]=  useState('');
+  const [end, setEnd] = useState('');
+  const [painter, setPainter] = useState('');
+  
   const [images, setImage] = useState([]);
   const [selectedOption, setSelectedOption] = useState('default');
   const [optionList, setOptionList] = useState([]);
   const [minDateTime, setMinDateTime] = useState('');
+  const [submit, setSubmit] = useState('false');
+
+  //이름 입력
+  const setN = (event) =>{
+    setName(event.target.value);
+  } 
+  //작품 정보
+  const setInfo = (event) => {
+    setDescription(event.target.value);
+  }
+  //최소판매 가격
+  const setMip = (e) => {
+    setMinP(e.target.value);
+  }
+  //즉시 판매가격
+  const setMap = (e) => {
+    setMaxP(e.target.value);
+  }
+  //width
+  const setWid = (e) => {
+    setWidth(e.target.value);
+  }
+  //height
+  const setHei = (e) => {
+    setHeight(e.target.value);
+  }
+  //depth
+  const setDep = (e) => {
+    setDepth(e.target.value);
+  }
+  //created
+  const setCrea = (e) => {
+    setCreated(e.target.value);
+  }
+  //start
+  const setStar = (e) => {
+    setStart(e.target.value);
+  }
+  //end
+  const setEn = (e) => {
+    setEnd(e.target.value);
+  }
+  //painter
+  const setPain = (e) => {
+    setPainter(e.target.value);
+  }
 
   const selecetOption = (e) => {
     setSelectedOption(e.target.value);
@@ -118,7 +177,7 @@ export default function PutRegister(){
   }
 
   const addList = () => {
-    if (selectedOption == "default") {
+    if (selectedOption === "default") {
       alert("선택불가능한 옵션입니다.");
       return; // 함수 종료
   }
@@ -165,6 +224,42 @@ export default function PutRegister(){
     setMinDateTime(currentDateTime);
   }, []);
 
+  // 그림 등록 부분
+  useEffect(()=>{
+    if(submit === true ){
+    async function postArt() {
+      try{
+        const request = await axios.post('https://artion.site/post/api/create?user_pk=3',{
+          art_name: name,
+          art_info: description,
+          minP: minP,
+          maxP: maxP,
+          width: width,
+          depth: depth,
+          height: height,
+          createdAt: created,
+          startTime: start,
+          endTime: end,
+          painter: painter,
+          artImahge: images,
+          artCategory : optionList
+        })
+        console.log(request);
+        console.log("성공");
+      }catch(e){
+          console.error(e);
+      }finally{
+        setSubmit(false);
+      } 
+    }
+    postArt(); 
+  }
+  }, [submit]);
+
+  const submitButton = () => {
+    setSubmit(true);
+  }
+
   return(
     <>
      <GlobalStyle />
@@ -172,16 +267,16 @@ export default function PutRegister(){
     <Div>
       <P>작품 정보</P>
       <DetailP>기본정보</DetailP>
-      <InputSize type="text" placeholder="작품명"></InputSize>
-      <InputSize type="text" placeholder="작가명"></InputSize>
-      <TextBox placeholder="작품설명"></TextBox>
+      <InputSize type="text" placeholder="작품명" value={name} onChange={setN}></InputSize>
+      <InputSize type="text" placeholder="작가명"  value={painter} onChange={setPain}></InputSize>
+      <TextBox placeholder="작품설명" value={description} onChange={setInfo}></TextBox>
       <DetailP>제작날짜</DetailP>
-      <InputSize type="date" max={minDateTime}></InputSize>
+      <InputSize type="datetime-local" value={created} onChange={setCrea}></InputSize>
       <DetailP>작품세부정보</DetailP>
       <ArtSize>
-        <InputSize type="text" placeholder="가로"></InputSize>
-        <InputSize type="text" placeholder="세로"></InputSize>
-        <InputSize type="text" placeholder="높이"></InputSize>
+        <InputSize type="text" placeholder="width" value={width} onChange={setWid}></InputSize>
+        <InputSize type="text" placeholder="height" value={height} onChange={setHei}></InputSize>
+        <InputSize type="text" placeholder="depth" value={depth} onChange={setDep}></InputSize>
       </ArtSize>
       <SelectList>
         <SelectSize onChange={selecetOption}>
@@ -212,12 +307,12 @@ export default function PutRegister(){
         ))}
         <P>입찰 정보</P>
         <DetailP>시작일자</DetailP>
-        <InputSize type="datetime-local" min={minDateTime}></InputSize>
+        <InputSize type="datetime-local" min={minDateTime} value={start} onChange={setStar}></InputSize>
         <DetailP>종료일자</DetailP>
-        <InputSize type="datetime-local"></InputSize>
+        <InputSize type="datetime-local" value={end} onChange={setEn}></InputSize>
         <DetailP>작품판매가</DetailP>
-        <InputSize type="text" placeholder="최소 입찰 가격"></InputSize>
-        <InputSize type="text" placeholder="즉시 판매 가격"></InputSize>
+        <InputSize type="text" placeholder="최소 입찰 가격" value={minP} onChange={setMip}></InputSize>
+        <InputSize type="text" placeholder="즉시 판매 가격" value={maxP} onChange={setMap}></InputSize>
       
         <P>작품 사진</P>
         <DetailP>첫번째 사진은 뒷 배경이 나오지 않은 사진을 넣어주세요. </DetailP>
@@ -232,7 +327,7 @@ export default function PutRegister(){
           ))}
         </div>
         </Div>
-        <Button>제출</Button>
+        <Button onClick={submitButton}>제출</Button>
     </>
   )
 }

@@ -1,11 +1,12 @@
 import React, {useEffect, useRef} from "react";
 import * as THREE from 'three';
 import { ARButton } from 'three/examples/jsm/webxr/ARButton.js';
-import { Header, Warning } from "../components";
+import { Header, Guide } from "../components";
 import { useLocation } from "react-router-dom";
 
 const ARCanvas = () => {
     const containerRef = useRef();
+    const arButtonRef = useRef(null);
     const hitTestSource = useRef(null);
     const hitTestSourceRequested = useRef(false);
     const artworkRef = useRef(null); //중복 생성 방지
@@ -36,7 +37,9 @@ const ARCanvas = () => {
         containerRef.current.appendChild(renderer.domElement);
 
         //AR 버튼 추가(AR 세션 시작 버튼)
-        document.body.appendChild(ARButton.createButton(renderer, {requiredFeatures: ['hit-test']}));
+        arButtonRef.current = ARButton.createButton(renderer, {requiredFeatures: ['hit-test']});
+        document.body.appendChild(arButtonRef.current);
+        // document.body.appendChild(ARButton.createButton(renderer, {requiredFeatures: ['hit-test']}))
 
         //조명 추가
         const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
@@ -236,6 +239,9 @@ const ARCanvas = () => {
         animate();
 
         return() => {
+            if(arButtonRef.current){
+                document.body.removeChild(arButtonRef.current);
+            }
             window.removeEventListener('touchstart', onTouchStart);
             window.removeEventListener('touchmove', onTouchMove);
             window.removeEventListener('touchend', onTouchEnd);
@@ -247,10 +253,9 @@ const ARCanvas = () => {
     }, [image, width, length]);
 
     return (
-        <div ref={containerRef}>
+        <div ref={containerRef} >
             <Header />
-            <h2 class="header" style={{display: "flex", justifyContent: 'center', marginTop: '30px'}}>사용 전 반드시 읽어주세요</h2>
-            <Warning />
+            <Guide />
         </div>
     )
 };

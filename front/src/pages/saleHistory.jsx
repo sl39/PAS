@@ -32,7 +32,7 @@ const AllBox = styled.div`
   justify-content: center;
   
   & > * {
-  width: 50%;
+  width: 80%;
   margin-bottom: 10px;
   }
 `;

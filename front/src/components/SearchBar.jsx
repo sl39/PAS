@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { IoIosSearch } from "react-icons/io";
 import { Link } from "react-router-dom";
@@ -31,10 +31,24 @@ const UnstyledLink = styled(Link)`
 `;
 
 export default function SearchBar() {
+  const [searchText, setSearchText] = useState("");
+
+  //검색창에 입력될 때마다 저장
+  const handleSearchChange = (e) => {
+    const searchText = e.target.value;
+    console.log(searchText);
+    setSearchText(searchText);
+  };
+
   return (
     <SearchContainer>
-      <SearchInput type="text" />
-      <UnstyledLink to="/search">
+      <SearchInput
+        type="text"
+        placeholder="검색"
+        value={searchText}
+        onChange={handleSearchChange}
+      />
+      <UnstyledLink to={`/search?keyword=${encodeURIComponent(searchText)}`}>
         <IoIosSearch></IoIosSearch>
       </UnstyledLink>
     </SearchContainer>
