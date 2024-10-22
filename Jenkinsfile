@@ -8,6 +8,14 @@ pipeline {
                     credentialsId: 'github_gom5314', url: 'https://github.com/Gom534/PAS.git'
             }
         }
+        stage('Build with Gradle') {
+            steps {
+                script {
+                    // Gradle 빌드 실행
+                    sh './gradlew build'
+                }
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 script {
