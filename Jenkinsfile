@@ -1,37 +1,27 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
+        stage('Clone repository') {
             steps {
-                // GitHub에서 소스 코드를 체크아웃
-                checkout scm                
-            }
-        }
-        stage('Build') {
-            steps {
-                // 체크아웃한 디렉토리에서 작업
-                dir('./') { // 기본 디렉토리 사용 (체크아웃된 경로)
-                    sh 'chmod +x gradlew' // Gradle Wrapper에 실행 권한 부여
-                    sh './gradlew build' // Gradle 빌드 명령어
-                }
+                // GitHub에서 소스 코드 클론
+                git branch: 'back/feat/AR',
+                    credentialsId: 'github_gom5314', url: 'https://github.com/Gom534/PAS.git'
             }
         }
         stage('Build Docker Image') {
             steps {
-                // 체크아웃한 디렉토리에서 Docker 이미지 빌드
-                dir('./') {
-                    script {
-                        sh 'docker build -t artionimage .' // 현재 디렉토리에서 Docker 이미지 빌드
-                    }
+                script {
+                    // Docker 이미지 빌드, Dockerfile 위치를 지정
+                    def image = docker.build("artionimage", "-f back/Dockerfile .")
                 }
             }
         }
         stage('Push Docker Image') {
             steps {
-                // 체크아웃한 디렉토리에서 Docker 이미지 푸시
-                dir('./') {
-                    script {
-                        sh 'docker push artionimage' // Docker 이미지 푸시
+                script {
+                    // Docker 이미지를 레지스트리에 푸시
+                    docker.withRegistry('https://your-docker-registry', 'docker_credentials_id') {
+                        image.push()
                     }
                 }
             }
