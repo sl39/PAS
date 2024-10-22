@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-       
+       sh 'cd /back'
         stage('Checkout') {
             steps {
                 checkout scm
