@@ -9,7 +9,10 @@ pipeline {
       stage('Building our image') { 
           steps { 
               script { 
-                  sh "cp /var/lib/jenkins/workspace/artion/build/libs/artion-0.0.1-SNAPSHOT.war /var/lib/jenkins/workspace/pipeline/" // war 파일을 현재 위치로 복사 
+               sh '''
+		 cp /var/lib/jenkins/workspace/<correct-path>/artion/build/libs/artion-0.0.1-SNAPSHOT.war /var/lib/jenkins/workspace/pipeline/
+		'''
+
                   dockerImage = docker.build repository + ":$BUILD_NUMBER" 
               }
           } 
