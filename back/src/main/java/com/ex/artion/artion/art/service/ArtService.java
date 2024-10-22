@@ -13,6 +13,7 @@ import com.ex.artion.artion.artimage.entity.ArtImageEntity;
 import com.ex.artion.artion.artimage.respository.ArtImageRepository;
 import com.ex.artion.artion.artimage.service.ArtImageService;
 import com.ex.artion.artion.auction.entity.AuctionEntity;
+import com.ex.artion.artion.global.jwt.UserPrincipal;
 import com.ex.artion.artion.order.entity.OrderEntity;
 import com.ex.artion.artion.order.respository.OrderRepostory;
 import com.ex.artion.artion.paying.entity.PayingEntity;
@@ -36,6 +37,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -64,8 +66,10 @@ public class ArtService {
     private final OrderRepostory orderRepostory;
     private final PayingRepository payingRepository;
 
-    public void createArt(@RequestBody ArtCreateDto dto, @RequestParam(value = "user_pk") Integer user_pk) {
-        UserEntity userEntity = userRepository.findById(user_pk).orElseThrow(() -> new IllegalArgumentException("해당하는 user_pk가 없습니다!"));
+    public void createArt(@RequestBody ArtCreateDto dto) {
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        UserEntity userEntity = userRepository.findById(userPrincipal.getUserPk()).orElseThrow(() -> new IllegalArgumentException("해당하는 user_pk가 없습니다!"));
         ArtEntity art = new ArtEntity();
 
         art.setArt_name(dto.getArt_name());

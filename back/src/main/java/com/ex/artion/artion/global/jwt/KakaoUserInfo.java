@@ -18,9 +18,9 @@ public class KakaoUserInfo {
 
     public static KakaoUserInfo ofKakao(Map<String, Object> attributes) {
         return KakaoUserInfo.builder()
-                .kakao_id("kakao_" + attributes.get("id").toString())
-                .name((String) ((Map<?, ?>) attributes.get("properties")).get("email"))
-                .image((String) ((Map<?, ?>) attributes.get("properties")).get("nickname"))
+                .kakao_id(attributes.get("id").toString())
+                .name((String) ((Map<?, ?>) attributes.get("properties")).get("nickname"))
+                .image((String) ((Map<?, ?>) attributes.get("properties")).get("profile_image"))
                 .build();
     }
 

@@ -54,14 +54,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(
                                 "/",
-                                "/api/**"
-//                                "/oauth2/**",
-//                                "/login/**",
-//                                "/error/**",
-//                                "/kapi/**",
-//                                "/api/user/**",
-//                                "/api/art/**",
-//                                "/kakao/**"
+                                "/api/**",
+                                "/oauth2/**",
+                                "/login/**",
+                                "/error/**",
+                                "/kapi/**",
+                                "/kakao/**"
                         ).permitAll() // 카카오 콜백 URL 허용
                         .anyRequest().authenticated())
 
@@ -85,7 +83,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList("http://localhost:3000","https://artion.site"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000","https://localhost:3000","http://43.202.31.55","http://artion.site","https://artion.site"));
         config.setAllowedMethods(Arrays.asList("HEAD","POST","GET","DELETE","PUT"));
         config.setAllowedHeaders(Arrays.asList("*"));
 
