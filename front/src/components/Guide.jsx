@@ -13,8 +13,10 @@ const HeadTitle = styled.h2`
 const BodyContainer = styled.ul`
     background-color: lightgray;
     border-radius: 10px;
-    margin: 0 50px;
+    margin: 0 auto;
     padding: 20px;
+    width: 80%;
+    max-width: 800px;
 `;
 const BodyContent = styled.li`
     font-size: 16px;
