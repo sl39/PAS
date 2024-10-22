@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // GitHub에서 코드 체크아웃
-                git url: 'https://github.com/Gom534/PAS/', credentialsId: 'github_gom5314'
+                git url: 'https://github.com/Gom534/PAS/', branch : 'back/feat/AR',credentialsId: 'github_gom5314'
             }
         }
 
