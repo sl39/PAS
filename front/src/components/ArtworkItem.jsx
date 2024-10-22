@@ -61,7 +61,6 @@ const HeartIcon = styled(GoHeartFill)`
 `;
 
 export default function ArtworkItem({ artWork, userPk }) {
-  // 작품 상세 페이지 url에 {artWork.art_pk} 쓰면 됨
   return (
     <StyledLink to={`/detail/${artWork.art_pk}/${userPk}`}>
       <ArtworkContainer>

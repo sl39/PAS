@@ -119,8 +119,15 @@ export default function Search() {
     };
 
     const fetchData = async () => {
+      console.log("작가 리스트 검색 키워드: ", options.keyword);
+
+      if (options.keyword === "") {
+        return;
+      }
+
       try {
         const artistList = await searchArtistApi(options);
+        console.log("작가 리스트 요소 개수: ", artistList.length);
         setArtistList(artistList);
       } catch (error) {
         console.error("데이터를 가져오는 중에 오류가 발생했습니다: ", error);
@@ -188,7 +195,7 @@ export default function Search() {
         </FilterContainer>
       </FilterWrapContainer>
       <SearchedItemContainer>
-        {textParams && (
+        {artistList.length > 0 && (
           <BorderLine>
             <SearchedArtist artistList={artistList}></SearchedArtist>
           </BorderLine>
