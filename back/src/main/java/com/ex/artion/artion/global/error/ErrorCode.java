@@ -22,7 +22,8 @@ public enum ErrorCode {
     PAYING_NOT_FOUND(HttpStatus.NOT_FOUND,"PAYING-001", "결제를 찾을 수 없습니다."),
     ORDER_EXIST(HttpStatus.CONFLICT,"ORDER-001", "본 주문에서 결제된 내역이 이미 존재합니다."),
     RELOGIN_REQUIRED(HttpStatus.BAD_REQUEST, "ACCOUNT-004", "재로그인이 필요합니다."),
-    TOKEN_NOT_VALID(HttpStatus.UNAUTHORIZED, "ACCOUNT-008", "유효하지 않은 인증 정보입니다.");
+    TOKEN_NOT_VALID(HttpStatus.UNAUTHORIZED, "ACCOUNT-008", "유효하지 않은 인증 정보입니다."),
+    ORDER_NOT_FOUND(HttpStatus.NOT_FOUND,"PAYING-002", "주문 정보를 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

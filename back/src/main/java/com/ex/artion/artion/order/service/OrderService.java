@@ -8,6 +8,7 @@ import com.ex.artion.artion.global.scheduler.SMSDto.OrderCompleteDto;
 import com.ex.artion.artion.global.scheduler.SMSDto.OrderSellingComplete;
 import com.ex.artion.artion.global.scheduler.SMSService;
 import com.ex.artion.artion.order.dto.OrderCreateDto;
+import com.ex.artion.artion.order.dto.OrderGetResponseDto;
 import com.ex.artion.artion.order.entity.OrderEntity;
 import com.ex.artion.artion.order.respository.OrderRepostory;
 import com.ex.artion.artion.paying.entity.PayingEntity;
@@ -68,5 +69,18 @@ public class OrderService {
 
         smsService.orderPaymentComplete(dto);
         smsService.orderSellComplete(dto1);
+    }
+
+    public OrderGetResponseDto getOrder(Integer payingPk) {
+        PayingEntity payingEntity = payingRepository.findById(payingPk).orElseThrow(()-> new CustomException(ErrorCode.PAYING_NOT_FOUND));
+
+        OrderEntity byPaying = orderRepostory.findByPaying(payingEntity).orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
+        OrderGetResponseDto dto = OrderGetResponseDto.builder()
+                .address_order(byPaying.getAddress_order())
+                .name(byPaying.getName())
+                .delivery_type(byPaying.getDelivery_type())
+                .phone_number(byPaying.getPhone_number())
+                .build();
+        return dto;
     }
 }
