@@ -10,8 +10,10 @@ import com.ex.artion.artion.following.respository.FollowingRepository;
 import com.ex.artion.artion.user.entity.UserEntity;
 import com.ex.artion.artion.user.respository.UserRepository;
 import com.ex.artion.artion.user.service.UserService;
+import com.sun.security.auth.UserPrincipal;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,6 +49,8 @@ public class ArtFollowingService {
         if(existingLike.isPresent()) {
             artfollowingRepository.deleteByUserEntityAndArtEntity(user, art);
             return "unliked";
+
+
         }
         else{
             return "not liked";
