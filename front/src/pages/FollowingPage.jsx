@@ -34,6 +34,7 @@ const Title = styled.h1`
     flex: 1; 
 `;
 const SelectContainer = styled.div`
+    color: black;
     margin-top: 10px;
     display: flex;
     justify-content: space-around;

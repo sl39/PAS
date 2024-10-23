@@ -59,7 +59,8 @@ const GoButton = styled(Link)`
     font-weight: bold;
     text-decoration: none;
     text-align: center;
-    border: 1px solid gray;
+    background-color: aliceblue;
+    border: 1.5px solid gray;
     border-radius: 7px;
     margin-top: 8px;
     padding: 5px;
@@ -71,21 +72,23 @@ const GoButton = styled(Link)`
 const MaxPrice = styled.div`
     display: flex;
     font-size: 15px;
+    background-color: aliceblue;
     justify-content: space-between;
     flex-direction: column;
-    border: 1px solid gray;
-    padding: 5px;
-    border-radius: 7px
+    border: 1.5px solid gray;
+    padding:8px;
+    border-radius: 10px
     `;
 const MinPrice = styled.div`
     margin-top: 14px;
     display: flex;
+    background-color: aliceblue;
     font-size: 15px;
     flex-direction: column;
     justify-content: space-between;
-    border: 1px solid gray;
-    padding: 5px;
-    border-radius: 7px
+    border: 1.5px solid gray;
+    padding: 8px;
+    border-radius: 10px
     `;
 const YearInfo = styled.h6`
     font-size: 13px;
@@ -185,8 +188,9 @@ const FollowingNum = styled.span`
     margin-left: 2px;
     `;
 const RetryButton = styled(Link)`
+    color: black;
     cursor: pointer;
-    background-color: white;
+    background-color: #f1f3f5;
     border: 1px solid gray;
     border-radius: 5px;
     font-size: 13px;
@@ -199,8 +203,9 @@ const RetryButton = styled(Link)`
     padding: 3px 20px
     `;
 const FixButton = styled(Link)`
+    color: black
     cursor: pointer;
-    background-color: white;
+    background-color: #f1f3f5;
     border: 1px solid gray;
     border-radius: 5px;
     font-size: 13px;

@@ -8,7 +8,7 @@ const ItemContainer = styled.li`
     justify-content: space-between;
     align-items: center;
     position: relative;
-    margin: 0 5px 0 5px;
+    margin: 0 5px 20px 5px;
     flex: 1;
     min-width: 0;
 `;
