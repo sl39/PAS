@@ -13,7 +13,7 @@ const DetailItemContainer = styled.div`
     margin-top: 100px;
     justify-content: space-between;
     padding: 20px;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid lightgray;
 
     @media (max-width: 840px) {
         flex-direction: column;
@@ -26,12 +26,13 @@ const Title = styled.h2`
     `;
 const Artist = styled.p`
     font-size: 18px;
+    margin-top: 8px;
     `;
 const SpanBold = styled.span`
+    font-size: 18px;
     font-weight: bold;
 `;
 const Registrant = styled.p`
-    margin-top: 20px;
     `;
 const DescriptionTitle = styled.p`
     padding: 10px;
@@ -39,17 +40,19 @@ const DescriptionTitle = styled.p`
     font-weight: bold
     `;
 const Description = styled.p`
-    margin: 10px 15px 0 15px;
-    background-color: lightgray;
+    font-size: 16px;
+    line-height: 1.8;
+    margin: 10px 15px 20px 15px;
+    background-color: #f1f3f5;
     border-radius: 15px;
     padding: 15px
+    
     `;
 const TimeInfo = styled.p`
-    font-weight: bold;
-    margin: 4px;
-    margin-top: 8px;
+    font-size: 16px;
+    text-align: center;
+    margin: 8px 4px 0 4px;
     padding-left: 2px;
-    font-size: 12px
     `;
 const GoButton = styled(Link)`
     font-size: 15px;
@@ -58,7 +61,7 @@ const GoButton = styled(Link)`
     text-align: center;
     border: 1px solid gray;
     border-radius: 7px;
-    margin-top: 14px;
+    margin-top: 8px;
     padding: 5px;
     &:hover {
         background-color: lightgray;
@@ -143,9 +146,19 @@ const ArtworkImage = styled.img`
 `;
 const LeftArrow = styled(IoIosArrowBack)`
     left: 10px;
+
+    &:hover {
+        background-color: lightgray;
+        border-radius: 50%;
+    }
     `;
 const RightArrow = styled(IoIosArrowForward)`
     right: 10px;
+
+    &:hover {
+        background-color: lightgray;
+        border-radius: 50%;
+    }
     `;
 const CameraLink = styled(Link)`
     cursor: pointer;
@@ -360,6 +373,10 @@ export default function DetailItem ({ artWork }) {
                     <SpanBold>현재가</SpanBold>
                     <SpanBold style={{textAlign: "right"}}>{currentPriceRE} 원</SpanBold>
                 </MinPrice>
+                <TimeInfo>
+                    <span style={{fontWeight: 'bold'}}>시작 시간 :</span> {artWork.startTime}<br/>
+                    <span style={{fontWeight: 'bold'}}>종료 시간 :</span> {artWork.endTime}
+                </TimeInfo>
                 {artWork.isPossible ? (
                     <>
                     {/* 경매 페이지로 이동 주소 */}
@@ -375,15 +392,12 @@ export default function DetailItem ({ artWork }) {
                     </>
                     ): (<GoButton>경매에 참여할 수 없습니다.</GoButton>)
                 }
-                <TimeInfo>
-                    시작 시간: {artWork.startTime}<br/>
-                    종료 시간: {artWork.endTime}
-                </TimeInfo>
+                
                 
             </InfoContainer>
         </DetailItemContainer>
         <DescriptionTitle>작품 설명</DescriptionTitle>
-        <Description>{artWork.artInfo}</Description>
+        <Description>{artWork.artInfo}<br/>가나다라마바사<br/>abcdefc</Description>
         {showMessage && (
                 <>
                     <Overlay onClick={closeMessage} />
