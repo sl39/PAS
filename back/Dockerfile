@@ -5,7 +5,8 @@ FROM openjdk:17-jdk-slim
 WORKDIR /home
 
 # Gradle 빌드 결과물 JAR 파일을 복사
-COPY ubuntu/artion/build/libs/artion-0.0.1-SNAPSHOT.jar app.jar
+COPY back/build/libs/artion-0.0.1-SNAPSHOT.jar app.jar
+
 # 애플리케이션 실행
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
