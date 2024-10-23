@@ -12,8 +12,8 @@ pipeline {
             steps {
                 script {
                     // Docker 빌드 명령어에서 컨텍스트 디렉토리 지정
-                    sh 'docker build -t wjddntyvld/artion:latest -f /home/ubuntu/artion/Dockerfile /home/ubuntu/artion'
-                }
+                    sh 'pwd'
+                    sh 'docker build -t wjddntyvld/artion:latest -f Dockerfile .'                }
             }
         }
 
