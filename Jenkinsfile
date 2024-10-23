@@ -14,6 +14,16 @@ pipeline {
             }
         }
 
+        stage('Prepare YAML File') {
+            steps {
+                script {
+                    // Credentials로 저장된 yml 내용을 파일로 생성
+                    withCredentials([string(credentialsId: 'artion_yml', variable: 'YML_CONTENT')]) {
+                        writeFile file: 'back/application.yml', text: "${YML_CONTENT}"
+                    }
+                }
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 script {                 
