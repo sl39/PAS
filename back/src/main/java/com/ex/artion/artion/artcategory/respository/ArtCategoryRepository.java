@@ -13,6 +13,11 @@ public interface ArtCategoryRepository extends JpaRepository<ArtCategoryEntity,I
             ,nativeQuery = true)
     ArtCategoryEntity findIdByArtCategoryName(@Param("category") String category);
 
+    @Query(value = "SELECT * FROM art_category_entity a " +
+            "WHERE a.art_category_pk = :art_category_pk "
+            ,nativeQuery = true)
+    ArtCategoryEntity findNameByArtCategoryPk(@Param("art_category_pk") ArtCategoryEntity art_category_pk);
+
     @Query(value = "SELECT a.* FROM art_category_entity as a " +
             "WHERE a.art_category_name =:artCategoryName",nativeQuery = true)
     Optional<ArtCategoryEntity> findByCategoryName(@Param("artCategoryName") String artCategoryName);

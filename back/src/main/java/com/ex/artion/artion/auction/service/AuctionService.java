@@ -173,13 +173,14 @@ public class AuctionService {
             dto.setState(1);
         } else {
 
-            PayingEntity paying = payingRepository.findByAuction(auction.get()).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+            PayingEntity paying = payingRepository.findByAuction(auction.get()).orElseThrow(()-> new CustomException(ErrorCode.PAYING_NOT_FOUND));
             Optional<OrderEntity> order = orderRepostory.findByPaying(paying);
+            dto.setPaying_pk(paying.getPaying_pk());
             if(order.isPresent()){
                 dto.setState(3);
             } else {
                 dto.setState(2);
-                dto.setPaying_pk(paying.getPaying_pk());
+
             }
 
         }

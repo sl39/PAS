@@ -10,7 +10,6 @@ import com.ex.artion.artion.artimage.entity.ArtImageEntity;
 import com.ex.artion.artion.artimage.respository.ArtImageRepository;
 import com.ex.artion.artion.auction.entity.AuctionEntity;
 import com.ex.artion.artion.auction.respository.AuctionRepository;
-import com.ex.artion.artion.global.scheduler.ScheduledMessageService;
 import com.ex.artion.artion.user.entity.UserEntity;
 import com.ex.artion.artion.user.respository.UserRepository;
 import net.datafaker.Faker;
@@ -46,17 +45,6 @@ class ArtionApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-//
-//	@Autowired
-//	private ScheduledMessageService service;
-
-//	@Test
-//	public void getTimeTest(){
-//		for(int i = 0 ; i < 10 ; i++){
-//			service.scheduleTask(i);
-//
-//		}
-//	}
 
 //	public List<ArtEntity> generateRandomArtAuctions(int count) {
 //		Faker faker = new Faker();
@@ -65,7 +53,7 @@ class ArtionApplicationTests {
 //		Optional<UserEntity> user = userRepository.findById(2);
 //		UserEntity userEntity = user.get();
 //		for (int i = 0; i < count; i++) {
-//			String art_name 	= faker.oscarMovie().movieName();
+//			String art_name = faker.oscarMovie().movieName();
 //			String art_info = faker.lorem().sentence();
 //			Long minP = (long) (random.nextInt(5000) + 1000); // Random price between 1000 and 6000
 //			Long maxP = minP + random.nextInt(5000); // Max price higher than min price
@@ -121,7 +109,7 @@ class ArtionApplicationTests {
 //
 //		return auctions;
 //	}
-//
+
 //	@Test
 //	void test() {
 //		List<ArtEntity> artEntities = generateRandomArtAuctions(5);
