@@ -19,6 +19,7 @@ pipeline {
                     // Credentials로 저장된 yml 내용을 파일로 생성
                     withCredentials([file(credentialsId: 'artion_yml', variable: 'YML_CONTENT')]) {
                      script {
+                        sh 'chmod 755 -f back/src/main/resources/application.yml'
                         sh 'cp $YML_CONTENT back/src/main/resources/application.yml'
                     }
                 }
