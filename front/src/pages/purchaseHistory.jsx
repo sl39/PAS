@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import BaseAppBar from "../element/appBar";
 import jjang from '../img/jjang.jpg';
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { Header } from "../components";
 
 const ImageSize = styled.img`
   width: 35%;
@@ -166,7 +166,7 @@ export default function PurchaseHistory() {
 
   return(
       <>
-        <BaseAppBar></BaseAppBar>
+       <Header></Header>
         <AllBox>  
         <div>
         <Pstylebar>구매내역</Pstylebar>

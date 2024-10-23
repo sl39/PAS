@@ -1,4 +1,3 @@
-import BaseAppBar from '../element/appBar';
 import jjang from '../img/jjang.jpg';
 import styled from "styled-components";
 
@@ -55,7 +54,6 @@ const P = styled.p`
 export default function Receipt() {
   return(
     <>
-    <BaseAppBar></BaseAppBar>
     <AllBox>
     <Pstyle>주문상세</Pstyle>
        <ListStyle>

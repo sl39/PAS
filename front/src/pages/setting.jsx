@@ -1,10 +1,10 @@
 import Profile from "../element/profile";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import BaseAppBar from "../element/appBar";
 import styled from "styled-components";
 import { createGlobalStyle } from 'styled-components';
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { DefaultHeader } from "../components";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -23,11 +23,14 @@ const InputSize = styled.input`
   font-size: 20px;
   padding: 5px;
   margin-bottom: 5%;
+  border: 2px solid #d0d0d0;
 `;
 
 const SubmitButton = styled.button`
   width: 80%;
   padding: 5px;
+  border: 2px solid #d0d0d0;
+  margin-bottom: 10%;
 `;
 
 const AddressDiv = styled.div`
@@ -67,6 +70,10 @@ const Select = styled.select`
    margin-bottom: 5%;
 `;
 
+const AllBox = styled.div`
+  width: 100%;
+`;
+
 export default function SettingPage() {
   const [text, setText] = useState('');
   const [phone, setPhone] = useState('');
@@ -75,6 +82,7 @@ export default function SettingPage() {
   const [address, setAddress] = useState('');
   const [detailAddress, setDetailAddress] = useState('');
   const [submit, setSubmit] = useState(false);
+  const navigate = useNavigate();
 
   //useEffect로 URL 연결
   useEffect(() => {
@@ -140,13 +148,14 @@ export default function SettingPage() {
         alert("입력이 완료되지 않았습니다. 모든 필드를 입력해주세요.");
     } else {
         setSubmit(true);
+        navigate('/');
  }
 }
 
   return (
-    <>
+    <AllBox>
       <GlobalStyle></GlobalStyle>
-      <BaseAppBar />
+      <DefaultHeader></DefaultHeader>
       <Profile />
       <Div>
         <P>닉네임</P>
@@ -187,6 +196,6 @@ export default function SettingPage() {
         </AddressDiv>
         <SubmitButton onClick={postButton}>저장</SubmitButton>
       </Div>
-    </>
+    </AllBox>
   )
   }

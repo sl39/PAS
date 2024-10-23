@@ -1,10 +1,10 @@
-import BaseAppBar from "../element/appBar";
 import InfoBar from "../element/infoBar";
 import Profile from "../element/profile";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { Header } from "../components";
 
 const DefaultLink = styled(Link)`
   text-decoration: none; 
@@ -21,7 +21,7 @@ export default function Info() {
   },[user_pk])
   return(
   <>
-    <BaseAppBar />
+   <Header></Header>
     <Profile user={userPk} />
     <DefaultLink to="/putCreate">
     <InfoBar text="개인정보수정" />

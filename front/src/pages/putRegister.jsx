@@ -1,10 +1,10 @@
 import styled from "styled-components"
-import BaseAppBar from "../element/appBar";
 import { createGlobalStyle } from 'styled-components';
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { BackHeader } from "../components";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -41,6 +41,7 @@ const InputSize = styled.input`
   width: 80%;
   height: 40%;
   font-size: 20px;
+  border: 2px solid #d0d0d0;
 `;
 
 const TextBox = styled.textarea`
@@ -48,12 +49,14 @@ const TextBox = styled.textarea`
   height: 100px;
   font-size: 20px;
   resize: none;
+  border: 2px solid #d0d0d0;
 `;
 
 const SelectSize = styled.select`
   width: 80%;
   height:31px;
   font-size: 20px;
+  border: 2px solid #d0d0d0;
 `;
 
 const ArtSize = styled.div`
@@ -105,8 +108,10 @@ const List = styled.div`
 `;
 
 const Button = styled.button`
-  width: 100%;
+  width: 80%;
   padding: 5px;
+  border: 2px solid #d0d0d0;
+  margin-bottom: 5%;
 `;
 
 const ImageDiv = styled.div`
@@ -329,7 +334,7 @@ export default function PutRegister(){
   return(
     <>
      <GlobalStyle />
-    <BaseAppBar></BaseAppBar>
+    <BackHeader></BackHeader>
     <Div>
       <P>작품 정보</P>
       <DetailP>기본정보</DetailP>
@@ -363,7 +368,7 @@ export default function PutRegister(){
           <option value="누드화">누드화</option>
           <option value="초상화">초상화</option>
         </SelectSize>
-      <button onClick={addList}>추가</button>
+      <button onClick={addList} style={{border: '2px solid #d0d0d0'}}>추가</button>
       </SelectList>
         {optionList.map((option, index) => (
             <AddList  key={index}>
@@ -382,7 +387,7 @@ export default function PutRegister(){
       
         <P>작품 사진</P>
         <DetailP>첫번째 사진은 뒷 배경이 나오지 않은 사진을 넣어주세요. </DetailP>
-        <InputSize type="file" multiple accept="image/*" onChange={imageChange}></InputSize>
+        <InputSize type="file" multiple accept="image/*" onChange={imageChange} style={{border: 0}}></InputSize>
         <ImageDiv>
           {images.map((image, index) => (
             <img
@@ -392,8 +397,8 @@ export default function PutRegister(){
             />
           ))}
         </ImageDiv>
-        </Div>
         <Button onClick={submitButton}>제출</Button>
+        </Div>
     </>
   )
 }

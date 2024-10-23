@@ -1,11 +1,11 @@
 import Profile from "../element/profile";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import BaseAppBar from "../element/appBar";
 import styled from "styled-components";
 import { createGlobalStyle } from 'styled-components';
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { BackHeader } from "../components";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -14,7 +14,6 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Div = styled.div`
-  margin-top: 5%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,23 +23,26 @@ const InputSize = styled.input`
   width: 80%;
   font-size: 20px;
   padding: 5px;
+  margin-bottom: 5%;
+  border: 2px solid #d0d0d0;
 `;
 
 const SubmitButton = styled.button`
-  position: fixed;
-  width: 100%;
+  width: 80%;
   padding: 5px;
-  bottom: 0;
+  border: 2px solid #d0d0d0;
+  margin-bottom: 10%;
 `;
 
 const AddressDiv = styled.div`
-  display: flex;
+ display: flex;
   flex-direction: column;
   width: 80%;
+  margin-bottom: 5%;
   
   &>*{
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 5%;
   padding: 5px;
   }
 `;
@@ -49,21 +51,28 @@ const P = styled.p`
   font-size : 20px;
   margin: 10px;
    width: 80%;
+   color: darkgray;
 `;
 
 const AccountDiv = styled.div`
-  display: flex;
+   display: flex;
   flex-direction: column;
   width: 80%;
+   margin-bottom: 5%;
    &>*{
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 0;
   padding: 5px;
   }
 `;
 
 const Select = styled.select`
-  font-size: 20px;
+   font-size: 20px;
+   margin-bottom: 5%;
+`;
+
+const AllBox = styled.div`
+  width: 100%;
 `;
 
 export default function SettingPage() {
@@ -76,6 +85,7 @@ export default function SettingPage() {
   const [detailAddress, setDetailAddress] = useState('');
   const [submit, setSubmit] = useState(false);
   const {user_pk} = useParams();
+  const navigate = useNavigate();
   
   useEffect(() => {
     setUserPk(`${user_pk}`);
@@ -170,13 +180,14 @@ export default function SettingPage() {
         alert("입력이 완료되지 않았습니다. 모든 필드를 입력해주세요.");
     } else {
         setSubmit(true);
+        navigate('/');
  }
 }
 
   return (
-    <>
+    <AllBox>
       <GlobalStyle></GlobalStyle>
-      <BaseAppBar />
+      <BackHeader />
       <Profile user={userPk}/>
       <Div>
         <P>닉네임</P>
@@ -215,8 +226,8 @@ export default function SettingPage() {
           <InputSize placeholder="도로명주소를 입력하세요." value={address} onChange={setAdd} ></InputSize>
           <InputSize placeholder="상세주소를 입력하세요." value={detailAddress} onChange={setD} ></InputSize>
         </AddressDiv>
+        <SubmitButton onClick={postButton}>저장</SubmitButton>
       </Div>
-      <SubmitButton onClick={postButton}>저장</SubmitButton>
-    </>
+    </AllBox>
   )
 }
