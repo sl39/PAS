@@ -203,7 +203,7 @@ const RetryButton = styled(Link)`
     padding: 3px 20px
     `;
 const FixButton = styled(Link)`
-    color: black
+    color: black;
     cursor: pointer;
     background-color: #f1f3f5;
     border: 1px solid gray;
