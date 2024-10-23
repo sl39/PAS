@@ -11,11 +11,7 @@ pipeline {
                 
             }
         }
-        stage('Build with Gradle') {
-                steps {
-                    sh './gradlew build'
-                }
-        }
+        
         stage('Build Docker Image') {
             steps {
                 script {
