@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub') // Jenkins에 저장된 자격 증명 ID
+        Artion_yml = credentials('artion_yml')
     }
     stages {
         stage('Checkout') {
