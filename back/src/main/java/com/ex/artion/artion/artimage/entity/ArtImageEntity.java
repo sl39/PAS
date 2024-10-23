@@ -20,6 +20,6 @@ public class ArtImageEntity {
 
     private String art_image_url;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private ArtEntity art_entity;
 }
