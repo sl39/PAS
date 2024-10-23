@@ -2,7 +2,6 @@ pipeline {
     agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub') // Jenkins에 저장된 자격 증명 ID
-        Artion_yml = credentials('artion_yml')
     }
     stages {
         stage('Checkout') {
@@ -16,10 +15,11 @@ pipeline {
 
         stage('Prepare YAML File') {
             steps {
-                script {
+               
                     // Credentials로 저장된 yml 내용을 파일로 생성
-                    withCredentials([string(credentialsId: 'artion_yml', variable: 'YML_CONTENT')]) {
-                        writeFile file: 'back/application.yml', text: "${YML_CONTENT}"
+                    withCredentials([file(credentialsId: 'artion_yml', variable: 'YML_CONTENT')]) {
+                     script {
+                        sh 'cp $YML_CONTENT back/src/main/resources/application.yml'
                     }
                 }
             }
