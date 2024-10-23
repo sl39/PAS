@@ -386,7 +386,6 @@ export default function DetailItem ({ artWork }) {
                     {artWork.auctionState === 0 && currentTime > chendTime &&(<GoButton>경매가 종료되었습니다.</GoButton>)}
                     {artWork.auctionState === 1 && <GoButton to={`/auction/${art_pk}/7`}>입찰하러 가기</GoButton>}
                     {artWork.auctionState === 2 && <GoButton to={`/auction/${art_pk}/7`}>경매 완료</GoButton>}
-                    {/* {artWork.auctionState === 3 && <GoButton to={`/auction/${art_pk}/7`}>판매되었습니다.</GoButton>} */}
                     {artWork.auctionState === 3 && (artWork.currentPrice === artWork.myCurrentPrice
                     ? (<GoButton to={`/auction/${art_pk}/7`}>주문내역 확인하기</GoButton>) : (<GoButton to={`/auction/${art_pk}/8`}>판매되었습니다.</GoButton>))}
                     </>
@@ -397,7 +396,7 @@ export default function DetailItem ({ artWork }) {
             </InfoContainer>
         </DetailItemContainer>
         <DescriptionTitle>작품 설명</DescriptionTitle>
-        <Description>{artWork.artInfo}<br/>가나다라마바사<br/>abcdefc</Description>
+        <Description>{artWork.artInfo}</Description>
         {showMessage && (
                 <>
                     <Overlay onClick={closeMessage} />
