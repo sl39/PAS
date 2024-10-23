@@ -394,7 +394,7 @@ public class ArtService {
             } else  {
                 Long price = art.getMinP();
                 Long auctionPrice = auctionRepository.findMaxPriceByArtPk(art.getArt_pk());
-                if(auctionPrice > price){
+                if(auctionPrice != null && auctionPrice > price){
                     price = auctionPrice;
                 }
                 result.setPrice(price);
