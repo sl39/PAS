@@ -361,9 +361,8 @@ export default function DetailItem ({ artWork }) {
                     {/* 수정 - 2 => user_pk */}
                     {2 === artWork.sellerPk && (
                         <>
-                         {/* to={`/작품 등록페이지로 이동`} */}
-                         {artWork.auctionState === 0 && currentTime < chstartTime && <FixButton to={`/`}>수정하기</FixButton>}
-                         {artWork.auctionState === 0 && currentTime > chendTime && <RetryButton to={`/`}>재경매</RetryButton>}
+                         {artWork.auctionState === 0 && currentTime < chstartTime && <FixButton to={`/putRegister/${art_pk}`}>수정하기</FixButton>}
+                         {artWork.auctionState === 0 && currentTime > chendTime && <RetryButton to={`/putRegister/${art_pk}`}>재경매</RetryButton>}
                         </>
                     )}
                 </ButtonContainer>
@@ -384,7 +383,6 @@ export default function DetailItem ({ artWork }) {
                 </TimeInfo>
                 {artWork.isPossible ? (
                     <>
-                    {/* 경매 페이지로 이동 주소 */}
                     {artWork.auctionState === 0 && currentTime < chstartTime &&(<GoButton>경매 시작 전입니다.</GoButton>)}
                     {artWork.auctionState === 0 && currentTime >= chstartTime && currentTime <= chendTime
                     && (<GoButton>경매 진행 중입니다.</GoButton>)}
