@@ -15,9 +15,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    // Docker 로그인
-                    sh "echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-wjddn123@@!"
+                script {                 
                     
                     // Docker 이미지 빌드
                     sh 'docker build -t wjddntyvld/artion:latest -f back/Dockerfile .'
