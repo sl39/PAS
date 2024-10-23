@@ -1,28 +1,34 @@
 pipeline {
     agent any
+
     stages {
-        stage('Clone repository') {
+        stage('Checkout') {
             steps {
-                // GitHub에서 소스 코드 클론
-                git branch: 'back/feat/AR',
-                    credentialsId: 'github_gom5314', url: 'https://github.com/Gom534/PAS.git'
+                git url: 'https://github.com/Gom534/PAS.git', credentialsId: 'github_gom5314', branch: 'back/feat/AR'
+                    sh 'ls -la'
+                    sh 'pwd'
+                    sh 'cd back'
+                
             }
+        }
+        stage('Build with Gradle') {
+                steps {
+                    sh './gradlew build'
+                }
         }
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Docker 이미지 빌드, Dockerfile 위치를 지정
-                    def image = docker.build("artionimage", "-f back/Dockerfile .")
-                }
+                    // Docker 빌드 명령어에서 컨텍스트 디렉토리 지정   
+                    
+                    sh 'docker build -t wjddntyvld/artion:latest -f back/Dockerfile .'                }
             }
         }
+
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Docker 이미지를 레지스트리에 푸시
-                    docker.withRegistry('https://your-docker-registry', 'docker_credentials_id') {
-                        image.push()
-                    }
+                    sh 'docker push wjddntyvld/artion:latest'
                 }
             }
         }
