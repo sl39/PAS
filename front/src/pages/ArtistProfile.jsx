@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { ArtworkInProfile, Header } from "../components";
 import { CiMenuKebab } from "react-icons/ci";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const ArtistContainer = styled.div`
   display: flex;
@@ -156,7 +158,35 @@ const NormalParagraph = styled.p`
   margin: 0px;
 `;
 
+export async function getArtistProfileApi(userPk) {
+  const response = await axios.get("https://artion.site/api/user/myart", {
+    params: {
+      user_pk: userPk,
+    },
+  });
+  return response.data;
+}
+
 export default function ArtistProfile() {
+  // URL에서 path variable 추출
+  const userPk = useParams();
+  const [artistName, setArtistName] = useState("");
+  const [artworkList, setArtworkList] = useState([]);
+
+  // 작가 페이지 정보 불러오기
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const artistProfileInfo = await getArtistProfileApi(userPk);
+        console.log("작가 페이지 정보 불러옴 ", artistProfileInfo);
+      } catch (error) {
+        console.error("데이터를 가져오는 중에 오류가 발생했습니다: ", error);
+      }
+    };
+
+    fetchData();
+  }, [userPk]);
+
   return (
     <>
       <Header></Header>

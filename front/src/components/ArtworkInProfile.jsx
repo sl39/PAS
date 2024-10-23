@@ -1,6 +1,8 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { GoHeartFill } from "react-icons/go";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 // Styled Components
 const ArtworkContainer = styled.div`

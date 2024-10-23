@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { IoIosSearch } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 // Styled Components
 const SearchContainer = styled.div`
@@ -33,10 +33,9 @@ const UnstyledLink = styled(Link)`
 export default function SearchBar() {
   const [searchText, setSearchText] = useState("");
 
-  //검색창에 입력될 때마다 저장
+  // 검색창에 입력될 때마다 저장
   const handleSearchChange = (e) => {
     const searchText = e.target.value;
-    console.log(searchText);
     setSearchText(searchText);
   };
 
