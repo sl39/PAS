@@ -29,6 +29,11 @@ public class UserController {
         return ResponseEntity.ok("회원정보 수정!");
     }
 
+    @GetMapping("/update")
+    public ResponseEntity<Map<String, Object>> updateBeforeUser(@RequestParam(value = "user_pk") Integer user_pk) {
+        return userService.updateBeforeUser(user_pk);
+    }
+
 //    @PostMapping("/delete")
 //    public ResponseEntity<String> deleteUser(
 //            @RequestParam(value = "user_pk") Integer user_pk) {
@@ -79,6 +84,11 @@ public class UserController {
     @GetMapping("/myart")
     public ResponseEntity<Map<String, Object>> myProfile(@RequestParam(value="user_pk") Integer user_pk) {
         return userService.requestMyArt(user_pk);
+    }
+
+    @GetMapping("/other")
+    public ResponseEntity<Map<String, Object>> otherProfile(@RequestParam(value="user_pk") Integer user_pk) {
+        return userService.requestOtherArt(user_pk);
     }
 
     @GetMapping("/myp")

@@ -173,6 +173,48 @@ public class ArtService {
         artRepository.save(art);
     }
 
+    // 그림 수정전 정보 불러오기
+    public ResponseEntity<Map<String, Object>> updateBeforeArt(@RequestParam(value = "art_pk") Integer art_pk) {
+
+        ArtEntity art = artRepository.findById(art_pk)
+                .orElseThrow(() -> new IllegalArgumentException("해당 그림이 없습니다!"));
+
+        Map<String, Object> result = new HashMap<>();
+        List<String> itemImageList = new ArrayList<>();
+        List<String> itemCateList = new ArrayList<>();
+
+        result.put("art_name", art.getArt_name());
+        result.put("painter", art.getPainter());
+        result.put("created_at", art.getCreatedAt());
+        result.put("width", art.getWidth());
+        result.put("depth", art.getDepth());
+        result.put("height", art.getHeight());
+        result.put("startTime", art.getStartTime());
+        result.put("endTime", art.getEndTime());
+        result.put("minP", art.getMinP());
+        result.put("maxP", art.getMaxP());
+        result.put("art_info", art.getArt_info());
+
+        List<ArtImageEntity> beforeImages = artImageRepository.findAllByArtEntity(art_pk);
+
+        for (ArtImageEntity artImage : beforeImages) {
+            itemImageList.add(artImage.getArt_image_url());
+        }
+
+        result.put("artImage", itemImageList);
+
+        List<ArtArtCategory> beforeCates = artArtCategoryRepository.findByArtEntity(art_pk);
+
+        for(ArtArtCategory artCategory : beforeCates) {
+            itemCateList.add(artCategory.getArt_category().getArt_category_name());
+        }
+
+        result.put("artCategory", itemCateList);
+
+        return ResponseEntity.ok(result);
+        }
+
+
     // 그림 삭제
     @Transactional
     public void deleteArt(@RequestParam(value = "art_pk") Integer art_pk) {
@@ -190,6 +232,7 @@ public class ArtService {
         }
     }
 
+    //낙찰된 그림 클릭 시 정보
     public ResponseEntity <Map<String, Object>> orderedArt(@PathVariable(value = "art_pk") Integer art_pk) {
         ArtEntity art = artRepository.findById(art_pk)
                 .orElseThrow(() -> new IllegalArgumentException("해당 그림이 없습니다!"));
@@ -197,8 +240,11 @@ public class ArtService {
 
         String art_name = art.getArt_name();
         String painter = art.getPainter();
-        Long minP = art.getMinP();
         LocalDate createdAt = art.getCreatedAt();
+
+        // 이거 왜주고 있음? - 아마도 낙찰 가격이 2개라 하나는 경매 시작, 하나는 낙찰 가격인 듯.
+        Long minP = art.getMinP();
+
 
         //그림 이미지 불러오기
         List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(art.getArt_pk());
@@ -210,7 +256,7 @@ public class ArtService {
             result.put("image", image);
         }
         //낙찰 가격
-        AuctionEntity auction = auctionRepository.findOneByArt_pk(art_pk);
+        AuctionEntity auction = auctionRepository.findMaxOneByArt_pk(art_pk);
         Long current_price = auction.getCurrent_price();
 
         //배송 방식
@@ -218,16 +264,11 @@ public class ArtService {
         OrderEntity order = orderRepostory.findOneByPaying_pk(paying.getPaying_pk());
         String delivery = order.getDelivery_type();
 
-
-        // 결제정보
-        String payment = "현재 고정값 넘어가는 중. 나중에 수정해야 함";
-
         result.put("art_name", art_name);
         result.put("painter", painter);
         result.put("minP", minP);
         result.put("createdAt", createdAt);
         result.put("delivery", delivery);
-        result.put("payment", payment);
         result.put("current_price", current_price);
 
         return ResponseEntity.ok(result);
