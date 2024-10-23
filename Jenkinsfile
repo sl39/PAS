@@ -12,9 +12,9 @@ pipeline {
             steps {
                 script {
                     // Docker 빌드 명령어에서 컨텍스트 디렉토리 지정
-                    sh 'cp /home/ubuntu/artion/Dockerfile .'
+                    sh 'sudo cp /home/ubuntu/artion/Dockerfile .'
                     sh 'pwd'
-                    sh 'docker build -t wjddntyvld/artion:latest -f Dockerfile .'                }
+                    sh 'sudo docker build -t wjddntyvld/artion:latest -f Dockerfile .'                }
             }
         }
 
