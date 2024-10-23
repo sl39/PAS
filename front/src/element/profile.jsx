@@ -1,10 +1,12 @@
-import { CgProfile } from "react-icons/cg";
 import styled from "styled-components";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const ProfileLogo = styled(CgProfile)`
-  width: 80px;
-  height: 80px;
+const ProfileImage = styled.img`
+    width: 80px;
+    height: 80px;
      margin-left: 5%;
+     border-radius : 100%;
 `;
 
 const P = styled.p`
@@ -17,15 +19,32 @@ const Div = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-
+  margin-bottom: 10%;
+  margin-top:10%;
 `;
 
-export default function Profile() {
+export default function Profile({ user }) {
+const [userImage, setUserImage]= useState('');
+const [name, setName] = useState('');
+
+  useEffect(()=> {
+    axios.get(`https://artion.site/api/user/myp?user_pk=${user}`)
+      .then(response =>{
+        const userData = response.data;
+        setName(userData.User_name);
+        setUserImage(userData.User_image);
+      })
+      .catch(error => {
+        console.error(error);
+      })
+    }
+  , [user]);
+
   return(
     <div>
     <Div>
-      <ProfileLogo />
-      <P>반갑습니다.</P>
+      <ProfileImage src={userImage}/>
+      <P>{name}</P>
     </Div>
     <hr></hr>
     </div>
