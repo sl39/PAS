@@ -27,6 +27,9 @@ const Title = styled.h2`
 const Artist = styled.p`
     font-size: 18px;
     `;
+const SpanBold = styled.span`
+    font-weight: bold;
+`;
 const Registrant = styled.p`
     margin-top: 20px;
     `;
@@ -82,6 +85,7 @@ const MinPrice = styled.div`
     border-radius: 7px
     `;
 const YearInfo = styled.h6`
+    font-size: 13px;
     text-align: left;
     color: gray;
     font-weight: normal;
@@ -89,6 +93,7 @@ const YearInfo = styled.h6`
     margin-left: 20px;
     `;
 const SizeInfo = styled.h6`
+    font-size: 13px;
     text-align: right;
     color: gray;
     font-weight: normal;
@@ -194,6 +199,7 @@ const FixButton = styled(Link)`
     padding: 3px 12px;
     `;
 const QuraterIcon = styled(IoShieldCheckmark)`
+    cursor: pointer;
     color: #0099FF;
     `;
 
@@ -230,6 +236,12 @@ export default function DetailItem ({ artWork }) {
     const chstartTime = new Date(artWork.startTime.replace(" ","T"));
     const chendTime = new Date(artWork.endTime.replace(" ","T"));
     const {art_pk, user_pk} = useParams();
+    //세자리마다 , 넣어주기
+    const maxPrice = artWork.maxPrice;
+    const currentPrice = artWork.currentPrice;
+    const maxPriceRE = maxPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+    const currentPriceRE = currentPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+    
 
     console.log(user_pk)
     
@@ -323,15 +335,15 @@ export default function DetailItem ({ artWork }) {
                     )}
                 </ButtonContainer>
                 <Title>{artWork.artName}{artWork.qurater ? <QuraterIcon onClick={handleQuraterIconClick} /> : null }</Title>
-                <Artist>작가: {artWork.artistName}</Artist>
-                <Registrant>등록자: {artWork.sellerName}</Registrant>
+                <Artist><SpanBold>작가 :</SpanBold> {artWork.artistName}</Artist>
+                <Registrant><SpanBold>등록자 :</SpanBold> {artWork.sellerName}</Registrant>
                 <MaxPrice>
-                    <span>즉시판매가 :</span>
-                    <span style={{textAlign: "right"}}>{artWork.maxPrice} 원</span>
+                    <SpanBold>즉시판매가</SpanBold>
+                    <SpanBold style={{textAlign: "right"}}>{maxPriceRE} 원</SpanBold>
                 </MaxPrice>
                 <MinPrice>
-                    <span>현재가 :</span>
-                    <span style={{textAlign: "right"}}>{artWork.currentPrice} 원</span>
+                    <SpanBold>현재가</SpanBold>
+                    <SpanBold style={{textAlign: "right"}}>{currentPriceRE} 원</SpanBold>
                 </MinPrice>
                 {artWork.isPossible ? (
                     <>
@@ -342,7 +354,9 @@ export default function DetailItem ({ artWork }) {
                     {artWork.auctionState === 0 && currentTime > chendTime &&(<GoButton>경매가 종료되었습니다.</GoButton>)}
                     {artWork.auctionState === 1 && <GoButton to={`/auction/${art_pk}/7`}>입찰하러 가기</GoButton>}
                     {artWork.auctionState === 2 && <GoButton to={`/auction/${art_pk}/7`}>경매 완료</GoButton>}
-                    {artWork.auctionState === 3 && <GoButton to={`/auction/${art_pk}/7`}>판매되었습니다.</GoButton>}
+                    {/* {artWork.auctionState === 3 && <GoButton to={`/auction/${art_pk}/7`}>판매되었습니다.</GoButton>} */}
+                    {artWork.auctionState === 3 && (artWork.currentPrice === artWork.myCurrentPrice
+                    ? (<GoButton to={`/auction/${art_pk}/7`}>주문내역 확인하기</GoButton>) : (<GoButton to={`/auction/${art_pk}/8`}>판매되었습니다.</GoButton>))}
                     </>
                     ): (<GoButton>경매에 참여할 수 없습니다.</GoButton>)
                 }
