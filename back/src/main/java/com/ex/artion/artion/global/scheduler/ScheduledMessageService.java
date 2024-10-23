@@ -67,18 +67,15 @@
 //    // status == 1 이고 end 시간이 < 12시간 + 하는거 보다 작을 경우
 //    @Transactional
 //    public Runnable acceptAuction(ScheduleDto dto) {
-//        return () -> {
-//
-//
 //        LocalDateTime now = LocalDateTime.now();
-//        System.out.println(dto.getArt_pk() + "여기는 acceptAuction" + now);
+//        return () -> {
 //        Optional<AuctionEntity> auction = auctionRepository.findByIdAndMaxPrice(dto.getArt_pk());
 //        ArtEntity art = artRepository.findById(dto.getArt_pk()).orElseThrow( () -> new CustomException(ErrorCode.ART_NOT_FOUND));
 //        if(auction.isEmpty()){
 //            art.setCurrent_auction_status(0);
 //            artRepository.save(art);
 //            String phone_number = "";
-//            smsService.noBid(art.getArt_name(),phone_number);
+////            smsService.noBid(art.getArt_name(),phone_number);
 //        } else {
 //        art.setCurrent_auction_status(2);
 //        artRepository.save(art);
@@ -140,12 +137,13 @@
 //            payingRepository.save(paying);
 //            //낙찰된 유저에게 메시지를 보내야 됨
 //            String phone_number = "";
-//            smsService.restTimeToPay(paying.getAuction().getArt_entity().getArt_name(),phone_number);
+////            smsService.restTimeToPay(paying.getAuction().getArt_entity().getArt_name(),phone_number);
 //        };
 //    }
 //
 //    @Transactional
 //    public Runnable afterPayingTime(ScheduleEndDto dto){
+//
 //        return () -> {
 //            Optional<PayingEntity> paying = payingRepository.findById(dto.getPaying_pk());
 //            if(paying.isPresent()){
@@ -160,7 +158,7 @@
 //
 //            ArtEntity art = artRepository.findById(dto.getArt_pk()).orElseThrow(() -> new CustomException(ErrorCode.ART_NOT_FOUND));
 //            String phone_number = "";
-//            smsService.endTime(art.getArt_name(),phone_number);
+////            smsService.endTime(art.getArt_name(),phone_number);
 //            List<AuctionEntity> auctionEntities = auctionRepository.findAllByArt_pk(art.getArt_pk());
 //            for (AuctionEntity auc : auctionEntities) {
 //                payingRepository.deleteAllByAuction(auc);

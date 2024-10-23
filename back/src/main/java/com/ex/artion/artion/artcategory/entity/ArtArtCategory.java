@@ -15,7 +15,7 @@ public class ArtArtCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer art_art_category_pk;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private ArtEntity art;
 
     @ManyToOne
