@@ -225,6 +225,16 @@ const Overlay = styled.div`
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 999;
 `;
+const IndexIndicator = styled.div`
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 7px;
+    padding: 2px 5px;
+    font-size: 11px;
+    font-weight: bold;
+`;
 
 //시작
 export default function DetailItem ({ artWork }) {
@@ -304,7 +314,12 @@ export default function DetailItem ({ artWork }) {
             <div>
             <ImageContainer>
                 <LeftArrow onClick={handlePrev} />
-                <ArtworkImage src={artWork.artImages[currentIndex]} alt={`Artwork ${currentIndex} + 1`} />
+                <div style={{position:"relative"}}>
+                    <ArtworkImage src={artWork.artImages[currentIndex]} alt={`Artwork ${currentIndex} + 1`} />
+                    <IndexIndicator>
+                        {currentIndex + 1} / {artWork.artImages.length}
+                    </IndexIndicator>
+                </div>
                 <RightArrow onClick={handleNext} />
             </ImageContainer>
             <YearInfoContainer>
