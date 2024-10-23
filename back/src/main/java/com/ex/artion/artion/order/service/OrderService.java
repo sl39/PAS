@@ -1,5 +1,7 @@
 package com.ex.artion.artion.order.service;
 
+import com.ex.artion.artion.art.entity.ArtEntity;
+import com.ex.artion.artion.art.respository.ArtRepository;
 import com.ex.artion.artion.global.error.CustomException;
 import com.ex.artion.artion.global.error.ErrorCode;
 import com.ex.artion.artion.global.scheduler.SMSDto.OrderCompleteDto;
@@ -24,6 +26,7 @@ public class OrderService {
     private final PayingRepository payingRepository;
     private final OrderRepostory orderRepostory;
     private final SMSService smsService;
+    private final ArtRepository artRepository;
 
     public void save(OrderCreateDto order) {
 
@@ -58,6 +61,9 @@ public class OrderService {
                 .order_date(formattedDateTime)
                 .order_num(order.getMerchant_uid())
                 .build();
+        ArtEntity art = artRepository.findById(paying.getAuction().getArt_entity().getArt_pk()).orElseThrow(() -> new CustomException(ErrorCode.ART_NOT_FOUND));
+        art.setCurrent_auction_status(3);
+        artRepository.save(art);
 
 
         smsService.orderPaymentComplete(dto);
