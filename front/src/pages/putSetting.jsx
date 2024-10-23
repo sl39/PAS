@@ -4,6 +4,7 @@ import axios from "axios";
 import BaseAppBar from "../element/appBar";
 import styled from "styled-components";
 import { createGlobalStyle } from 'styled-components';
+import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 const GlobalStyle = createGlobalStyle`
@@ -13,6 +14,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Div = styled.div`
+  margin-top: 5%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,23 +24,23 @@ const InputSize = styled.input`
   width: 80%;
   font-size: 20px;
   padding: 5px;
-  margin-bottom: 5%;
 `;
 
 const SubmitButton = styled.button`
-  width: 80%;
+  position: fixed;
+  width: 100%;
   padding: 5px;
+  bottom: 0;
 `;
 
 const AddressDiv = styled.div`
   display: flex;
   flex-direction: column;
   width: 80%;
-  margin-bottom: 5%;
   
   &>*{
   width: 100%;
-  margin-bottom: 5%;
+  margin-bottom: 10px;
   padding: 5px;
   }
 `;
@@ -47,27 +49,25 @@ const P = styled.p`
   font-size : 20px;
   margin: 10px;
    width: 80%;
-   color: darkgray;
 `;
 
 const AccountDiv = styled.div`
   display: flex;
   flex-direction: column;
   width: 80%;
-   margin-bottom: 5%;
    &>*{
   width: 100%;
-  margin-bottom: 0;
+  margin-bottom: 10px;
   padding: 5px;
   }
 `;
 
 const Select = styled.select`
   font-size: 20px;
-   margin-bottom: 5%;
 `;
 
 export default function SettingPage() {
+  const [userPk, setUserPk] = useState('');
   const [text, setText] = useState('');
   const [phone, setPhone] = useState('');
   const [bankName, setBankName] = useState('국민은행');
@@ -75,27 +75,32 @@ export default function SettingPage() {
   const [address, setAddress] = useState('');
   const [detailAddress, setDetailAddress] = useState('');
   const [submit, setSubmit] = useState(false);
+  const {user_pk} = useParams();
+  
+  useEffect(() => {
+    setUserPk(`${user_pk}`);
+}, [user_pk]);
 
   //useEffect로 URL 연결
   useEffect(() => {
     if(submit){
     async function postUserData() {
       try{
-        const request = await axios.post("https://artion.site/api/user/create",{
-              user_name : text,
-              phone_number : phone,
-              bank_name : bankName,
-              user_account : acc,
-              address : fullAdd
+    const request = await axios.put(`https://artion.site/api/user/update?user_pk=${user_pk}`,{
+          user_name : text,
+          phone_number : phone,
+          bank_name : bankName,
+          user_account : acc,
+          address : fullAdd
       });
-        alert("성공");
-        console.log(request);
-        console.log("성공");
-      }catch(error){
-        console.error(error);
-      }finally{
-        setSubmit(false);
-      }
+      alert("성공");
+      console.log(request);
+      console.log("성공");
+    }catch(error){
+      console.error(error);
+    }finally{
+      setSubmit(false);
+    }
   }
   postUserData();
 }
@@ -132,6 +137,31 @@ export default function SettingPage() {
   }
 
   const fullAdd = address + ',' +  detailAddress ;
+  
+  //, 앞까지 불러오는 함수
+  const getFirstString = (str) => {
+    return str.split(',')[0];
+  }
+
+  //, 뒤를 불러오는 함수
+  const getSecondString = (str) => {
+    return str.split(',')[0];
+  }
+
+  //개인정보 수정전 정보 불러오는 부분
+  useEffect(()=>{
+    axios.get(`https://artion.site/api/user/update?user_pk=${user_pk}`)
+    .then( response => {
+        setText(response.data.user_name);
+        setPhone(response.data.phone_number);
+        setBankName(response.data.bank_name);
+        setAccount(response.data.user_account);
+        setAddress(getFirstString(response.data.address));
+        setDetailAddress(getSecondString(response.data.address));
+    }).catch(error => {
+      console.error(error); 
+    })
+  },[]);
 
   const postButton = () =>{
     const requiredFields = [text, phone, bankName,acc, address, detailAddress]; 
@@ -147,7 +177,7 @@ export default function SettingPage() {
     <>
       <GlobalStyle></GlobalStyle>
       <BaseAppBar />
-      <Profile />
+      <Profile user={userPk}/>
       <Div>
         <P>닉네임</P>
         <InputSize  placeholder="닉네임을 입력하세요." value={text} onChange={setN} ></InputSize>
@@ -185,8 +215,8 @@ export default function SettingPage() {
           <InputSize placeholder="도로명주소를 입력하세요." value={address} onChange={setAdd} ></InputSize>
           <InputSize placeholder="상세주소를 입력하세요." value={detailAddress} onChange={setD} ></InputSize>
         </AddressDiv>
-        <SubmitButton onClick={postButton}>저장</SubmitButton>
       </Div>
+      <SubmitButton onClick={postButton}>저장</SubmitButton>
     </>
   )
-  }
+}
