@@ -10,6 +10,7 @@ const HeadTitle = styled.h2`
     text-align: center;
     margin: 30px 0 20px 0;
     font-weight: bold;
+    line-height: 150%;
 `;
 
 const BodyContainer = styled.ul`
@@ -67,7 +68,7 @@ export default function Guide() {
         <>
         <Header />
         <GuideContainer>
-            <HeadTitle>사용 전 반드시 읽어주세요</HeadTitle>
+            <HeadTitle>AR 사용 설명서<br/>사용 전 반드시 읽어주세요</HeadTitle>
             <BodyContainer>
                 <BodyContent>해당 기능은 <UnderLineColor>안드로이드 모바일 Chrome</UnderLineColor>에서만 제공합니다.</BodyContent>
                 <BodyContent>실제 사이즈와 <UnderLineColor>차이</UnderLineColor>가 있을 수 있습니다.</BodyContent>
