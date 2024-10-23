@@ -15,8 +15,8 @@ pipeline {
             steps {
                 script {
                     // Docker 빌드 명령어에서 컨텍스트 디렉토리 지정   
-                    sh 'ls -la'
-                    sh 'docker build -t wjddntyvld/artion:latest /Dockerfile .'                }
+                    
+                    sh 'docker build -t wjddntyvld/artion:latest -f back/Dockerfile .'                }
             }
         }
 
