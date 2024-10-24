@@ -27,4 +27,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
             "WHERE a.kakao_pk = :kakao_pk "
             ,nativeQuery = true)
     Optional<UserEntity> findByKakao_pk(String kakao_pk);
+
 }
