@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -46,7 +47,8 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     {
         OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
         Long user_pk = Long.parseLong(oauth2User.getName());
-        Integer userPk = Integer.parseInt(oauth2User.getName());
+        Integer userPk = Integer.parseInt(String.valueOf(oauth2User.getName()));
+        UserEntity user = userRepository.findById(userPk).orElse(null);
 
         // access token, refresh token 발급
         String accessToken = jwtTokenProvider.createAccessToken(user_pk);
@@ -76,9 +78,11 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         response.addHeader("Set-Cookie", createCookie("accessToken", accessToken).toString());
         response.addHeader("Set-Cookie", createCookie("refreshToken", refreshToken).toString());
 
-        if(isMember(userPk)) {
+        if(!Objects.requireNonNull(user).getAddress().isEmpty() ) {
+            System.out.println("기존 유저입니다!");
             redirectStrategy.sendRedirect(request, response, isMemberUrl);
         } else {
+            System.out.println("기존 유저가 아닙니다!");
             redirectStrategy.sendRedirect(request, response, notIsMemberUrl);
         }
 //        redirectStrategy.sendRedirect(request, response, url);
@@ -89,14 +93,5 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                 .sameSite("")
                 .path("/")
                 .build();
-    }
-
-    private boolean isMember(Integer user_pk) {
-        Optional<UserEntity> userEntity = userRepository.findById(user_pk);
-        if (userEntity.isPresent()) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }
