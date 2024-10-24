@@ -14,6 +14,7 @@ import FollowersItem from "./FollowersItem";
 import DefaultHeader from "./DefaultHeader";
 import BackHeader from "./BackHeader";
 import SearchFilter from "./SearchFilter";
+import HistoryHeader from "./HistoryHeader";
 
 export {
   Header,
@@ -32,4 +33,5 @@ export {
   DefaultHeader,
   BackHeader,
   SearchFilter,
+  HistoryHeader
 };

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { Header } from "../components";
+import { BackHeader } from "../components";
 import app from "../firebase";
 
 const GlobalStyle = createGlobalStyle`
@@ -327,7 +327,7 @@ export default function Register(){
   return(
     <>
      <GlobalStyle />
-    <Header></Header>
+    <BackHeader></BackHeader>
     <Div>
       <P>작품 정보</P>
       <DetailP>기본정보</DetailP>
