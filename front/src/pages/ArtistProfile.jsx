@@ -207,7 +207,7 @@ export default function ArtistProfile() {
         const artistProfileInfo = await getArtistProfileApi(userPkObj.user_pk);
         setArtistName(artistProfileInfo.User_name);
         setArtworkList(artistProfileInfo.artList);
-        // setFollowState(artistProfileInfo); 값 들어오면 팔로잉 상태 넣기
+        setFollowState(artistProfileInfo.followState);
       } catch (error) {
         console.error("데이터를 가져오는 중에 오류가 발생했습니다: ", error);
       }
