@@ -33,11 +33,17 @@ const UnstyledLink = styled(Link)`
 export default function SearchBar() {
   const [searchText, setSearchText] = useState("");
 
-  //검색창에 입력될 때마다 저장
+  // 검색창에 입력될 때마다 저장
   const handleSearchChange = (e) => {
     const searchText = e.target.value;
-    console.log(searchText);
     setSearchText(searchText);
+  };
+
+  const handleSearchClick = () => {
+    if (!searchText.trim()) {
+      // 입력값이 비어있지 않으면
+      alert("검색어를 입력해주세요."); // 알림 표시
+    }
   };
 
   return (
@@ -48,7 +54,10 @@ export default function SearchBar() {
         value={searchText}
         onChange={handleSearchChange}
       />
-      <UnstyledLink to={`/search?keyword=${encodeURIComponent(searchText)}`}>
+      <UnstyledLink
+        onClick={handleSearchClick}
+        to={`/search?keyword=${encodeURIComponent(searchText)}`}
+      >
         <IoIosSearch></IoIosSearch>
       </UnstyledLink>
     </SearchContainer>

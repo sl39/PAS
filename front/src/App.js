@@ -1,11 +1,26 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ArtistProfile, MainFeed, Search, DetailPage, FollowingPage, AuctionPage, Login, SettingPage, Info, Register, PurchaseHistory, SaleHistory, PutRegister, Receipt, PutSetting,
-  Guide, ARCanvas
- } from "./pages";
+import {
+  ArtistProfile,
+  MainFeed,
+  Search,
+  DetailPage,
+  FollowingPage,
+  AuctionPage,
+  Login,
+  SettingPage,
+  Info,
+  Register,
+  PurchaseHistory,
+  SaleHistory,
+  PutRegister,
+  Receipt,
+  PutSetting,
+  Guide,
+  ARCanvas,
+} from "./pages";
 
 export default function App() {
-  
   return (
     <Router>
       <Routes>
@@ -26,6 +41,7 @@ export default function App() {
         <Route path="/info/:user:pk" element={<Info />} />
         <Route path="/receipt" element={<Receipt />} />
         <Route path="/putCreate/:user_pk" element={<PutSetting />} />
+        <Route path="/artist/:user_pk" element={<ArtistProfile />} />
       </Routes>
     </Router>
   );
