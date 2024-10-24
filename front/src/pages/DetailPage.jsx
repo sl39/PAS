@@ -19,7 +19,7 @@ export default function DetailPage() {
         const fetchArtwork = async () => {
             try {
                 // 수정 - user_pk 바꾸기
-                const response = await axios.get(`https://artion.site/api/art/detail?artPk=${art_pk}&userPk=8`);
+                const response = await axios.get(`https://artion.site/api/art/detail?artPk=${art_pk}&userPk=7`);
                 setArtwork(response.data);
             } catch (error) {
                 console.error("Error:", error);

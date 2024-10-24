@@ -3,8 +3,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { createGlobalStyle } from 'styled-components';
+import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { DefaultHeader } from "../components";
+import { BackHeader } from "../components";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -34,7 +35,7 @@ const SubmitButton = styled.button`
 `;
 
 const AddressDiv = styled.div`
-  display: flex;
+ display: flex;
   flex-direction: column;
   width: 80%;
   margin-bottom: 5%;
@@ -54,7 +55,7 @@ const P = styled.p`
 `;
 
 const AccountDiv = styled.div`
-  display: flex;
+   display: flex;
   flex-direction: column;
   width: 80%;
    margin-bottom: 5%;
@@ -66,7 +67,7 @@ const AccountDiv = styled.div`
 `;
 
 const Select = styled.select`
-  font-size: 20px;
+   font-size: 20px;
    margin-bottom: 5%;
 `;
 
@@ -75,6 +76,7 @@ const AllBox = styled.div`
 `;
 
 export default function SettingPage() {
+  const [userPk, setUserPk] = useState('');
   const [text, setText] = useState('');
   const [phone, setPhone] = useState('');
   const [bankName, setBankName] = useState('국민은행');
@@ -82,28 +84,33 @@ export default function SettingPage() {
   const [address, setAddress] = useState('');
   const [detailAddress, setDetailAddress] = useState('');
   const [submit, setSubmit] = useState(false);
+  const {user_pk} = useParams();
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    setUserPk(`${user_pk}`);
+}, [user_pk]);
 
   //useEffect로 URL 연결
   useEffect(() => {
     if(submit){
     async function postUserData() {
       try{
-        const request = await axios.post("https://artion.site/api/user/create",{
-              user_name : text,
-              phone_number : phone,
-              bank_name : bankName,
-              user_account : acc,
-              address : fullAdd
+    const request = await axios.put(`https://artion.site/api/user/update?user_pk=${user_pk}`,{
+          user_name : text,
+          phone_number : phone,
+          bank_name : bankName,
+          user_account : acc,
+          address : fullAdd
       });
-        alert("성공");
-        console.log(request);
-        console.log("성공");
-      }catch(error){
-        console.error(error);
-      }finally{
-        setSubmit(false);
-      }
+      alert("성공");
+      console.log(request);
+      console.log("성공");
+    }catch(error){
+      console.error(error);
+    }finally{
+      setSubmit(false);
+    }
   }
   postUserData();
 }
@@ -140,6 +147,31 @@ export default function SettingPage() {
   }
 
   const fullAdd = address + ',' +  detailAddress ;
+  
+  //, 앞까지 불러오는 함수
+  const getFirstString = (str) => {
+    return str.split(',')[0];
+  }
+
+  //, 뒤를 불러오는 함수
+  const getSecondString = (str) => {
+    return str.split(',')[0];
+  }
+
+  //개인정보 수정전 정보 불러오는 부분
+  useEffect(()=>{
+    axios.get(`https://artion.site/api/user/update?user_pk=${user_pk}`)
+    .then( response => {
+        setText(response.data.user_name);
+        setPhone(response.data.phone_number);
+        setBankName(response.data.bank_name);
+        setAccount(response.data.user_account);
+        setAddress(getFirstString(response.data.address));
+        setDetailAddress(getSecondString(response.data.address));
+    }).catch(error => {
+      console.error(error); 
+    })
+  },[]);
 
   const postButton = () =>{
     const requiredFields = [text, phone, bankName,acc, address, detailAddress]; 
@@ -155,8 +187,8 @@ export default function SettingPage() {
   return (
     <AllBox>
       <GlobalStyle></GlobalStyle>
-      <DefaultHeader></DefaultHeader>
-      <Profile />
+      <BackHeader />
+      <Profile user={userPk}/>
       <Div>
         <P>닉네임</P>
         <InputSize  placeholder="닉네임을 입력하세요." value={text} onChange={setN} ></InputSize>
@@ -198,4 +230,4 @@ export default function SettingPage() {
       </Div>
     </AllBox>
   )
-  }
+}

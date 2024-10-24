@@ -13,14 +13,14 @@ const ItemContainer = styled.li`
 `;
 
 const UserImage = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
 `;
 
 const PlaceholderImage = styled.div`
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   background-color: lightgray;
   border-radius: 50%;
 `;

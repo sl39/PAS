@@ -12,6 +12,8 @@ import SearchedArtist from "./SearchedArtist";
 import LikedArtItem from "./LikedArtItem"
 import FollowingItem from "./FollowingItem";
 import FollowersItem from "./FollowersItem";
+import DefaultHeader from "./DefaultHeader";
+import BackHeader from "./BackHeader";
 
 export {
   Header,
@@ -28,4 +30,6 @@ export {
   LikedArtItem,
   FollowingItem,
   FollowersItem,
+  DefaultHeader,
+  BackHeader
 };

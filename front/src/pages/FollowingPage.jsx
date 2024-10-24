@@ -34,6 +34,7 @@ const Title = styled.h1`
     flex: 1; 
 `;
 const SelectContainer = styled.div`
+    color: black;
     margin-top: 10px;
     display: flex;
     justify-content: space-around;
@@ -67,6 +68,7 @@ const ArtworkList = styled.ul`
     margin: 0;
     list-style-type: none;
 `;
+
 const FollowingList = styled.ul`
     display: flex;
     flex-direction: column;
@@ -83,7 +85,7 @@ const LikedArtworks = ({user_pk}) => {
     useEffect(() => {
         const fetchLikedArtworks = async() =>{
             try{
-                const response = await axios.get(`https://artion.site/api/user/artfol/${user_pk}`);
+                const response = await axios.get(`https://artion.site/api/user/artfol?user_pk=1`);
                 setLikedArtworks(response.data);
             } catch(error){
                 console.error("작품 좋아요 오류 :", error);
@@ -97,7 +99,7 @@ const LikedArtworks = ({user_pk}) => {
     };
 
     return (
-        <div style={{ marginTop: 50 }}>
+        <div style={{ marginTop: 50, display: "flex" }}>
             {likedArtworks.length > 0 ? (
                 <ArtworkList>
                     {likedArtworks.map((artWork) => (
@@ -121,7 +123,7 @@ const Following = ({ user_pk }) => {
     useEffect(() => {
         const fetchFollowing = async() => {
             try{
-                const response = await axios.get(`https://artion.site/api/user/fol/${user_pk}`);
+                const response = await axios.get(`https://artion.site/api/user/fol?user_pk=1`);
                 setFollowing(response.data);
             } catch(error){
                 console.error("팔로잉 에러:", error);
@@ -150,7 +152,7 @@ const Followers = ({ user_pk }) => {
     useEffect (() => {
         const fetchFollowers = async() => {
             try{
-                const response = await axios.get(`https://artion.site/api/user/myfol/${user_pk}`);
+                const response = await axios.get(`https://artion.site/api/user/myfol?user_pk=1`);
                 setFollowers(response.data);
             } catch(error){
                 console.error("팔로워 에러", error);

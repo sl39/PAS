@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ArtistProfile, MainFeed, Search, DetailPage, FollowingPage, AuctionPage, Login, SettingPage, Info, Register, PurchaseHistory, SaleHistory, PutRegister, Receipt,
+import { ArtistProfile, MainFeed, Search, DetailPage, FollowingPage, AuctionPage, Login, SettingPage, Info, Register, PurchaseHistory, SaleHistory, PutRegister, Receipt, PutSetting,
   Guide, ARCanvas
  } from "./pages";
 
@@ -19,12 +19,13 @@ export default function App() {
         <Route path="/auction/:art_pk/:user_pk" element={<AuctionPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/create" element={<SettingPage />} />
-        <Route path="/postArt" element={<Register />} />
-        <Route path="/salesHistory" element={<SaleHistory />} />
-        <Route path="/purchaseHistory" element={<PurchaseHistory />} />
-        <Route path="/putRegister" element={<PutRegister />} />
-        <Route path="/info" element={<Info />} />
-        <Route path="/reciept" element={<Receipt />} />
+        <Route path="/postArt/:user_pk" element={<Register />} />
+        <Route path="/salesHistory/:user_pk" element={<SaleHistory />} />
+        <Route path="/purchaseHistory/:user_pk" element={<PurchaseHistory />} />
+        <Route path="/putArt/:art_pk" element={<PutRegister />} />
+        <Route path="/info/:user:pk" element={<Info />} />
+        <Route path="/receipt" element={<Receipt />} />
+        <Route path="/putCreate/:user_pk" element={<PutSetting />} />
       </Routes>
     </Router>
   );

@@ -1,10 +1,9 @@
-import BaseAppBar from '../element/appBar';
 import jjang from '../img/jjang.jpg';
 import styled from "styled-components";
 
 const ImageSize = styled.img`
-  width: 25%;
-  height: 25%;
+  width: 35%;
+  height: 35%;
 `;
 
 const ListStyle = styled.div`
@@ -41,36 +40,38 @@ const InputDivSize = styled.div`
 
 const InputSize = styled.input`
   font-size: 20px;
+  padding: 5px;
 `;
 
 const Pstyle = styled.p`
   font-size: 20px;
 `;
 
+const P = styled.p`
+  font-size: 80%;
+`;
+
 export default function Receipt() {
   return(
     <>
-    <BaseAppBar></BaseAppBar>
     <AllBox>
     <Pstyle>주문상세</Pstyle>
        <ListStyle>
         <ImageSize src={jjang}></ImageSize>
         <ArrangeBox>
           <div>
-            <p>작품이름</p>
-            <p>작가이름</p>
-            <p>낙찰가격</p>
+            <P>작품이름</P>
+            <P>작가이름</P>
+            <P>낙찰가격</P>
           </div>
           <div>
-            <p>종료날짜</p>
+            <P>종료날짜</P>
           </div>
           </ArrangeBox>
       </ListStyle> 
       <InputDivSize>
         <p>낙찰가격</p>
         <InputSize type="text" value="100000" disabled></InputSize>
-        <p>결제정보</p>
-        <InputSize type="text" value="BC카드, 일시불" disabled></InputSize>
         <p>배송방식</p>
         <InputSize type="text" value="픽업" disabled></InputSize>
       </InputDivSize>

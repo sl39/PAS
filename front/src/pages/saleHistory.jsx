@@ -1,11 +1,13 @@
 import styled from "styled-components";
-import HistoryBox from "../element/historyBox";
-import BaseAppBar from "../element/appBar";
 import jjang from '../img/jjang.jpg';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import { Header } from "../components";
 
 const ImageSize = styled.img`
-  width: 25%;
-  height: 25%;
+  width: 35%;
+  height: 35%;
 `;
 
 const ListStyle = styled.div`
@@ -36,31 +38,179 @@ const AllBox = styled.div`
   margin-bottom: 10px;
   }
 `;
+const P = styled.p`
+  font-size: 80%;
+`;
 
-export default function SaleHistory() {
+const Divbar = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly; 
+  background-color: lightgray;
+  border-radius: 20px;
+
+  &>*{
+    cursor: pointer;
+  }
+`;
+
+const Pbar = styled.p`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Linebar = styled.div`
+  border-left: 2px solid darkgray;
+  height: auto;
+`;
+
+const Pstylebar = styled.p`
+  font-size: 20px;
+  margin-bottom: 10px;
+`;
+
+export default function PurchaseHistory() {
+  const [ entire, setEntire ] = useState(false);
+  const [ bid, setBid] = useState(false);
+  const [ trueBid, setTrueBid ] = useState(false); 
+  const [ end, setEnd ] = useState(false);
+
+  const [entireLength, setEntireLength] = useState('');
+  const [bidLength, setBidLength] = useState('');
+  const [trueBidLength, setTrueBidLength] = useState('');
+  const [endLength, setEndLength] = useState('');
+  const {user_pk} = useParams();
+  
+  const [data, setData] = useState([]);
+
+  //전체 영역 클릭이벤트
+  const entireHandler = () => {
+    setEntire(true);
+  }
+
+  //입찰 영역 클릭이벤트
+  const bidHandler = () => {
+    setBid(true);
+  }
+
+  //낙찰 영역 클릭이벤트
+  const trueBidHandler = () => {
+    setTrueBid(true);
+  }
+
+  //종료 영역 클릭이벤트
+  const endHandler = () => {
+    setEnd(true);
+  }
+
+  // 각 URL 별로 데이터를 가져와 길이를 반환하는 함수
+  const fetchDataLength = (url, setLength) => {
+    axios.get(url)
+      .then(response => {
+        setLength(response.data.length); // 데이터 길이를 설정
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  // 처음 렌더링 시 한 번만 실행되는 코드
+    useEffect(() => {
+      axios.get(`https://artion.site/api/user/saleall?user_pk=${user_pk}`)
+        .then(response => {
+          setData(response.data);
+          console.log(response.data); 
+        })
+        .catch(error => {
+          console.error(error); 
+        });
+    }, []);
+
+  //영역 누를 때마다 리스트 로드
+  useEffect(()=>{
+    const history = (url, status, lengthStatus) => {
+      axios.get(url)
+      .then(response => {
+        setData(response.data);
+        console.log(data)
+        status(false);
+        lengthStatus(response.data.length);
+      }).catch(error => {
+        console.error(error);
+      });
+    };
+
+    fetchDataLength(`https://artion.site/api/user/saleall?user_pk=${user_pk}`,setEntireLength);
+    fetchDataLength(`https://artion.site/api/user/salebid?user_pk=${user_pk}`,setBidLength);
+    fetchDataLength(`https://artion.site/api/user/salesuc?user_pk=${user_pk}`,setTrueBidLength);
+    fetchDataLength(`https://artion.site/api/user/saleend?user_pk=${user_pk}`,setEndLength);
+ 
+    if(entire){
+      history(`https://artion.site/api/user/saleall?user_pk=${user_pk}`,setEntire, setEntireLength)
+    }
+
+    if(bid){
+      history(`https://artion.site/api/user/salebid?user_pk=${user_pk}`,setBid, setBidLength)
+    }
+
+    if(trueBid){
+      history(`https://artion.site/api/user/salesuc?user_pk=${user_pk}`,setTrueBid, setTrueBidLength)
+    }
+
+    if(end){
+      history(`https://artion.site/api/user/saleend?user_pk=${user_pk}`,setEnd, setEndLength)
+    }
+    },[entire , bid, trueBid, end]);
+
+
   return(
-<>
-    <BaseAppBar></BaseAppBar>
-    <AllBox>  
-    <HistoryBox text="판매내역"></HistoryBox>
-      <ListStyle>
+      <>
+        <Header></Header>
+        <AllBox>  
+        <div>
+        <Pstylebar>판매내역</Pstylebar>
+        <Divbar>
+          <div onClick = {entireHandler}>
+            <p>전체</p>
+            <Pbar>{entireLength}</Pbar>
+          </div>
+          <Linebar />
+          <div onClick={bidHandler}>
+            <p>입찰</p>
+            <Pbar>{bidLength}</Pbar>
+          </div>
+          <Linebar />
+          <div onClick={trueBidHandler}>
+            <p>낙찰</p>
+            <Pbar>{trueBidLength}</Pbar>
+          </div>
+          <Linebar />
+          <div onClick={endHandler}>
+            <p>종료</p>
+            <Pbar>{endLength}</Pbar>
+          </div>
+        </Divbar>
+      </div>
+      {data.map((item, index) => (
+      <ListStyle key={index}>
       <ImageSize src={jjang}></ImageSize>
-        <ArrangeBox>
+        <ArrangeBox >
           <div>
-            <p>작품이름</p>
-            <p>작가이름</p>
-            <p>입찰가격</p>
+            <P>{item.artName}</P>
+            <P>{item.painter}</P>
+            <P>{item.current_price}</P>
           </div>
           <div>
-            <p>종료날짜</p>
+            <P>{item.endTime}</P>
           </div>
             <div>
-              <p>상태</p>
+              <P>{item.currentAuctionStatus}</P>
             </div>
           </ArrangeBox>
       </ListStyle>
-    </AllBox>
-    
+      ))} 
+    </AllBox>  
 </>
   )
 }
