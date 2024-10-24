@@ -32,8 +32,7 @@ public class ArtController {
     public ResponseEntity<String> updateArt(
             @RequestBody ArtUpdateDto dto,
             @RequestParam(value = "art_pk") Integer art_pk) {
-        artService.updateArt(dto, art_pk);
-        return ResponseEntity.ok("그림 수정 성공!");
+        return artService.updateArt(dto, art_pk);
     }
     //그림 수정 전 불러오기
     @GetMapping("/update")
