@@ -13,8 +13,8 @@ public class RedisSchedulerService {
     public void setDate(String key, ArtEntityRedis artEntityRedis) {
         redisTemplate.opsForValue().set(key, artEntityRedis);
     }
-    public String getData(String key){
-        return (String) redisTemplate.opsForValue().get(key);
+    public ArtEntityRedis getData(String key){
+        return (ArtEntityRedis)  redisTemplate.opsForValue().get(key);
     }
 
 }

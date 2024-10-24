@@ -3,6 +3,8 @@ package com.ex.artion.artion.global;
 import com.ex.artion.artion.global.jwt.JwtTokenProvider;
 import com.ex.artion.artion.global.jwt.RefreshTokenEntity;
 import com.ex.artion.artion.global.jwt.RefreshTokenRepository;
+import com.ex.artion.artion.user.entity.UserEntity;
+import com.ex.artion.artion.user.respository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +28,14 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository tokenRepository;
-    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+    private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+    private final UserRepository userRepository;
 
-    @Value("${oauth2.success.redirect.url}")
-    private String url;
+    @Value("${oauth2.success.redirect.isMemberUrl}")
+    private String isMemberUrl;
+
+    @Value("${oauth2.success.redirect.isMemberNotUrl}")
+    private String notIsMemberUrl;
 
     @Override
     public void onAuthenticationSuccess(
@@ -39,24 +45,25 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     ) throws IOException
     {
         OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
-        Long userPk = Long.parseLong(oauth2User.getName());
+        Long user_pk = Long.parseLong(oauth2User.getName());
+        Integer userPk = Integer.parseInt(oauth2User.getName());
 
         // access token, refresh token 발급
-        String accessToken = jwtTokenProvider.createAccessToken(userPk);
-        String refreshToken = jwtTokenProvider.createRefreshToken(userPk);
+        String accessToken = jwtTokenProvider.createAccessToken(user_pk);
+        String refreshToken = jwtTokenProvider.createRefreshToken(user_pk);
         log.info("access token : {}", accessToken);
         log.info("refresh token : {}", refreshToken);
 
 
         // refreshToken DB에 저장
         RefreshTokenEntity newToken = RefreshTokenEntity.builder()
-                .userPk(userPk)
+                .userPk(user_pk)
                 .token(refreshToken)
                 .build();
 
         System.out.println("refreshToken 저장? : " + newToken);
 
-        Optional<RefreshTokenEntity> optionalToken = tokenRepository.findByUserPk(userPk);
+        Optional<RefreshTokenEntity> optionalToken = tokenRepository.findByUserPk(user_pk);
         if(optionalToken.isPresent()) {
             RefreshTokenEntity oldToken = optionalToken.get();
             oldToken.setToken(refreshToken);
@@ -69,7 +76,12 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         response.addHeader("Set-Cookie", createCookie("accessToken", accessToken).toString());
         response.addHeader("Set-Cookie", createCookie("refreshToken", refreshToken).toString());
 
-        redirectStrategy.sendRedirect(request, response, url);
+        if(isMember(userPk)) {
+            redirectStrategy.sendRedirect(request, response, isMemberUrl);
+        } else {
+            redirectStrategy.sendRedirect(request, response, notIsMemberUrl);
+        }
+//        redirectStrategy.sendRedirect(request, response, url);
     }
 
     private ResponseCookie createCookie(String key, String value) {
@@ -77,5 +89,14 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                 .sameSite("")
                 .path("/")
                 .build();
+    }
+
+    private boolean isMember(Integer user_pk) {
+        Optional<UserEntity> userEntity = userRepository.findById(user_pk);
+        if (userEntity.isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

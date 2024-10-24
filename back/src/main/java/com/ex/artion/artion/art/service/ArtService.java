@@ -66,9 +66,11 @@ public class ArtService {
     private final OrderRepostory orderRepostory;
     private final PayingRepository payingRepository;
 
-    public void createArt(@RequestBody ArtCreateDto dto, @RequestParam(value="user_pk") Integer user_pk) {
+    public ResponseEntity<String> createArt(@RequestBody ArtCreateDto dto, @RequestParam(value="user_pk") Integer user_pk) {
 //        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        UserEntity userEntity = userRepository.findById(userPrincipal.getUserPk()).orElseThrow(() -> new IllegalArgumentException("해당하는 user_pk가 없습니다!"));
+//
+        System.out.println("dto :" + dto + "user_pk : " + user_pk);
 
         UserEntity userEntity = userRepository.findById(user_pk).orElseThrow(() -> new IllegalArgumentException("해당하는 user_pk가 없습니다!"));
         ArtEntity art = new ArtEntity();
@@ -110,11 +112,14 @@ public class ArtService {
             artCat.setArt(savedArt);
             artCat.setArt_category(cateId);
             this.artArtCategoryRepository.save(artCat);
+
         }
+
+        return ResponseEntity.ok("그림 추가 성공!");
     }
 
     @Transactional
-    public void updateArt(@RequestBody ArtUpdateDto dto, @RequestParam(value = "art_pk") Integer art_pk) {
+    public ResponseEntity<String> updateArt(@RequestBody ArtUpdateDto dto, @RequestParam(value = "art_pk") Integer art_pk) {
         ArtEntity art = artRepository.findById(art_pk)
                 .orElseThrow(() -> new IllegalArgumentException("해당 그림이 없습니다!"));
 
@@ -161,7 +166,12 @@ public class ArtService {
                 newCates.setArt_category(cateId);
                 artArtCategoryRepository.save(newCates);
             }
+
             artRepository.save(art);
+
+            return ResponseEntity.ok("그림 수정 성공!");
+        } else {
+            return ResponseEntity.badRequest().body("경매 중 혹은 판매 완료된 그림입니다!");
         }
     }
 
@@ -185,7 +195,7 @@ public class ArtService {
 
         result.put("art_name", art.getArt_name());
         result.put("painter", art.getPainter());
-        result.put("created_at", art.getCreatedAt());
+        result.put("createdAt", art.getCreatedAt());
         result.put("width", art.getWidth());
         result.put("depth", art.getDepth());
         result.put("height", art.getHeight());
@@ -298,6 +308,7 @@ public class ArtService {
                 .created(artEntity.getCreatedAt())
                 .artInfo(artEntity.getArt_info())
                 .AuctionState(artEntity.getCurrent_auction_status())
+                .uploadAt(artEntity.getUpload())
                 .endTime(end)
                 .startTime(start)
                 .maxPrice(artEntity.getMaxP())
@@ -319,12 +330,13 @@ public class ArtService {
 
         // 그림 이미지들
         List<ArtImageEntity> images = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
+
         List<String> imageUrls = new ArrayList<>();
         for (ArtImageEntity imageEntity : images) {
             imageUrls.add(imageEntity.getArt_image_url());
         }
         dto.setArtImages(imageUrls);
-
+        System.out.println(artEntity.getArt_pk() + " : " + imageUrls.size());
         // 그림 팔로윙
         Integer count = artFollowingRepository.countByArtPk(artEntity.getArt_pk());
         dto.setArtFollowingNum(count);

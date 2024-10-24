@@ -183,6 +183,9 @@
 //                    .end_time(art.getEndTime())
 //                    .start_time(art.getStartTime())
 //                    .build();
+//            if(art.getEndTime() == null || art.getStartTime() == null){
+//                continue;
+//            }
 //            if(art.getStartTime().isAfter(now)){
 //                beforeTask(dto);
 //            } else if (art.getEndTime().isAfter(now) && art.getStartTime().isBefore(now) && (art.getCurrent_auction_status() == 1 || art.getCurrent_auction_status() == 0)){

@@ -124,20 +124,24 @@ class ArtionApplicationTests {
 	@Test
 	void test1(){
 		List<ArtEntity> list = artRepository.findAll();
-		for (ArtEntity artEntity : list) {
+		for (int i = 0; i < 10; i++) {
+			ArtEntity artEntity = list.get(i);
 			String key = "art"+ artEntity.getArt_pk();
+			System.out.println(key);
 			ArtEntityRedis artEntityRedis = ArtEntityRedis.builder()
 					.art_pk(artEntity.getArt_pk())
 					.current_auction_status(artEntity.getCurrent_auction_status())
-					.startTime(artEntity.getStartTime())
-					.endTime(artEntity.getEndTime())
+					.startTime(artEntity.getStartTime().toString())
+					.endTime(artEntity.getEndTime().toString())
 					.build();
 			redisSchedulerService.setDate(key,artEntityRedis);
 		}
-
-
 	}
 
-
+	@Test
+	void test2(){
+		ArtEntityRedis art = redisSchedulerService.getData("art6");
+		System.out.println(art.getArt_pk());
+	}
 
 }
