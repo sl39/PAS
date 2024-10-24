@@ -67,7 +67,10 @@ public class ArtService {
     private final PayingRepository payingRepository;
 
     public ResponseEntity<String> createArt(@RequestBody ArtCreateDto dto, @RequestParam(value="user_pk") Integer user_pk) {
-//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        System.out.println(userPrincipal);
 
         UserEntity userEntity = userRepository.findById(user_pk)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 user_pk가 없습니다!"));
