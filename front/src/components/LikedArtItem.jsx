@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 const ItemContainer = styled.li`
@@ -64,8 +64,11 @@ const Option = styled.div`
 `;
 
 const LikedArtworkItem = ({ artWork, isSelected, onClick }) => {
+    const user = useParams();
     const art_pk = artWork.art_pk;
-    const user_pk = artWork.user_pk;
+    const seller_pk = artWork.seller_pk;
+    const user_pk = user.user_pk
+    console.log(artWork)
 
     if (!artWork) {
         return null;
@@ -86,7 +89,7 @@ const LikedArtworkItem = ({ artWork, isSelected, onClick }) => {
                     </Link>
                 </Option>
                 <Option>
-                    <Link to={`/test/${user_pk}`} style={{ textDecoration: 'none', color: 'inherit', fontSize: 14}}>
+                    <Link to={`/artist/${seller_pk}`} style={{ textDecoration: 'none', color: 'inherit', fontSize: 14}}>
                     프로필 보기
                     </Link>
                 </Option>

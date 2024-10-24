@@ -33,10 +33,9 @@ const UnstyledLink = styled(Link)`
 export default function SearchBar() {
   const [searchText, setSearchText] = useState("");
 
-  //검색창에 입력될 때마다 저장
+  // 검색창에 입력될 때마다 저장
   const handleSearchChange = (e) => {
     const searchText = e.target.value;
-    console.log(searchText);
     setSearchText(searchText);
   };
 
