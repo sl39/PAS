@@ -2,9 +2,9 @@ import styled from "styled-components"
 import { createGlobalStyle } from 'styled-components';
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { Header } from "../components";
+import { BackHeader } from "../components";
 import app from "../firebase";
 
 const GlobalStyle = createGlobalStyle`
@@ -129,29 +129,30 @@ const ImageDiv = styled.div`
 `;
 
 export default function Register(){
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [minP, setMinP] = useState('');
-  const [maxP, setMaxP] = useState('');
-  const [width, setWidth]= useState('');
-  const [depth, setDepth]= useState('');
-  const [height, setHeight] = useState('');
+  const [name2, setName2] = useState('');
+  const [description2, setDescription] = useState('');
+  const [minP2, setMinP2] = useState();
+  const [maxP2, setMaxP2] = useState();
+  const [width2, setWidth2]= useState();
+  const [depth2, setDepth2]= useState();
+  const [height2, setHeight2] = useState();
   const [created, setCreated] = useState('');
   const [start, setStart]=  useState('');
   const [end, setEnd] = useState('');
-  const [painter, setPainter] = useState('');
+  const [painter2, setPainter2] = useState('');
   const [images, setImage] = useState([]);
   const [selectedOption, setSelectedOption] = useState('default');
   const [optionList, setOptionList] = useState([]);
   const [minDateTime, setMinDateTime] = useState('');
   const [date, setDate] = useState('');
   const [submit, setSubmit] = useState('false');
-  const {user_pk} = useParams();
+  const id = useParams();
   const storage = getStorage();
+  const navigate = useNavigate();
 
   //이름 입력
   const setN = (event) =>{
-    setName(event.target.value);
+    setName2(event.target.value);
   } 
   //작품 정보
   const setInfo = (event) => {
@@ -159,23 +160,23 @@ export default function Register(){
   }
   //최소판매 가격
   const setMip = (e) => {
-    setMinP(e.target.value);
+    setMinP2(e.target.value);
   }
   //즉시 판매가격
   const setMap = (e) => {
-    setMaxP(e.target.value);
+    setMaxP2(e.target.value);
   }
   //width
   const setWid = (e) => {
-    setWidth(e.target.value);
+    setWidth2(e.target.value);
   }
   //height
   const setHei = (e) => {
-    setHeight(e.target.value);
+    setHeight2(e.target.value);
   }
   //depth
   const setDep = (e) => {
-    setDepth(e.target.value);
+    setDepth2(e.target.value);
   }
   //created
   const setCrea = (e) => {
@@ -191,7 +192,7 @@ export default function Register(){
   }
   //painter
   const setPain = (e) => {
-    setPainter(e.target.value);
+    setPainter2(e.target.value);
   }
 
   const selecetOption = (e) => {
@@ -265,23 +266,23 @@ export default function Register(){
     if(submit === true ){
     async function postArt() {
       try{
-        const request = await axios.post(`https://artion.site/api/art/create?user_pk=${user_pk}`,{
-          art_name: name,
-          art_info: description,
-          minP: minP,
-          maxP: maxP,
-          width: width,
-          depth: depth,
-          height: height,
+        const request = await axios.post(`https://artion.site/api/art/create?user_pk=${id.user_pk}`,{
+          art_name: name2,
+          art_info: description2,
+          minP: minP2,
+          maxP: maxP2,
+          width: width2,
+          depth: depth2,
+          height: height2,
           createdAt: created,
           startTime: start,
           endTime: end,
-          painter: painter,
-          artImahge: images,
+          painter: painter2,
+          artImage: images,
           artCategory : optionList
         })
-        console.log(request);
-        console.log("성공");
+        alert("작품이 등록 되었습니다.");
+        navigate('/');
       }catch(e){
           console.error(e);
       }finally{
@@ -290,40 +291,56 @@ export default function Register(){
     }
     postArt(); 
   }
-  }, [submit]);
+  }, [id,submit]);
 
   const submitButton = () => {
-    const requiredFields = [name, description, minP, maxP, width, depth, height, created, start, end, painter ,images ,optionList]; 
-    const allFieldsFilled = requiredFields.every(field => {
-      // 각 필드가 배열인지 확인
-      if (Array.isArray(field)) {
-          return field.length > 0; 
-      }
-      return field.trim() !== '';
-  });
+    const requiredFields = [name2, description2, minP2, maxP2, width2, depth2, height2, created, start, end, painter2, images, optionList]; 
+    let allFieldsFilled = true;
+
+    requiredFields.forEach((field, index) => {
+        if (Array.isArray(field)) {
+            if (field.length === 0) {
+                allFieldsFilled = false; // 배열이 비어있으면 false로 설정
+            }
+        } else if (typeof field === 'string') {
+            if (field.trim() === '') {
+                allFieldsFilled = false; // 빈 문자열이면 false로 설정
+            }
+        } else if (typeof field === 'number') {
+            if (isNaN(field)) {
+                allFieldsFilled = false; // 숫자가 NaN이면 false로 설정
+            }
+        } else {
+            allFieldsFilled = false; // 배열도 아니고 문자열도 아닌 경우 false로 설정
+        }
+    });
+
+    console.log("All fields filled:", allFieldsFilled); 
+
     if (!allFieldsFilled) {
         alert("입력이 완료되지 않았습니다. 모든 필드를 입력해주세요.");
     } else {
-       setSubmit(true);
-          }
-  };
+        setSubmit(true);
+    }
+}
+
   return(
     <>
      <GlobalStyle />
-    <Header></Header>
+    <BackHeader></BackHeader>
     <Div>
       <P>작품 정보</P>
       <DetailP>기본정보</DetailP>
-      <InputSize type="text" placeholder="작품명" value={name} onChange={setN}></InputSize>
-      <InputSize type="text" placeholder="작가명"  value={painter} onChange={setPain}></InputSize>
-      <TextBox placeholder="작품설명" value={description} onChange={setInfo}></TextBox>
+      <InputSize type="text" placeholder="작품명" value={name2} onChange={setN}></InputSize>
+      <InputSize type="text" placeholder="작가명"  value={painter2} onChange={setPain}></InputSize>
+      <TextBox placeholder="작품설명" value={description2} onChange={setInfo}></TextBox>
       <DetailP>제작날짜</DetailP>
       <InputSize type="date" value={created} onChange={setCrea} max={date}></InputSize>
       <DetailP>작품세부정보</DetailP>
       <ArtSize>
-        <InputSize type="text" placeholder="width" value={width} onChange={setWid}></InputSize>
-        <InputSize type="text" placeholder="height" value={height} onChange={setHei}></InputSize>
-        <InputSize type="text" placeholder="depth" value={depth} onChange={setDep}></InputSize>
+        <InputSize type="number" placeholder="width" value={width2} onChange={setWid}></InputSize>
+        <InputSize type="number" placeholder="height" value={height2} onChange={setHei}></InputSize>
+        <InputSize type="number" placeholder="depth" value={depth2} onChange={setDep}></InputSize>
       </ArtSize>
       <SelectList>
         <SelectSize onChange={selecetOption}>
@@ -358,8 +375,8 @@ export default function Register(){
         <DetailP>종료일자</DetailP>
         <InputSize type="datetime-local" value={end} onChange={setEn} min={start}></InputSize>
         <DetailP>작품판매가</DetailP>
-        <InputSize type="text" placeholder="최소 입찰 가격" value={minP} onChange={setMip}></InputSize>
-        <InputSize type="text" placeholder="즉시 판매 가격" value={maxP} onChange={setMap}></InputSize>
+        <InputSize type="number" placeholder="최소 입찰 가격" value={minP2} onChange={setMip}></InputSize>
+        <InputSize type="number" placeholder="즉시 판매 가격" value={maxP2} onChange={setMap}></InputSize>
       
         <P>작품 사진</P>
         <DetailP>첫번째 사진은 뒷 배경이 나오지 않은 사진을 넣어주세요. </DetailP>

@@ -1,4 +1,3 @@
-import jjang from '../img/jjang.jpg';
 import styled from "styled-components";
 
 const ImageSize = styled.img`
@@ -57,7 +56,7 @@ export default function Receipt() {
     <AllBox>
     <Pstyle>주문상세</Pstyle>
        <ListStyle>
-        <ImageSize src={jjang}></ImageSize>
+        <ImageSize ></ImageSize>
         <ArrangeBox>
           <div>
             <P>작품이름</P>

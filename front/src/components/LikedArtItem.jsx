@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 const ItemContainer = styled.li`
@@ -18,6 +18,7 @@ const ArtworkImage = styled.img`
     height: auto;
     aspect-ratio: 1;
     object-fit: cover;
+    border-radius: 5px;
 `;
 
 const PlaceholderImage = styled.div`
@@ -30,10 +31,12 @@ const PlaceholderImage = styled.div`
 
 const ArtworkTitle = styled.span`
     font-size: 14px;
+    font-weight: bold;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%; 
+    margin-top: 3px;
     max-width: 150px; 
     text-align: center;
 `;
@@ -64,8 +67,10 @@ const Option = styled.div`
 `;
 
 const LikedArtworkItem = ({ artWork, isSelected, onClick }) => {
+    const user = useParams();
     const art_pk = artWork.art_pk;
-    const user_pk = artWork.user_pk;
+    const seller_pk = artWork.seller_pk;
+    const user_pk = user.user_pk
 
     if (!artWork) {
         return null;
@@ -86,7 +91,7 @@ const LikedArtworkItem = ({ artWork, isSelected, onClick }) => {
                     </Link>
                 </Option>
                 <Option>
-                    <Link to={`/test/${user_pk}`} style={{ textDecoration: 'none', color: 'inherit', fontSize: 14}}>
+                    <Link to={`/artist/${seller_pk}`} style={{ textDecoration: 'none', color: 'inherit', fontSize: 14}}>
                     프로필 보기
                     </Link>
                 </Option>

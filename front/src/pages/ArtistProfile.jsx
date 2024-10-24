@@ -162,7 +162,6 @@ export async function getArtistProfileApi(userPk) {
   const response = await axios.get(
     `https://artion.site/api/user/myart?user_pk=${userPk}`
   );
-
   return response.data;
 }
 
@@ -172,6 +171,35 @@ export default function ArtistProfile() {
   const [artistName, setArtistName] = useState("");
   const [artistProfileImage, setArtistProfileImage] = useState("");
   const [artworkList, setArtworkList] = useState([]);
+  const [followState, setFollowState] = useState(false);
+  
+  //구독 버튼 기능
+  // const handleSubscription = async() => {
+  //   try{
+  //     await axios.post(`https://artion.site/api/following/1/follow/${userPkObj.user_pk}`);
+  //     alert("구독에 성공했습니다.");
+  //   } catch(error){
+  //     console.error("구독 실패:", error);
+  //     alert("구독에 실패했습니다.", error);
+  //   }
+  // };
+  //나중에 구독버튼 눌렸을때 구독/구독취소 파트
+  const handleSubscription = async() => {
+    try{
+      const url = followState
+        ? `https://artion.site/api/following/1/unfollow/${userPkObj.user_pk}`
+        : `https://artion.site/api/following/1/follow/${userPkObj.user_pk}`
+
+        await axios({
+          method: followState ? 'delete' : 'post',
+          url: url,
+        });
+        alert(followState ? "구독이 취소되었습니다." : "구독에 성공했습니다.");
+    } catch(error){
+      console.error(error);
+      alert("요청에 실패했습니다.");
+    }
+  }
 
   // 작가 페이지 정보 불러오기
   useEffect(() => {
@@ -181,6 +209,7 @@ export default function ArtistProfile() {
         setArtistName(artistProfileInfo.User_name);
         setArtistProfileImage(artistProfileInfo.user_Image);
         setArtworkList(artistProfileInfo.artList);
+        // setFollowState(artistProfileInfo); 값 들어오면 팔로잉 상태 넣기
       } catch (error) {
         console.error("데이터를 가져오는 중에 오류가 발생했습니다: ", error);
       }
@@ -189,9 +218,11 @@ export default function ArtistProfile() {
     fetchData();
   }, [userPkObj]);
 
+  
+
   return (
     <>
-      <Header></Header>
+      <Header ></Header>
       <ArtistContainer>
         <ProfileBox>
           <ImageContainer>
@@ -203,7 +234,7 @@ export default function ArtistProfile() {
                 <ProfileInfoBox>
                   <BoldParagraph>{artistName}</BoldParagraph>
                 </ProfileInfoBox>
-                <FollowBox>
+                <FollowBox onClick={handleSubscription}>
                   <NormalParagraph>구독</NormalParagraph>
                 </FollowBox>
               </NameBox>
@@ -215,15 +246,15 @@ export default function ArtistProfile() {
             </TopBox>
             <BottomBox>
               <SocialBox>
-                <StyledLink to={`/following/liked`}>
+                <StyledLink to={`/following/liked/${userPkObj.user_pk}`}>
                   <SmallDiv>좋아요</SmallDiv>
                 </StyledLink>
                 <Divider></Divider>
-                <StyledLink to={`/following/following`}>
+                <StyledLink to={`/following/following/${userPkObj.user_pk}`}>
                   <SmallDiv>팔로잉</SmallDiv>
                 </StyledLink>
                 <Divider></Divider>
-                <StyledLink to={`/following/followers`}>
+                <StyledLink to={`/following/followers/${userPkObj.user_pk}`}>
                   <SmallDiv style={{ borderRight: 0 }}>팔로워</SmallDiv>
                 </StyledLink>
               </SocialBox>

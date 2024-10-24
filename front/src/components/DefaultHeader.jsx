@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import React from "react";
 
 // Styled Components
 const HeaderContainer = styled.header`
@@ -21,14 +20,7 @@ const Logo = styled.h1`
   user-select: none;
 `;
 
-const StyledLink = styled(Link)`
-  cursor: pointer;
-  text-decoration: none;
-  color: inherit;
-`;
-
 export default function DefaultHeader() {
-
   return (
     <>
       <HeaderContainer>

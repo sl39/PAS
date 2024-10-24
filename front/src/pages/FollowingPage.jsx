@@ -86,7 +86,8 @@ const LikedArtworks = ({user_pk}) => {
         const fetchLikedArtworks = async() =>{
             try{
                 const response = await axios.get(`https://artion.site/api/user/artfol?user_pk=1`);
-                setLikedArtworks(response.data);
+                const sortedArt = response.data.sort((a,b) => new Date(b.upload) - new Date(a.upload))
+                setLikedArtworks(sortedArt);
             } catch(error){
                 console.error("작품 좋아요 오류 :", error);
             }
@@ -124,16 +125,19 @@ const Following = ({ user_pk }) => {
         const fetchFollowing = async() => {
             try{
                 const response = await axios.get(`https://artion.site/api/user/fol?user_pk=1`);
-                setFollowing(response.data);
+                const sortedFollowing = response.data.sort((a,b) => a.user_name.localeCompare(b.user_name));
+                setFollowing(sortedFollowing);
             } catch(error){
                 console.error("팔로잉 에러:", error);
             }
         };
         fetchFollowing();
     }, [user_pk]);
-const handleUnSubscribe = (seller_pk) => {
-    setFollowing(following.filter(user => user.user_pk !== seller_pk));
-};
+    
+    const handleUnSubscribe = (seller_pk) => {
+        setFollowing(following.filter(user => user.user_pk !== seller_pk));
+    };
+    
     return (
         <div style={{marginTop: 50}}>
             {following.length > 0 ? (
@@ -153,7 +157,9 @@ const Followers = ({ user_pk }) => {
         const fetchFollowers = async() => {
             try{
                 const response = await axios.get(`https://artion.site/api/user/myfol?user_pk=1`);
-                setFollowers(response.data);
+                const sortedFollower = response.data.sort((a, b) => 
+                    a.user_name.localeCompare(b.user_name));
+                setFollowers(sortedFollower);
             } catch(error){
                 console.error("팔로워 에러", error);
             }
@@ -201,20 +207,20 @@ const FollowingPage = () => {
         <FollowingContainer>
             <HeadContainer>
                 <ButtonContainer>
-                    <Link to={`/test`}>
+                    <Link to={`/artist/${user_pk}`}>
                     <BackButton />
                     </Link>
                 </ButtonContainer>
                 <Title>user</Title>
             </HeadContainer>
             <SelectContainer>
-                <SelectLink to="/following/liked" onClick={() => handleSelect('liked')}>
+                <SelectLink to={`/following/liked/${user_pk}`} onClick={() => handleSelect('liked')}>
                     <SelectButton selected={selectedPage === 'liked'}>좋아요</SelectButton>
                 </SelectLink>
-                <SelectLink to="/following/following" onClick={() => handleSelect('following')}>
+                <SelectLink to={`/following/following/${user_pk}`} onClick={() => handleSelect('following')}>
                     <SelectButton selected={selectedPage === 'following'}>팔로잉</SelectButton>
                 </SelectLink>
-                <SelectLink to="/following/followers" onClick={() => handleSelect('followers')}>
+                <SelectLink to={`/following/followers/${user_pk}`} onClick={() => handleSelect('followers')}>
                     <SelectButton selected={selectedPage === 'followers'}>팔로워</SelectButton>
                 </SelectLink>
             </SelectContainer>
