@@ -80,7 +80,7 @@ export default function PurchaseHistory() {
   const [bidLength, setBidLength] = useState('');
   const [trueBidLength, setTrueBidLength] = useState('');
   const [endLength, setEndLength] = useState('');
-  const {user_pk} = useParams();
+  const id = useParams();
   
   const [data, setData] = useState([]);
 
@@ -117,7 +117,7 @@ export default function PurchaseHistory() {
 
   // 처음 렌더링 시 한 번만 실행되는 코드
     useEffect(() => {
-      axios.get(`https://artion.site/api/user/purall?user_pk=${user_pk}`)
+      axios.get(`https://artion.site/api/user/purall?user_pk=${id.user_pk}`)
         .then(response => {
           setData(response.data);
         })
@@ -139,27 +139,27 @@ export default function PurchaseHistory() {
       });
     };
 
-    fetchDataLength(`https://artion.site/api/user/purall?user_pk=${user_pk}`,setEntireLength);
-    fetchDataLength(`https://artion.site/api/user/purbid?user_pk=${user_pk}`,setBidLength);
-    fetchDataLength(`https://artion.site/api/user/pursuc?user_pk=${user_pk}`,setTrueBidLength);
-    fetchDataLength(`https://artion.site/api/user/purend?user_pk=${user_pk}`,setEndLength);
+    fetchDataLength(`https://artion.site/api/user/purall?user_pk=${id.user_pk}`,setEntireLength);
+    fetchDataLength(`https://artion.site/api/user/purbid?user_pk=${id.user_pk}`,setBidLength);
+    fetchDataLength(`https://artion.site/api/user/pursuc?user_pk=${id.user_pk}`,setTrueBidLength);
+    fetchDataLength(`https://artion.site/api/user/purend?user_pk=${id.user_pk}`,setEndLength);
  
     if(entire){
-      history(`https://artion.site/api/user/purall?user_pk=${user_pk}`,setEntire, setEntireLength)
+      history(`https://artion.site/api/user/purall?user_pk=${id.user_pk}`,setEntire, setEntireLength)
     }
 
     if(bid){
-      history(`https://artion.site/api/user/purbid?user_pk=${user_pk}`,setBid, setBidLength)
+      history(`https://artion.site/api/user/purbid?user_pk=${id.user_pk}`,setBid, setBidLength)
     }
 
     if(trueBid){
-      history(`https://artion.site/api/user/pursuc?user_pk=${user_pk}`,setTrueBid, setTrueBidLength)
+      history(`https://artion.site/api/user/pursuc?user_pk=${id.user_pk}`,setTrueBid, setTrueBidLength)
     }
 
     if(end){
-      history(`https://artion.site/api/user/purend?user_pk=${user_pk}`,setEnd, setEndLength)
+      history(`https://artion.site/api/user/purend?user_pk=${id.user_pk}`,setEnd, setEndLength)
     }
-    },[entire , bid, trueBid, end]);
+    },[entire , bid, trueBid, end, id]);
 
 
   return(
