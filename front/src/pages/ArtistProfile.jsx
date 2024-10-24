@@ -36,6 +36,8 @@ const FollowBox = styled.div`
   height: 20px;
   border: 1px solid black;
   cursor: pointer;
+  background-color: ${(props) => (props.followState ? 'red' : 'transparent')};
+  color: ${(props) => (props.followState ? 'white' : 'black')};
 `;
 
 const ArtworkBox = styled.div`
@@ -172,23 +174,14 @@ export default function ArtistProfile() {
   const [artworkList, setArtworkList] = useState([]);
   const [followState, setFollowState] = useState(false);
   
-  //구독 버튼 기능
-  // const handleSubscription = async() => {
-  //   try{
-  //     await axios.post(`https://artion.site/api/following/1/follow/${userPkObj.user_pk}`);
-  //     alert("구독에 성공했습니다.");
-  //   } catch(error){
-  //     console.error("구독 실패:", error);
-  //     alert("구독에 실패했습니다.", error);
-  //   }
-  // };
   //나중에 구독버튼 눌렸을때 구독/구독취소 파트
   const handleSubscription = async() => {
-    try{
-      const url = followState
+    setFollowState((prevState) => !prevState);
+    const url = followState
         ? `https://artion.site/api/following/1/unfollow/${userPkObj.user_pk}`
         : `https://artion.site/api/following/1/follow/${userPkObj.user_pk}`
 
+    try{      
         await axios({
           method: followState ? 'delete' : 'post',
           url: url,
@@ -197,6 +190,7 @@ export default function ArtistProfile() {
     } catch(error){
       console.error(error);
       alert("요청에 실패했습니다.");
+      setFollowState((prevState) => !prevState);
     }
   }
 
@@ -232,7 +226,7 @@ export default function ArtistProfile() {
                 <ProfileInfoBox>
                   <BoldParagraph>{artistName}</BoldParagraph>
                 </ProfileInfoBox>
-                <FollowBox onClick={handleSubscription}>
+                <FollowBox onClick={handleSubscription} followState={followState}>
                   <NormalParagraph>구독</NormalParagraph>
                 </FollowBox>
               </NameBox>
