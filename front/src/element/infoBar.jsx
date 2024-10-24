@@ -7,6 +7,7 @@ const Div = styled.div`
   align-items: center;
   justify-content: space-between;
   margin : 20px 50px 20px 50px;
+  cursor: pointer;
 `;
 
 const Logo = styled(IoIosArrowForward)`
@@ -14,10 +15,14 @@ const Logo = styled(IoIosArrowForward)`
   height: 30px;
 `;
 
-export default function InfoBar({ text }) {
+const P = styled.p`
+  margin : 5px;
+`;
+
+export default function InfoBar({ id, text, onClick }) {
   return(
-   <Div>
-    <p>{text}</p>
+   <Div onClick={onClick}>
+    <P>{text}</P>
     <Logo></Logo>
    </Div> 
   )

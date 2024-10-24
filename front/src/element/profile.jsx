@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import jjang from "../img/jjang.jpg";
 
 const ArtistContainer = styled.div`
   display: flex;
