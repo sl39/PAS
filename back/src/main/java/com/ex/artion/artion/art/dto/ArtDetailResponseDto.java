@@ -32,4 +32,5 @@ public class ArtDetailResponseDto {
     private String artInfo;
     private Integer AuctionState;
     private Boolean isArtFollowing;
+    private LocalDate uploadAt;
 }

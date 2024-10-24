@@ -65,7 +65,6 @@ public class SecurityConfig {
 
                 .oauth2Login(oauth2Login -> oauth2Login
                         .failureUrl("/login/error") // 로그인 실패 시 이동할 경로
-                        .defaultSuccessUrl("/login/success")  // 로그인 성공 후 보여줄 URL
                         .userInfoEndpoint(userInfoEndpoint ->
                                 userInfoEndpoint
                                         .userService(oauth2UserService)  // 사용자 정보 서비스

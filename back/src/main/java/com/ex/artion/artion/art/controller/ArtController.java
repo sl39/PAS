@@ -24,8 +24,7 @@ public class ArtController {
     //그림 생성
     @PostMapping("/create")
     public ResponseEntity<String> createArt(@RequestBody ArtCreateDto dto, @RequestParam(value = "user_pk") Integer user_pk) {
-        artService.createArt(dto, user_pk);
-        return ResponseEntity.ok("그림 추가 성공!");
+        return artService.createArt(dto, user_pk);
     }
     //그림 수정
     @PutMapping("/update")
