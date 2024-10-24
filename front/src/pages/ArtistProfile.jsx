@@ -183,6 +183,23 @@ export default function ArtistProfile() {
       alert("구독에 실패했습니다.", error);
     }
   };
+  //나중에 구독버튼 눌렸을때 구독/구독취소 파트
+  // const handleSubscription2 = async() => {
+  //   try{
+  //     const url = a
+  //       ? `https://artion.site/api/following/1/follow/${userPkObj.user_pk}`
+  //       : `https://artion.site/api/following/1/unfollow/${userPkObj.user_pk}`
+
+  //       await axios({
+  //         method: a ? 'delete' : 'post',
+  //         url: url,
+  //       });
+  //       alert(a ? "구독이 취소되었습니다." : "구독에 성공했습니다.");
+  //   } catch(error){
+  //     console.error(error);
+  //     alert("요청에 실패했습니다.");
+  //   }
+  // }
 
   // 작가 페이지 정보 불러오기
   useEffect(() => {
