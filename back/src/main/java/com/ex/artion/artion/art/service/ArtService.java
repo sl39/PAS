@@ -115,22 +115,7 @@ public class ArtService {
 
         }
 
-        System.out.println(art.getArt_pk());
-        System.out.println(art.getArt_info());
-        System.out.println(art.getArt_name());
-        System.out.println(art.getDepth());
-        System.out.println(art.getHeight());
-        System.out.println(art.getPainter());
-        System.out.println(art.getWidth());
-        System.out.println(art.getStartTime());
-        System.out.println(art.getMinP());
-        System.out.println(art.getMaxP());
-        System.out.println(art.getCreatedAt());
-
-
-
-
-        return ResponseEntity.ok("그림 추가함");
+        return ResponseEntity.ok("그림 추가 성공!");
     }
 
     @Transactional
