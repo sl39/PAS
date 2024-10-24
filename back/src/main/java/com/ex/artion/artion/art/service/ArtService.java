@@ -319,12 +319,13 @@ public class ArtService {
 
         // 그림 이미지들
         List<ArtImageEntity> images = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
+
         List<String> imageUrls = new ArrayList<>();
         for (ArtImageEntity imageEntity : images) {
             imageUrls.add(imageEntity.getArt_image_url());
         }
         dto.setArtImages(imageUrls);
-
+        System.out.println(artEntity.getArt_pk() + " : " + imageUrls.size());
         // 그림 팔로윙
         Integer count = artFollowingRepository.countByArtPk(artEntity.getArt_pk());
         dto.setArtFollowingNum(count);

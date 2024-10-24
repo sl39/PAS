@@ -52,7 +52,7 @@ public interface ArtRepository extends JpaRepository<ArtEntity, Integer> {
             "LEFT JOIN (SELECT COUNT(*) AS f_c, f.artEntity.art_pk AS art_entity_art_pk " +
             "            FROM ArtFollowingEntity f " +
             "            GROUP BY f.artEntity.art_pk) AS d ON a.art_pk = d.art_entity_art_pk " +
-            "LEFT JOIN (SELECT image.art_image_pk as art_pk, MAX(image.art_image_url) as image " +
+            "LEFT JOIN (SELECT image.art_entity.art_pk as art_pk, MAX(image.art_image_url) as image " +
             "           FROM ArtImageEntity as image " +
             "           GROUP BY art_pk) as im ON a.art_pk = im.art_pk " +
             "WHERE (:minPrice <= COALESCE(c.price, a.minP) and COALESCE(c.price, a.minP)<= :maxPrice) " +
