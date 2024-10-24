@@ -1,9 +1,8 @@
 import styled from "styled-components";
-import jjang from '../img/jjang.jpg';
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-import { Header } from "../components";
+import { useParams, useNavigate } from "react-router-dom";
+import { HistoryHeader } from "../components";
 
 const ImageSize = styled.img`
   width: 35%;
@@ -25,6 +24,10 @@ width: 100%;
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
+  padding: 5px;
+  &>*{
+  margin: 5px;
+}
 `;
 
 const AllBox = styled.div`
@@ -70,6 +73,12 @@ const Pstylebar = styled.p`
   margin-bottom: 10px;
 `;
 
+const InfoDiv = styled.div`
+  &>*{
+    margin-bottom: 5px;
+  }
+`;
+
 export default function PurchaseHistory() {
   const [ entire, setEntire ] = useState(false);
   const [ bid, setBid] = useState(false);
@@ -83,6 +92,7 @@ export default function PurchaseHistory() {
   const id = useParams();
   
   const [data, setData] = useState([]);
+  const navigate = useNavigate();
 
   //전체 영역 클릭이벤트
   const entireHandler = () => {
@@ -161,10 +171,14 @@ export default function PurchaseHistory() {
     }
     },[entire , bid, trueBid, end, id]);
 
+    const handleItemClick = (artPk) => {
+      // art_pk를 포함한 경로로 이동
+      navigate(`/detail/${artPk}/${id.user_pk}`);
+    };
 
   return(
       <>
-       <Header></Header>
+       <HistoryHeader></HistoryHeader>
         <AllBox>  
         <div>
         <Pstylebar>구매내역</Pstylebar>
@@ -191,19 +205,24 @@ export default function PurchaseHistory() {
         </Divbar>
       </div>
       {data.map((item, index) => (
-      <ListStyle key={index}>
+      <ListStyle key={index} onClick={() =>  (item.currentAuctionStatus === 1 || item.currentAuctionStatus === 2) && handleItemClick(item.art_pk)}>
       <ImageSize src={item.image}></ImageSize>
         <ArrangeBox >
-          <div>
+          <InfoDiv>
             <P>{item.artName}</P>
             <P>{item.painter}</P>
             <P>{item.current_price}</P>
-          </div>
+          </InfoDiv>
           <div>
             <P>{item.endTime}</P>
           </div>
             <div>
-              <P>{item.currentAuctionStatus}</P>
+              <P style={{margin: 0}}>
+              {item.currentAuctionStatus === 0 && '경매전'}
+              {item.currentAuctionStatus === 1 && '입찰중'}
+              {item.currentAuctionStatus === 2 && '결제대기'}
+              {item.currentAuctionStatus === 3 && '판매완료'}
+              </P>
             </div>
           </ArrangeBox>
       </ListStyle>
