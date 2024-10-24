@@ -1052,6 +1052,7 @@ public class UserService {
                 ArtEntity art = artFollowingEntity.getArtEntity();
                 String art_name = art.getArt_name();
                 Integer art_pk = art.getArt_pk();
+                Integer seller_pk = art.getUserEntity().getUser_pk();
 
                 List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(art_pk);
                 if (!artImage.isEmpty()) {
@@ -1064,7 +1065,7 @@ public class UserService {
 
                 map.put("art_pk", art_pk);
                 map.put("art_name", art_name);
-                map.put("user_pk", user_pk);
+                map.put("seller_pk", seller_pk);
                 result.add(map);
             }
         }
@@ -1075,14 +1076,14 @@ public class UserService {
         UserEntity user;
         List<Map<String, Object>> result = new ArrayList<>();
 //        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        try {
-            user = userRepository.findById(user_pk)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
-        } catch (Exception e) {
-            Map<String, Object> errorMessage = new HashMap<>();
-            errorMessage.put("에러", "사용자가 존재하지 않습니다");
-            result.add(errorMessage);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+            try {
+                user = userRepository.findById(user_pk)
+                        .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+            } catch (Exception e) {
+                Map<String, Object> errorMessage = new HashMap<>();
+                errorMessage.put("에러", "사용자가 존재하지 않습니다");
+                result.add(errorMessage);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
         }
 
         // 여기서 이미 내가 구독한 사람들 다 가져왔음.
