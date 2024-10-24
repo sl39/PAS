@@ -121,7 +121,7 @@ const ArtworkImage = styled.img`
     height: auto;
     margin: 5px;
     `;
-    const InfoContainer = styled.div`
+const InfoContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -136,7 +136,7 @@ const ArtworkImage = styled.img`
         width: 100%;
     }
 `;
-    const YearInfoContainer = styled.div`
+const YearInfoContainer = styled.div`
     display: flex;
     justify-content: space-between; 
     width: 100%;
@@ -253,6 +253,12 @@ const IndexIndicator = styled.div`
     font-size: 11px;
     font-weight: bold;
 `;
+const UploadAt = styled.p`
+    color: gray;
+    font-size: 16px;
+    margin: 0;
+    text-align: start;
+`;
 
 //시작
 export default function DetailItem ({ artWork }) {
@@ -341,7 +347,7 @@ export default function DetailItem ({ artWork }) {
                 <RightArrow onClick={handleNext} />
             </ImageContainer>
             <YearInfoContainer>
-                <YearInfo>제작년도<br/>{artWork.created}</YearInfo>
+                <YearInfo>작품 제작년도<br/>{artWork.created}</YearInfo>
                 <SizeInfo>{artWork.width} x {artWork.length} x {artWork.depth} cm
                     <br/>
                     <div style={{ display: 'flex', alignItems: 'center',justifyContent: 'flex-end' }}>
@@ -367,6 +373,7 @@ export default function DetailItem ({ artWork }) {
                     )}
                 </ButtonContainer>
                 <Title>{artWork.artName}{artWork.qurater ? <QuraterIcon onClick={handleQuraterIconClick} /> : null }</Title>
+                <UploadAt>{artWork.uploadAt}</UploadAt>
                 <Artist><SpanBold>작가 :</SpanBold> {artWork.artistName}</Artist>
                 <Registrant><SpanBold>등록자 :</SpanBold> <Link to={`/artist/${artWork.sellerPk}`} style={{textDecoration: 'none', color: "black"}}>{artWork.sellerName}</Link></Registrant>
                 <MaxPrice>
