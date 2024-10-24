@@ -381,7 +381,11 @@ export default function DetailItem ({ artWork }) {
                     <SpanBold style={{textAlign: "right"}}>{maxPriceRE} 원</SpanBold>
                 </MaxPrice>
                 <MinPrice>
-                    <SpanBold>현재가</SpanBold>
+                    <>
+                    {artWork.auctionState === 0 && <SpanBold>최소가</SpanBold>}
+                    {artWork.auctionState === 1 && <SpanBold>현재가</SpanBold>}
+                    {artWork.auctionState >= 2 && <SpanBold>낙찰가</SpanBold>}
+                    </>
                     <SpanBold style={{textAlign: "right"}}>{currentPriceRE} 원</SpanBold>
                 </MinPrice>
                 <TimeInfo>
