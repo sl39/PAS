@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import ArtworkItem from "./ArtworkItem";
-import { forwardRef } from "react";
 
 // Styled Components
 const SearchContainer = styled.div`
@@ -23,6 +22,7 @@ const BoldParagraph = styled.p`
   font-size: 17px;
   margin: 0px;
   margin-left: 30px;
+  user-select: none;
 `;
 
 const NormalParagraph = styled.p`
@@ -30,6 +30,7 @@ const NormalParagraph = styled.p`
   font-size: 11px;
   margin: 0px;
   margin-left: 30px;
+  user-select: none;
 `;
 
 export default function SearchedArtwork({ artWorkList }) {

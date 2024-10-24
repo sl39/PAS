@@ -1,8 +1,6 @@
 import styled from "styled-components";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { GoHeartFill } from "react-icons/go";
-import axios from "axios";
-import { useEffect, useState } from "react";
 
 // Styled Components
 const ArtworkContainer = styled.div`
@@ -62,17 +60,15 @@ const HeartIcon = styled(GoHeartFill)`
   color: red;
 `;
 
-export default function ArtworkInProfile() {
+export default function ArtworkInProfile({ artWork, userPk }) {
   return (
-    <StyledLink to="/">
+    <StyledLink to={`/detail/${artWork.art_pk}/${userPk}`}>
       <ArtworkContainer>
         <ImageContainer>
-          <SquareImage src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTn697KapdshZw4TZFDoybC8SzUhBlqTJO3A&s"></SquareImage>
+          <SquareImage src={artWork.image}></SquareImage>
         </ImageContainer>
-        <NormalParagraph>
-          빈센트 반 고흐의 자화상으로, 빈센트 반 고흐의 자화상
-        </NormalParagraph>
-        <BoldParagraph>art_price원</BoldParagraph>
+        <NormalParagraph>{artWork.art_name}</NormalParagraph>
+        <BoldParagraph>{artWork.price}원</BoldParagraph>
         <LikeBox>
           <HeartIcon></HeartIcon>
           <NormalParagraph>132</NormalParagraph>

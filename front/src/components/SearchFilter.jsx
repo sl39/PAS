@@ -75,13 +75,15 @@ const OptionItem = styled.div`
   cursor: pointer;
 `;
 
-const SliderBox = styled.div`
-  width: 100%;
-`;
+//const SliderBox = styled.div`
+//  width: 100%;
+//`;
 
 // -webkit-appearance: none -> 브라우저 기본 스타일 제거
 // -webkit-slider-runnable-track -> 슬라이더의 배경
 // -webkit-slider-thumb -> 슬라이더 손잡이
+
+/* 
 const SliderItem = styled.input`
   width: 100%;
   -webkit-appearance: none;
@@ -101,7 +103,7 @@ const SliderItem = styled.input`
     width: 15px;
     margin-top: -3px;
   }
-`;
+`;*/
 
 const NormalParagraph = styled.p`
   user-select: none;

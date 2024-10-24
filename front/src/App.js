@@ -37,7 +37,7 @@ export default function App() {
         <Route path="/putRegister" element={<PutRegister />} />
         <Route path="/info" element={<Info />} />
         <Route path="/reciept" element={<Receipt />} />
-        <Route path="/artist/:artist_pk" element={<ArtistProfile />} />
+        <Route path="/artist/:user_pk" element={<ArtistProfile />} />
         <Route path="/test" element={<SearchFilter />} />
       </Routes>
     </Router>

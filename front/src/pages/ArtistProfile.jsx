@@ -159,17 +159,17 @@ const NormalParagraph = styled.p`
 `;
 
 export async function getArtistProfileApi(userPk) {
-  const response = await axios.get("https://artion.site/api/user/myart", {
-    params: {
-      user_pk: userPk,
-    },
-  });
+  console.log(`https://artion.site/api/user/myart?user_pk=${userPk}`);
+  const response = await axios.get(
+    `https://artion.site/api/user/myart?user_pk=${userPk}`
+  );
+
   return response.data;
 }
 
 export default function ArtistProfile() {
   // URL에서 path variable 추출
-  const userPk = useParams();
+  const userPkObj = useParams();
   const [artistName, setArtistName] = useState("");
   const [artworkList, setArtworkList] = useState([]);
 
@@ -177,15 +177,17 @@ export default function ArtistProfile() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const artistProfileInfo = await getArtistProfileApi(userPk);
-        console.log("작가 페이지 정보 불러옴 ", artistProfileInfo);
+        console.log("userPk: ", userPkObj.user_pk);
+        const artistProfileInfo = await getArtistProfileApi(userPkObj.user_pk);
+        setArtistName(artistProfileInfo.User_name);
+        setArtworkList(artistProfileInfo.artList);
       } catch (error) {
         console.error("데이터를 가져오는 중에 오류가 발생했습니다: ", error);
       }
     };
 
     fetchData();
-  }, [userPk]);
+  }, [userPkObj]);
 
   return (
     <>
@@ -199,7 +201,7 @@ export default function ArtistProfile() {
             <TopBox>
               <NameBox>
                 <ProfileInfoBox>
-                  <BoldParagraph>그림파는</BoldParagraph>
+                  <BoldParagraph>{artistName}</BoldParagraph>
                 </ProfileInfoBox>
                 <FollowBox>
                   <NormalParagraph>구독</NormalParagraph>
@@ -231,16 +233,9 @@ export default function ArtistProfile() {
         <ArtworkBox>
           <BorderLine>
             <ContentBox>
-              <ArtworkInProfile></ArtworkInProfile>
-              <ArtworkInProfile></ArtworkInProfile>
-              <ArtworkInProfile></ArtworkInProfile>
-              <ArtworkInProfile></ArtworkInProfile>
-              <ArtworkInProfile></ArtworkInProfile>
-              <ArtworkInProfile></ArtworkInProfile>
-              <ArtworkInProfile></ArtworkInProfile>
-              <ArtworkInProfile></ArtworkInProfile>
-              <ArtworkInProfile></ArtworkInProfile>
-              <ArtworkInProfile></ArtworkInProfile>
+              {artworkList.map((item) => (
+                <ArtworkInProfile key={item.art_pk} artWork={item} />
+              ))}
             </ContentBox>
           </BorderLine>
         </ArtworkBox>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { IoIosSearch } from "react-icons/io";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // Styled Components
 const SearchContainer = styled.div`
