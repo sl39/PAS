@@ -11,6 +11,8 @@ import com.ex.artion.artion.auction.respository.AuctionRepository;
 import com.ex.artion.artion.following.entity.FollowingEntity;
 import com.ex.artion.artion.following.respository.FollowingRepository;
 import com.ex.artion.artion.global.auth.repository.AuthRepository;
+import com.ex.artion.artion.global.error.CustomException;
+import com.ex.artion.artion.global.error.ErrorCode;
 import com.ex.artion.artion.global.jwt.UserPrincipal;
 import com.ex.artion.artion.paying.entity.PayingEntity;
 import com.ex.artion.artion.paying.repository.PayingRepository;
@@ -46,13 +48,12 @@ public class UserService {
     private final FollowingRepository followingRepository;
 
     // 소셜로그인 전 기본적인 유저 생성 테스트
-    public void createUser(@RequestBody UserCreateDto dto, @RequestParam(value = "user_pk") Integer user_pk) {
+    public void createUser(@RequestBody UserCreateDto dto) {
 
-//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        Integer userId = userPrincipal.getUserPk();
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        UserEntity user = userRepository.findById(user_pk)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+        UserEntity user = userRepository.findById(userPrincipal.getUserPk())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         user.setPhone_number(dto.getPhone_number());
         user.setBank_name(dto.getBank_name());
@@ -68,18 +69,17 @@ public class UserService {
     // 이거 상대방 user_pk 사용하는 거겠지?
     public UserEntity searchUser(@RequestParam(value = "user_pk") Integer user_pk) {
         UserEntity founduser = userRepository.findById(user_pk)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         return founduser;
     }
 
     // 유저 정보 수정
-    public void updateUser(@RequestBody UserUpdateDto dto, @RequestParam(value = "user_pk") Integer user_pk) {
+    public void updateUser(@RequestBody UserUpdateDto dto) {
 
-//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        Integer userId = userPrincipal.getUserPk();
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        UserEntity user = userRepository.findById(user_pk)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+        UserEntity user = userRepository.findById(userPrincipal.getUserPk())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         user.setUser_name(dto.getUser_name());
         user.setPhone_number(dto.getPhone_number());
@@ -90,15 +90,14 @@ public class UserService {
         this.userRepository.save(user);
     }
 
-    public ResponseEntity<Map<String, Object>> updateBeforeUser(@RequestParam(value = "user_pk") Integer user_pk) {
+    public ResponseEntity<Map<String, Object>> updateBeforeUser() {
 
-//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        Integer userId = userPrincipal.getUserPk();
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Map<String, Object> Message = new HashMap<>();
 
-        UserEntity user = userRepository.findById(user_pk)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+        UserEntity user = userRepository.findById(userPrincipal.getUserPk())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Message.put("user_name", user.getUser_name());
         Message.put("phone_number", user.getPhone_number());
@@ -121,14 +120,14 @@ public class UserService {
 //    }
 
     // user_pk로 구매내역(입찰 중) 조회
-    public ResponseEntity<List<Map<String, Object>>> requestPurchaseBid(@RequestParam(value = "user_pk") Integer user_pk) {
+    public ResponseEntity<List<Map<String, Object>>> requestPurchaseBid() {
         List<Map<String, Object>> result = new ArrayList<>();
         UserEntity user;
         List<Object[]> prices = new ArrayList<>();
-//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
-            user = userRepository.findById(user_pk)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+            user = userRepository.findById(userPrincipal.getUserPk())
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         } catch (Exception e) {
 //            Map<String, Object> errorMessage = new HashMap<>();
 //            errorMessage.put("에러", "사용자가 존재하지 않습니다");
@@ -140,7 +139,7 @@ public class UserService {
 
         for (AuctionEntity auction : auc) {
             if (!auc.isEmpty() && auction.getArt_entity().getCurrent_auction_status() == 1) {
-                prices = auctionRepository.findMaxPriceAndUserMaxPriceByArtPkAndUserPkNative(auction.getArt_entity().getArt_pk(), user_pk);
+                prices = auctionRepository.findMaxPriceAndUserMaxPriceByArtPkAndUserPkNative(auction.getArt_entity().getArt_pk(), userPrincipal.getUserPk());
                 Object[] row = prices.get(0);
                 Long userMaxPrice = ((Number) row[1]).longValue();
                 if (userMaxPrice.equals(auction.getCurrent_price())) {
@@ -187,13 +186,13 @@ public class UserService {
 
 
     // user_pk로 구매내역(낙찰) 조회
-    public ResponseEntity<List<Map<String, Object>>> requestPurchaseSuccess(@RequestParam(value = "user_pk") Integer user_pk) {
+    public ResponseEntity<List<Map<String, Object>>> requestPurchaseSuccess() {
         List<Map<String, Object>> result = new ArrayList<>();
         UserEntity user;
-//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
-            user = userRepository.findById(user_pk)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+            user = userRepository.findById(userPrincipal.getUserPk())
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         } catch (Exception e) {
 //            Map<String, Object> errorMessage = new HashMap<>();
 //            errorMessage.put("에러", "사용자가 존재하지 않습니다");
@@ -255,13 +254,13 @@ public class UserService {
     //구매내역(종료)
     //종료 = 1. 입금O + 2. 낙찰실패로 나뉨.
 
-    public ResponseEntity<List<Map<String, Object>>> requestPurchaseEnd(@RequestParam(value = "user_pk") Integer user_pk) {
+    public ResponseEntity<List<Map<String, Object>>> requestPurchaseEnd() {
         List<Map<String, Object>> result = new ArrayList<>();
         UserEntity user;
-//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
-            user = userRepository.findById(user_pk)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+            user = userRepository.findById(userPrincipal.getUserPk())
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         } catch (Exception e) {
 //            Map<String, Object> errorMessage = new HashMap<>();
 //            errorMessage.put("에러", "사용자가 존재하지 않습니다");
@@ -281,7 +280,7 @@ public class UserService {
                 List<PayingEntity> pay = payingRepository.findAllByAuction_pk(auction.getAuction_pk());
 
                 //auc에서 최대 가격이랑 내 최대 가격이랑 다른 것들 = 경매는 참여했으나 낙찰하지 못한 것들 뽑아내기
-                prices = auctionRepository.findMaxPriceAndUserMaxPriceByArtPkAndUserPkNative(art_pk, user_pk);
+                prices = auctionRepository.findMaxPriceAndUserMaxPriceByArtPkAndUserPkNative(art_pk, userPrincipal.getUserPk());
                 Object[] row = prices.get(0);
                 Long maxPrice = ((Number) row[0]).longValue();
                 Long userMaxPrice = ((Number) row[1]).longValue();
@@ -366,13 +365,18 @@ public class UserService {
 }
 
     // 구매내역 전체
-    public ResponseEntity<List<Map<String, Object>>> requestPurchaseAll(@RequestParam(value = "user_pk") Integer user_pk) {
+    public ResponseEntity<List<Map<String, Object>>> requestPurchaseAll() {
         List<Map<String, Object>> result = new ArrayList<>();
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if(requestPurchaseBid(user_pk).getBody() != null || requestPurchaseSuccess(user_pk).getBody() != null || requestPurchaseEnd(user_pk).getBody() != null) {
-            result.addAll(requestPurchaseBid(user_pk).getBody());
-            result.addAll(requestPurchaseSuccess(user_pk).getBody());
-            result.addAll(requestPurchaseEnd(user_pk).getBody());
+        System.out.println(userPrincipal.getUserPk());
+
+        if(requestPurchaseBid() != null || requestPurchaseSuccess() != null || requestPurchaseEnd().getBody() != null) {
+            result.addAll(requestPurchaseBid().getBody());
+
+            result.addAll(requestPurchaseSuccess().getBody());
+
+            result.addAll(requestPurchaseEnd().getBody());
         } else {
 //            Map<String, Object> errorMessage = new HashMap<>();
 //            errorMessage.put("에러", "구매이력이 존재하지 않습니다");
@@ -384,14 +388,14 @@ public class UserService {
 
 
     // user_pk로 판매내역(입찰 중) 조회
-    public ResponseEntity<List<Map<String, Object>>> requestSaleBid(@RequestParam(value = "user_pk") Integer user_pk) {
+    public ResponseEntity<List<Map<String, Object>>> requestSaleBid() {
         UserEntity user;
         List<Map<String, Object>> result = new ArrayList<>();
-//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         try {
-            user = userRepository.findById(user_pk)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+            user = userRepository.findById(userPrincipal.getUserPk())
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
         }
@@ -453,14 +457,14 @@ public class UserService {
 
 
     // user_pk로 판매내역(낙찰) 조회
-    public ResponseEntity<List<Map<String, Object>>> requestSaleSuccess(@RequestParam(value = "user_pk") Integer user_pk) {
+    public ResponseEntity<List<Map<String, Object>>> requestSaleSuccess() {
         UserEntity user;
         List<Map<String, Object>> result = new ArrayList<>();
-//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         try {
-            user = userRepository.findById(user_pk)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+            user = userRepository.findById(userPrincipal.getUserPk())
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         } catch (Exception e) {
 //            Map<String, Object> errorMessage = new HashMap<>();
 //            errorMessage.put("에러", "사용자가 존재하지 않습니다");
@@ -478,7 +482,7 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
         } else {
             for (ArtEntity artEntity : art) {
-                //                System.out.println("유저로 art 조회 후 모든 art 중 auction 들어가 있는 것들" + auction.size());
+//                System.out.println("유저로 art 조회 후 모든 art 중 auction 들어가 있는 것들" + auction.size());
 //                List<AuctionEntity> auction = auctionRepository.findAllByArt_pk(artEntity.getArt_pk());
 //                for (AuctionEntity auctionEntity : auction) {
 //                    System.out.println("옥션Pk : " + auctionEntity.getAuction_pk());
@@ -512,6 +516,7 @@ public class UserService {
                         String painter = artEntity.getPainter();
                         LocalDate createdAt = artEntity.getCreatedAt();
                         LocalDateTime endTime = artEntity.getEndTime();
+                        Integer currentAuctionStatus = artEntity.getCurrent_auction_status();
 
                         List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
 
@@ -529,6 +534,7 @@ public class UserService {
                         map.put("art_pk", art_pk);
                         map.put("artName", artName);
                         map.put("painter", painter);
+                        map.put("currentAuctionStatus", currentAuctionStatus);
 
                         map.put("createdAt", createdAt);
                         map.put("endTime", endTime);
@@ -544,14 +550,14 @@ public class UserService {
 
     // user_pk로 판매내역(종료) 조회
     // 종료는 입금까지 끝난 것들 + 아무도 입찰하지 않은 것들로 나뉨. 구분은 current_auction_status = 0이면 입찰X, 3이면 입금O
-    public ResponseEntity<List<Map<String, Object>>> requestSaleEnd(@RequestParam(value = "user_pk") Integer user_pk) {
+    public ResponseEntity<List<Map<String, Object>>> requestSaleEnd() {
         UserEntity user;
         List<Map<String, Object>> result = new ArrayList<>();
-//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         try {
-            user = userRepository.findById(user_pk)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+            user = userRepository.findById(userPrincipal.getUserPk())
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         } catch (Exception e) {
 //            Map<String, Object> errorMessage = new HashMap<>();
 //            errorMessage.put("에러", "사용자가 존재하지 않습니다");
@@ -679,13 +685,13 @@ public class UserService {
     }
 
     // 판매내역 전체
-    public ResponseEntity<List<Map<String, Object>>> requestSaleAll(@RequestParam(value = "user_pk") Integer user_pk) {
+    public ResponseEntity<List<Map<String, Object>>> requestSaleAll() {
         List<Map<String, Object>> result = new ArrayList<>();
 
-        if(requestSaleBid(user_pk).getBody() != null || requestSaleSuccess(user_pk).getBody() != null || requestSaleEnd(user_pk).getBody() != null) {
-            result.addAll(requestSaleBid(user_pk).getBody());
-            result.addAll(requestSaleSuccess(user_pk).getBody());
-            result.addAll(requestSaleEnd(user_pk).getBody());
+        if(requestSaleBid().getBody() != null || requestSaleSuccess().getBody() != null || requestSaleEnd().getBody() != null) {
+            result.addAll(requestSaleBid().getBody());
+            result.addAll(requestSaleSuccess().getBody());
+            result.addAll(requestSaleEnd().getBody());
         } else {
 //            Map<String, Object> errorMessage = new HashMap<>();
 //            errorMessage.put("에러", "판매이력이 존재하지 않습니다");
@@ -696,158 +702,64 @@ public class UserService {
     }
 
     //내 작품 페이지 - 그림, current_auction_status에 따라 price가 달라지게,
-    public ResponseEntity<Map<String, Object>> requestMyArt(@RequestParam(value = "user_pk") Integer user_pk) {
-        UserEntity user;
+    public ResponseEntity<Map<String, Object>> requestMyArt(@RequestParam (value="user_pk") Integer user_pk) {
         Map<String, Object> result = new HashMap<>();
         List<Map<String, Object>> itemList = new ArrayList<>();
         List<Map<String, Object>> itemDESC = new ArrayList<>();
 
-        try {
-            user = userRepository.findById(user_pk)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
-        } catch (Exception e) {
-            result.put("에러", "사용자가 존재하지 않습니다");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
-        }
-//        Map<String, Object> mainData = new HashMap<>();
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-//      소셜로그인 시 여기서 이미지 불러와야 함
-        String user_Image = user.getKakao_image();
-        result.put("user_Image", user_Image);
+        UserEntity user;
 
-        String User_name = user.getUser_name();
-        result.put("User_name", User_name);
+        UserEntity user2;
 
-        List<FollowingEntity> Follow = followingRepository.findBySeller(user);
-        result.put("Follow", Follow.size());
+//        UserEntity user = userRepository.findById(userPrincipal.getUserPk())
+//                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+//
+//        UserEntity user2 = userRepository.findById(user_pk)
+//                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
 
-        List<ArtEntity> art = artRepository.findAllByUser_pk(user.getUser_pk());
+        if(userPrincipal.getUserPk().equals(user_pk)) {
+            user = userRepository.findById(userPrincipal.getUserPk())
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+            result.put("isSelf", true);
 
-        // 분기처리 전에 정렬한거라 의미 없음
-//        List<ArtEntity> artDESC = art.stream()
-//                        .sorted(Comparator.comparing(ArtEntity::getCreatedAt).reversed())
-////                        .collect(Collectors.toList());
-//                        .toList();
+            user2 = userRepository.findById(user_pk)
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        if (art.isEmpty()) {
-            result.put("에러", "사용자가 등록한 그림이 없습니다");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+            Optional<FollowingEntity> follower = followingRepository.findByCustomerAndSeller(user, user2);
+
+            if(follower.isPresent()) {
+                result.put("followState", true);
+            } else {
+                result.put("followState", false);
+            }
+
         } else {
-            for (ArtEntity artEntity : art) {
-                List<AuctionEntity> auction = auctionRepository.findAllByArt_pk(artEntity.getArt_pk());
-                if (auction == null) {
-                    result.put("에러", "사용자는 경매를 진행한 적이 없습니다");
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
-                } else {
-                    if (artEntity.getCurrent_auction_status() != 0) {
-                        Map<String, Object> itemData = new HashMap<>();
-                        Integer art_pk = artEntity.getArt_pk();
-                        String art_name = artEntity.getArt_name();
-                        Long price = auctionRepository.findMaxPriceByArtPk(art_pk);
-                        List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
-                        LocalDate upload = artEntity.getUpload();
-
-                        if (!artImage.isEmpty()) {
-                            String image = String.valueOf(artImage.get(0).getArt_image_url());
-                            itemData.put("image", image);
-                        } else {
-                            String image = null;
-                            itemData.put("image", image);
-                        }
-
-                        Integer artFollows = artFollowingRepository.countByArtPk(artEntity.getArt_pk());
-
-                        if (artFollows != null) {
-                            itemData.put("follows", artFollows);
-                        } else {
-                            itemData.put("follows", 0);
-                        }
-
-                        itemData.put("price", price);
-                        itemData.put("art_name", art_name);
-                        itemData.put("art_pk", art_pk);
-                        itemData.put("upload", upload);
-
-                        itemDESC.add(itemData);
-
-                    } else {
-                        Map<String, Object> itemData = new HashMap<>();
-                        Integer art_pk = artEntity.getArt_pk();
-                        String art_name = artEntity.getArt_name();
-                        Long price = artEntity.getMinP();
-                        List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
-                        LocalDate upload = artEntity.getUpload();
-
-                        if (!artImage.isEmpty() && artImage != null) {
-                            String image = String.valueOf(artImage.get(0).getArt_image_url());
-                            itemData.put("image", image);
-                        } else {
-                            String image = null;
-                            itemData.put("image", image);
-                        }
-
-                        Integer artFollows = artFollowingRepository.countByArtPk(artEntity.getArt_pk());
-
-                        if (artFollows != null) {
-                            itemData.put("follows", artFollows);
-                        } else {
-                            itemData.put("follows", 0);
-                        }
-
-                        itemData.put("price", price);
-                        itemData.put("art_name", art_name);
-                        itemData.put("art_pk", art_pk);
-                        itemData.put("upload", upload);
-
-                        itemDESC.add(itemData);
-
-                    }
-
-                    //upload DESC 정렬,
-                    itemDESC.sort((m1, m2) -> {
-                        int compareUploadAt = ((LocalDate) m2.get("upload")).compareTo((LocalDate) m1.get("upload"));
-
-                        // createdAt이 같다면, art_pk을 기준으로 정렬
-                        if (compareUploadAt == 0) {
-                            return ((Integer) m2.get("art_pk")).compareTo((Integer) m1.get("art_pk"));
-                        }
-
-                        return compareUploadAt;
-                    });
-                }
-            }
-
-            for (Map<String, Object> item : itemDESC) {
-                item.remove("upload");
-            }
-
-            // result에 추가.
-            result.put("artList", itemDESC);
-
-            return ResponseEntity.ok(result);
-        }
-    }
-
-    //다른사람 작품페이지 - 그림, current_auction_status에 따라 price가 달라지게,
-    public ResponseEntity<Map<String, Object>> requestOtherArt(@RequestParam(value = "user_pk") Integer user_pk) {
-        UserEntity user;
-        Map<String, Object> result = new HashMap<>();
-        List<Map<String, Object>> itemList = new ArrayList<>();
-        List<Map<String, Object>> itemDESC = new ArrayList<>();
-//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        try {
             user = userRepository.findById(user_pk)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
-        } catch (Exception e) {
-            result.put("에러", "사용자가 존재하지 않습니다");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+            result.put("isSelf", false);
+
+            user2 = userRepository.findById(user_pk)
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+            Optional<FollowingEntity> follower = followingRepository.findByCustomerAndSeller(user, user2);
+
+            if(follower.isPresent()) {
+                result.put("followState", true);
+            } else {
+                result.put("followState", false);
+            }
         }
-//        Map<String, Object> mainData = new HashMap<>();
 
-//      소셜로그인 시 여기서 이미지 불러와야 함
-
-        result.put("user_pk", user_pk);
+//        try {
+//            user = userRepository.findById(userPrincipal.getUserPk())
+//                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
+//        } catch (Exception e) {
+//            result.put("에러", "사용자가 존재하지 않습니다");
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+//        }
 
         String user_Image = user.getKakao_image();
         result.put("user_Image", user_Image);
@@ -865,7 +777,6 @@ public class UserService {
 //                        .sorted(Comparator.comparing(ArtEntity::getCreatedAt).reversed())
 ////                        .collect(Collectors.toList());
 //                        .toList();
-
 
         if (art.isEmpty()) {
             result.put("에러", "사용자가 등록한 그림이 없습니다");
@@ -967,17 +878,19 @@ public class UserService {
     }
 
     //유저 정보 반환
-    public ResponseEntity<Map<String, Object>> requestMyProfile(@RequestParam(value = "user_pk") Integer user_pk) {
+    public ResponseEntity<Map<String, Object>> requestMyProfile() {
         UserEntity user;
         Map<String, Object> result = new HashMap<>();
-//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        try {
-            user = userRepository.findById(user_pk)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
-        } catch (Exception e) {
-            result.put("에러", "사용자가 존재하지 않습니다");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
-        }
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+//        System.out.println(userPrincipal);
+//        System.out.println(SecurityContextHolder.getContext());
+//        System.out.println(SecurityContextHolder.getContext().getAuthentication());
+//        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+//        System.out.println(userPrincipal.getUserPk());
+
+            user = userRepository.findById(userPrincipal.getUserPk())
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         String User_name = user.getUser_name();
 
@@ -990,13 +903,13 @@ public class UserService {
         return ResponseEntity.ok(result);
     }
 
-    public ResponseEntity<Map<String, Object>> requestMyProfileAndFollows(@RequestParam(value = "user_pk") Integer user_pk) {
+    public ResponseEntity<Map<String, Object>> requestMyProfileAndFollows() {
         UserEntity user;
         Map<String, Object> result = new HashMap<>();
-//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         try {
-            user = userRepository.findById(user_pk)
+            user = userRepository.findById(userPrincipal.getUserPk())
                     .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
         } catch (Exception e) {
             result.put("에러", "사용자가 존재하지 않습니다");
@@ -1023,19 +936,12 @@ public class UserService {
         return ResponseEntity.ok(result);
     }
 
-    public ResponseEntity<List<Map<String, Object>>> requestArtFollowing(@RequestParam(value = "user_pk") Integer user_pk) {
+    public ResponseEntity<List<Map<String, Object>>> requestArtFollowing() {
         UserEntity user;
         List<Map<String, Object>> result = new ArrayList<>();
-//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        try {
-            user = userRepository.findById(user_pk)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
-        } catch (Exception e) {
-            Map<String, Object> errorMessage = new HashMap<>();
-            errorMessage.put("에러", "사용자가 존재하지 않습니다");
-            result.add(errorMessage);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
-        }
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            user = userRepository.findById(userPrincipal.getUserPk())
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         List<ArtFollowingEntity> artFollowing = artFollowingRepository.findByUserEntity(user);
         if (artFollowing != null) {
@@ -1067,56 +973,44 @@ public class UserService {
         return ResponseEntity.ok(result);
     }
 
-    public ResponseEntity<List<Map<String, Object>>> requestFollowing(@RequestParam(value = "user_pk") Integer user_pk) {
+    public ResponseEntity<List<Map<String, Object>>> requestFollowing() {
         UserEntity user;
         List<Map<String, Object>> result = new ArrayList<>();
-//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            try {
-                user = userRepository.findById(user_pk)
-                        .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
-            } catch (Exception e) {
-                Map<String, Object> errorMessage = new HashMap<>();
-                errorMessage.put("에러", "사용자가 존재하지 않습니다");
-                result.add(errorMessage);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
-        }
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        // 여기서 이미 내가 구독한 사람들 다 가져왔음.
-        List<FollowingEntity> Following = followingRepository.findByCustomer(user);
-        if (Following != null) {
-            for (FollowingEntity followingEntity : Following) {
-                Map<String, Object> map = new HashMap<>();
+            user = userRepository.findById(userPrincipal.getUserPk())
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-                Integer Seller_pk = followingEntity.getSeller().getUser_pk();
+            // 여기서 이미 내가 구독한 사람들 다 가져왔음.
+            List<FollowingEntity> Following = followingRepository.findByCustomer(user);
+            if (Following != null) {
+                for (FollowingEntity followingEntity : Following) {
+                    Map<String, Object> map = new HashMap<>();
 
-                // 카카오 로그인 시 이미지 불러오기 해야함.
-                String user_image = user.getKakao_image();
+                    Integer Seller_pk = followingEntity.getSeller().getUser_pk();
 
-                String user_name = followingEntity.getSeller().getUser_name();
+                    // 카카오 로그인 시 이미지 불러오기 해야함.
+                    String user_image = user.getKakao_image();
 
-                map.put("user_image", user_image);
-                map.put("user_name", user_name);
-                map.put("user_pk", Seller_pk);
-                result.add(map);
+                    String user_name = followingEntity.getSeller().getUser_name();
+
+                    map.put("user_image", user_image);
+                    map.put("user_name", user_name);
+                    map.put("user_pk", Seller_pk);
+                    result.add(map);
+                }
             }
+            return ResponseEntity.ok(result);
         }
-        return ResponseEntity.ok(result);
-    }
 
-    public ResponseEntity<List<Map<String, Object>>> requestMyFollower (@RequestParam(value = "user_pk") Integer user_pk) {
+
+    public ResponseEntity<List<Map<String, Object>>> requestMyFollower () {
         UserEntity user;
         List<Map<String, Object>> result = new ArrayList<>();
-//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        try {
-            user = userRepository.findById(user_pk)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
-        } catch (Exception e) {
-            Map<String, Object> errorMessage = new HashMap<>();
-            errorMessage.put("에러", "사용자가 존재하지 않습니다");
-            result.add(errorMessage);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
-        }
+            user = userRepository.findById(userPrincipal.getUserPk())
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // 날 구독한 사람들
         List<FollowingEntity> Following = followingRepository.findBySeller(user);
@@ -1139,4 +1033,4 @@ public class UserService {
         }
         return ResponseEntity.ok(result);
     }
-    }
+}
