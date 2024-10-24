@@ -218,7 +218,7 @@ export default function ArtistProfile() {
 
   return (
     <>
-      <Header></Header>
+      <Header ></Header>
       <ArtistContainer>
         <ProfileBox>
           <ImageContainer>

@@ -1,8 +1,7 @@
 import { MdArrowBack } from "react-icons/md";
-
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 // Styled Components
 const HeaderContainer = styled.header`
@@ -23,30 +22,40 @@ const Logo = styled.h1`
   user-select: none;
 `;
 
-const StyledLink = styled(Link)`
-  cursor: pointer;
-  text-decoration: none;
-  color: inherit;
-`;
-
 const Div = styled.div`
   width: 30px;
   height: 30px;
 `;
 
-export default function Header() {
- 
+export default function BackHeader() {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    const userConfirmed = window.confirm("변경사항이 저장되지 않습니다. 페이지를 나가시겠습니까?");
+    if (userConfirmed) {
+      navigate(-1); 
+    } else {
+      alert("취소되었습니다.");
+    }
+  };
+
+  const handleClick2 = () => {
+    const userConfirmed = window.confirm("변경사항이 저장되지 않습니다. 페이지를 나가시겠습니까?");
+
+    if (userConfirmed) {
+      navigate('/'); 
+    } else {
+      alert("취소되었습니다.");
+    }
+  };
+
   return (
     <>
       <HeaderContainer>
         <MenuIcon>
-        <StyledLink to="/">
-          <MdArrowBack size={30} />
-          </StyledLink>
+          <MdArrowBack size={30} onClick={handleClick} />
         </MenuIcon>
-        <StyledLink to="/">
-          <Logo>Artion</Logo>
-        </StyledLink>
+          <Logo onClick={handleClick2}>Artion</Logo>
         <Div></Div> 
       </HeaderContainer>
     </>

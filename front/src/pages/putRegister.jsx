@@ -2,7 +2,7 @@ import styled from "styled-components"
 import { createGlobalStyle } from 'styled-components';
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { BackHeader } from "../components";
 
@@ -132,11 +132,11 @@ const ImageDiv = styled.div`
 export default function PutRegister(){
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [minP, setMinP] = useState('');
-  const [maxP, setMaxP] = useState('');
-  const [width, setWidth]= useState('');
-  const [depth, setDepth]= useState('');
-  const [height, setHeight] = useState('');
+  const [minP, setMinP] = useState(0);
+  const [maxP, setMaxP] = useState(0);
+  const [width, setWidth]= useState(0);
+  const [depth, setDepth]= useState(0);
+  const [height, setHeight] = useState(0);
   const [created, setCreated] = useState('');
   const [start, setStart]=  useState('');
   const [end, setEnd] = useState('');
@@ -146,8 +146,10 @@ export default function PutRegister(){
   const [optionList, setOptionList] = useState([]);
   const [minDateTime, setMinDateTime] = useState('');
   const [submit, setSubmit] = useState('false');
-  const {art_pk} = useParams();
+  const [date, setDate] = useState('');
+  const id = useParams();
   const storage = getStorage();
+  const navigate = useNavigate();
 
   //이름 입력
   const setN = (event) =>{
@@ -255,7 +257,9 @@ export default function PutRegister(){
       const minutes = String(now.getMinutes()).padStart(2, '0');
 
       const currentDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+      const currentDate = `${year}-${month}-${day}`;
       setMinDateTime(currentDateTime);
+      setDate(currentDate);
     }, []);
 
     // 그림 등록 부분
@@ -263,7 +267,7 @@ export default function PutRegister(){
       if(submit === true ){
       async function postArt() {
         try{
-          const request = await axios.put(`https://artion.site/api/art/update?art_pk=${art_pk}`,{
+          const request = await axios.put(`https://artion.site/api/art/update?art_pk=${id.art_pk}`,{
             //담아보낼 데이터
             art_name: name,
             art_info: description,
@@ -279,9 +283,9 @@ export default function PutRegister(){
             artImage: images,
             artCategory : optionList
           })
-          console.log('optionList: '+optionList);
-          console.log('request:' +request);
-          console.log("성공");
+         
+          alert("작품이 수정되었습니다.");
+          navigate('/');
         }catch(e){
             console.error(e);
         }finally{
@@ -290,28 +294,45 @@ export default function PutRegister(){
       }
       postArt(); 
     }
-    }, [submit]);
+    }, [submit, id]);
 
     const submitButton = () => {
-      const requiredFields = [name, description, minP, maxP, width, depth, height, created, start, end, painter ,images ,optionList]; 
-      const allFieldsFilled = requiredFields.every(field => {
-        // 각 필드가 배열인지 확인
-        if (Array.isArray(field)) {
-            return field.length > 0; 
-        }
-        return field.trim() !== '';
-    });
+      const requiredFields = [name, description, minP, maxP, width, depth, height, created, start, end, painter, images, optionList]; 
+      let allFieldsFilled = true;
+  
+      requiredFields.forEach((field, index) => {
+          console.log(`Field ${index} value:`, field, `Type:`, typeof field); // 각 필드의 값과 타입 출력
+  
+          if (Array.isArray(field)) {
+              if (field.length === 0) {
+                  allFieldsFilled = false; // 배열이 비어있으면 false로 설정
+              }
+          } else if (typeof field === 'string') {
+              if (field.trim() === '') {
+                  allFieldsFilled = false; // 빈 문자열이면 false로 설정
+              }
+          } else if (typeof field === 'number') {
+              if (isNaN(field)) {
+                  allFieldsFilled = false; // 숫자가 NaN이면 false로 설정
+              }
+          } else {
+              allFieldsFilled = false; // 배열도 아니고 문자열도 아닌 경우 false로 설정
+          }
+      });
+  
+      console.log("All fields filled:", allFieldsFilled); 
+  
       if (!allFieldsFilled) {
           alert("입력이 완료되지 않았습니다. 모든 필드를 입력해주세요.");
       } else {
           setSubmit(true);
+      }
   }
-    }
-
+  
 
   //그림 정보 불러오는 부분
   useEffect(()=>{
-    axios.get(`https://artion.site/api/art/update?art_pk=${art_pk}`)
+    axios.get(`https://artion.site/api/art/update?art_pk=${id.art_pk}`)
     .then(response => {
         setName(response.data.art_name);
         setDescription(response.data.art_info);
@@ -329,7 +350,7 @@ export default function PutRegister(){
       }).catch((error) => {
         console.error(error);
       })
-  },[]);
+  },[id]);
 
   return(
     <>
@@ -342,7 +363,7 @@ export default function PutRegister(){
       <InputSize type="text" placeholder="작가명"  value={painter} onChange={setPain}></InputSize>
       <TextBox placeholder="작품설명" value={description} onChange={setInfo}></TextBox>
       <DetailP>제작날짜</DetailP>
-      <InputSize type="datetime-local" value={created} onChange={setCrea} max={minDateTime}></InputSize>
+      <InputSize type="date" value={created} onChange={setCrea} max={date}></InputSize>
       <DetailP>작품세부정보</DetailP>
       <ArtSize>
         <InputSize type="text" placeholder="width" value={width} onChange={setWid}></InputSize>
