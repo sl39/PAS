@@ -303,6 +303,7 @@ public class ArtService {
                 .created(artEntity.getCreatedAt())
                 .artInfo(artEntity.getArt_info())
                 .AuctionState(artEntity.getCurrent_auction_status())
+                .uploadAt(artEntity.getUpload())
                 .endTime(end)
                 .startTime(start)
                 .maxPrice(artEntity.getMaxP())
