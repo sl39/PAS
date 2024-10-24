@@ -159,7 +159,6 @@ const NormalParagraph = styled.p`
 `;
 
 export async function getArtistProfileApi(userPk) {
-  console.log(`https://artion.site/api/user/myart?user_pk=${userPk}`);
   const response = await axios.get(
     `https://artion.site/api/user/myart?user_pk=${userPk}`
   );
@@ -177,7 +176,6 @@ export default function ArtistProfile() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("userPk: ", userPkObj.user_pk);
         const artistProfileInfo = await getArtistProfileApi(userPkObj.user_pk);
         setArtistName(artistProfileInfo.User_name);
         setArtworkList(artistProfileInfo.artList);

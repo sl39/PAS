@@ -61,14 +61,12 @@ export default function SearchedArtist({ artistList }) {
 
   const scrollLeft = () => {
     if (contentRef.current) {
-      console.log("scrollLeft");
       contentRef.current.scrollLeft -= 200;
     }
   };
 
   const scrollRight = () => {
     if (contentRef.current) {
-      console.log("scrollRight");
       contentRef.current.scrollLeft += 200;
     }
   };

@@ -34,6 +34,15 @@ const BorderLine = styled.div`
   width: 850px;
 `;
 
+const GreyLine = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+  justify-content: start;
+  border-top: 0.5px solid lightgrey;
+  width: 850px;
+`;
+
 const FilterWrapContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -63,6 +72,13 @@ const NormalParagraph = styled.p`
   user-select: none;
   font-weight: 300;
   font-size: 9px;
+  margin: 0px;
+`;
+
+const BoldParagraph = styled.p`
+  user-select: none;
+  font-weight: 500;
+  font-size: 15px;
   margin: 0px;
 `;
 
@@ -105,7 +121,7 @@ export default function Search() {
   const categoryParams = queryParams.get("category") || "";
 
   // 필터 State 저장
-  const hasFetched = useRef(false);
+  //const hasFetched = useRef(false);
   const [isFilterView, setIsFilterView] = useState(false);
   const [category, setCategory] = useState(categoryParams);
   const [sortBy, setSortBy] = useState("LIKE");
@@ -158,14 +174,10 @@ export default function Search() {
       try {
         // 작품 리스트 fetch
         const artworkList = await searchArtworkApi(options);
-        console.log("현재 페이지: ", artworkList.page);
-
         // 상황에 따라 초기화 or 유지
         if (code === 0) {
-          console.log("기존 Artwork 데이터 초기화");
           setSearchedItemList(artworkList.content);
         } else if (code === 1) {
-          console.log("기존 Artwork 데이터 유지");
           setSearchedItemList((prevList) => [
             ...prevList,
             ...artworkList.content,
@@ -188,10 +200,6 @@ export default function Search() {
         필터 조건이 변경된 경우 SearchedItemList 초기화
   */
   useEffect(() => {
-    if (!hasFetched.current) {
-      hasFetched.current = true;
-      return;
-    }
     page.current = 0;
     fetchItemList(0);
   }, [fetchItemList]);
@@ -240,10 +248,15 @@ export default function Search() {
             <SearchedArtist artistList={artistList}></SearchedArtist>
           </BorderLine>
         )}
-        <BorderLine>
-          <SearchedArtwork artWorkList={searchedItemList}></SearchedArtwork>
-          <BorderLine ref={ref}></BorderLine>
-        </BorderLine>
+        {searchedItemList.length > 0 && (
+          <BorderLine>
+            <SearchedArtwork artWorkList={searchedItemList}></SearchedArtwork>
+          </BorderLine>
+        )}
+        {!searchedItemList.length && (
+          <BoldParagraph>검색 결과가 없습니다</BoldParagraph>
+        )}
+        <GreyLine ref={ref}></GreyLine>
       </SearchedItemContainer>
     </>
   );
