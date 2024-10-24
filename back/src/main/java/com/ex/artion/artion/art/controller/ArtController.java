@@ -23,8 +23,8 @@ public class ArtController {
     private final ArtService artService;
     //그림 생성
     @PostMapping("/create")
-    public ResponseEntity<String> createArt(@RequestBody ArtCreateDto dto) {
-        return artService.createArt(dto);
+    public ResponseEntity<String> createArt(@RequestBody ArtCreateDto dto, @RequestParam(value="user_pk") Integer user_pk) {
+        return artService.createArt(dto, user_pk);
     }
     //그림 수정
     @PutMapping("/update")
