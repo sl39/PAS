@@ -15,7 +15,7 @@ axios.defaults.baseURL = 'https://artion.site';
 const ActionPage = () => {
   const { art_pk } = useParams(); // URL 파라미터에서 artPk와 userPk 가져오기
   const artPk = Number(art_pk); // 숫자로 변환
-  const userPk = 7; // 숫자로 변환
+  const userPk = 6; // 숫자로 변환
 
   const [auctionData, setAuctionData] = useState(null);
   const [showBidModal, setShowBidModal] = useState(false);
@@ -26,13 +26,16 @@ const ActionPage = () => {
   const [winnerContact, setWinnerContact] = useState('');
   const [winnerAddress, setWinnerAddress] = useState('');
   const [shippingMethod, setShippingMethod] = useState('일반배송');
+  const [paying_pk, setpaying_pk] = useState('');
 
   const fetchAuctionDetails = async () => {
     try {
       const response = await axios.get(`/api/auction/detail`, {
         params: { artPk, userPk },
       });
+      console.log('API 응답:', response.data); // 응답 데이터 확인
       setAuctionData(response.data);
+      setpaying_pk(response.data.paying_pk); // payingPk 설정
       const endTime = new Date(response.data.endTime);
       const now = new Date();
       setTimeRemaining(endTime - now);
@@ -40,7 +43,13 @@ const ActionPage = () => {
       console.error('Error fetching auction details:', error);
       toast.error('경매 정보를 가져오는 데 실패했습니다.');
     }
-  };
+  };  
+  
+  useEffect(() => {
+    // payingPk가 업데이트될 때마다 로그 출력
+    console.log('현재 payingPk:', paying_pk);
+  }, [paying_pk]); // payingPk가 변경될 때마다 호출
+  
 
   const notifyAuctionEnd = () => {
     if (!client) return; // 클라이언트가 없으면 종료
@@ -251,6 +260,7 @@ const ActionPage = () => {
             onPaymentComplete={handlePaymentComplete}
             artPk={artPk} // artPk를 전달
             userPk={userPk} // userPk를 전달
+            paying_pk={paying_pk}
           />
         )}
         {state === 2 && (
@@ -270,6 +280,7 @@ const ActionPage = () => {
             onPaymentComplete={handlePaymentComplete}
             artPk={artPk} // artPk를 전달
             userPk={userPk} // userPk를 전달
+            paying_pk={paying_pk}
           />
         )}
         {state === 3 && (
@@ -290,6 +301,7 @@ const ActionPage = () => {
             paymentCompleted={true}
             artPk={artPk} // artPk를 전달
             userPk={userPk} // userPk를 전달
+            paying_pk={paying_pk}
           />
         )}
   
