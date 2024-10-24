@@ -170,6 +170,7 @@ export default function ArtistProfile() {
   // URL에서 path variable 추출
   const userPkObj = useParams();
   const [artistName, setArtistName] = useState("");
+  const [artistProfileImage, setArtistProfileImage] = useState("");
   const [artworkList, setArtworkList] = useState([]);
 
   // 작가 페이지 정보 불러오기
@@ -178,6 +179,7 @@ export default function ArtistProfile() {
       try {
         const artistProfileInfo = await getArtistProfileApi(userPkObj.user_pk);
         setArtistName(artistProfileInfo.User_name);
+        setArtistProfileImage(artistProfileInfo.user_Image);
         setArtworkList(artistProfileInfo.artList);
       } catch (error) {
         console.error("데이터를 가져오는 중에 오류가 발생했습니다: ", error);
@@ -193,7 +195,7 @@ export default function ArtistProfile() {
       <ArtistContainer>
         <ProfileBox>
           <ImageContainer>
-            <CircleImage src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFfltVt8k_O8R9Hh3eBO1cEsLXP6RkJfh-Jw&s"></CircleImage>
+            <CircleImage src={artistProfileImage}></CircleImage>
           </ImageContainer>
           <BoxContainer>
             <TopBox>
@@ -206,7 +208,7 @@ export default function ArtistProfile() {
                 </FollowBox>
               </NameBox>
               <SettingBox>
-                <StyledLink to={"/"}>
+                <StyledLink to={`/info/${userPkObj.user_pk}`}>
                   <CiMenuKebab size={25}></CiMenuKebab>
                 </StyledLink>
               </SettingBox>
