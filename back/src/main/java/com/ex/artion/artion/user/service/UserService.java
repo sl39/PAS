@@ -74,11 +74,14 @@ public class UserService {
     }
 
     // 유저 정보 수정
-    public void updateUser(@RequestBody UserUpdateDto dto) {
+    public void updateUser(@RequestBody UserUpdateDto dto, @RequestParam(value = "user_pk") Integer user_pk) {
 
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        UserEntity user = userRepository.findById(userPrincipal.getUserPk())
+//        UserEntity user = userRepository.findById(userPrincipal.getUserPk())
+//                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        UserEntity user = userRepository.findById(user_pk)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         user.setUser_name(dto.getUser_name());
@@ -90,13 +93,16 @@ public class UserService {
         this.userRepository.save(user);
     }
 
-    public ResponseEntity<Map<String, Object>> updateBeforeUser() {
+    public ResponseEntity<Map<String, Object>> updateBeforeUser(@RequestParam(value = "user_pk") Integer user_pk) {
 
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Map<String, Object> Message = new HashMap<>();
 
-        UserEntity user = userRepository.findById(userPrincipal.getUserPk())
+//        UserEntity user = userRepository.findById(userPrincipal.getUserPk())
+//                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        UserEntity user = userRepository.findById(user_pk)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Message.put("user_name", user.getUser_name());
@@ -120,13 +126,13 @@ public class UserService {
 //    }
 
     // user_pk로 구매내역(입찰 중) 조회
-    public ResponseEntity<List<Map<String, Object>>> requestPurchaseBid() {
+    public ResponseEntity<List<Map<String, Object>>> requestPurchaseBid(@RequestParam(value = "user_pk") Integer user_pk) {
         List<Map<String, Object>> result = new ArrayList<>();
         UserEntity user;
         List<Object[]> prices = new ArrayList<>();
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
-            user = userRepository.findById(userPrincipal.getUserPk())
+            user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         } catch (Exception e) {
 //            Map<String, Object> errorMessage = new HashMap<>();
@@ -139,7 +145,7 @@ public class UserService {
 
         for (AuctionEntity auction : auc) {
             if (!auc.isEmpty() && auction.getArt_entity().getCurrent_auction_status() == 1) {
-                prices = auctionRepository.findMaxPriceAndUserMaxPriceByArtPkAndUserPkNative(auction.getArt_entity().getArt_pk(), userPrincipal.getUserPk());
+                prices = auctionRepository.findMaxPriceAndUserMaxPriceByArtPkAndUserPkNative(auction.getArt_entity().getArt_pk(), user_pk);
                 Object[] row = prices.get(0);
                 Long userMaxPrice = ((Number) row[1]).longValue();
                 if (userMaxPrice.equals(auction.getCurrent_price())) {
@@ -186,12 +192,12 @@ public class UserService {
 
 
     // user_pk로 구매내역(낙찰) 조회
-    public ResponseEntity<List<Map<String, Object>>> requestPurchaseSuccess() {
+    public ResponseEntity<List<Map<String, Object>>> requestPurchaseSuccess(@RequestParam(value = "user_pk") Integer user_pk) {
         List<Map<String, Object>> result = new ArrayList<>();
         UserEntity user;
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
-            user = userRepository.findById(userPrincipal.getUserPk())
+            user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         } catch (Exception e) {
 //            Map<String, Object> errorMessage = new HashMap<>();
@@ -254,12 +260,12 @@ public class UserService {
     //구매내역(종료)
     //종료 = 1. 입금O + 2. 낙찰실패로 나뉨.
 
-    public ResponseEntity<List<Map<String, Object>>> requestPurchaseEnd() {
+    public ResponseEntity<List<Map<String, Object>>> requestPurchaseEnd(@RequestParam(value = "user_pk") Integer user_pk) {
         List<Map<String, Object>> result = new ArrayList<>();
         UserEntity user;
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
-            user = userRepository.findById(userPrincipal.getUserPk())
+            user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         } catch (Exception e) {
 //            Map<String, Object> errorMessage = new HashMap<>();
@@ -280,7 +286,7 @@ public class UserService {
                 List<PayingEntity> pay = payingRepository.findAllByAuction_pk(auction.getAuction_pk());
 
                 //auc에서 최대 가격이랑 내 최대 가격이랑 다른 것들 = 경매는 참여했으나 낙찰하지 못한 것들 뽑아내기
-                prices = auctionRepository.findMaxPriceAndUserMaxPriceByArtPkAndUserPkNative(art_pk, userPrincipal.getUserPk());
+                prices = auctionRepository.findMaxPriceAndUserMaxPriceByArtPkAndUserPkNative(art_pk, user_pk);
                 Object[] row = prices.get(0);
                 Long maxPrice = ((Number) row[0]).longValue();
                 Long userMaxPrice = ((Number) row[1]).longValue();
@@ -365,18 +371,18 @@ public class UserService {
 }
 
     // 구매내역 전체
-    public ResponseEntity<List<Map<String, Object>>> requestPurchaseAll() {
+    public ResponseEntity<List<Map<String, Object>>> requestPurchaseAll(@RequestParam(value = "user_pk") Integer user_pk) {
         List<Map<String, Object>> result = new ArrayList<>();
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        System.out.println(userPrincipal.getUserPk());
+        System.out.println(user_pk);
 
-        if(requestPurchaseBid() != null || requestPurchaseSuccess() != null || requestPurchaseEnd().getBody() != null) {
-            result.addAll(requestPurchaseBid().getBody());
+        if(requestPurchaseBid(user_pk) != null || requestPurchaseSuccess(user_pk) != null || requestPurchaseEnd(user_pk).getBody() != null) {
+            result.addAll(requestPurchaseBid(user_pk).getBody());
 
-            result.addAll(requestPurchaseSuccess().getBody());
+            result.addAll(requestPurchaseSuccess(user_pk).getBody());
 
-            result.addAll(requestPurchaseEnd().getBody());
+            result.addAll(requestPurchaseEnd(user_pk).getBody());
         } else {
 //            Map<String, Object> errorMessage = new HashMap<>();
 //            errorMessage.put("에러", "구매이력이 존재하지 않습니다");
@@ -388,13 +394,13 @@ public class UserService {
 
 
     // user_pk로 판매내역(입찰 중) 조회
-    public ResponseEntity<List<Map<String, Object>>> requestSaleBid() {
+    public ResponseEntity<List<Map<String, Object>>> requestSaleBid(@RequestParam(value = "user_pk") Integer user_pk) {
         UserEntity user;
         List<Map<String, Object>> result = new ArrayList<>();
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         try {
-            user = userRepository.findById(userPrincipal.getUserPk())
+            user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
@@ -457,13 +463,13 @@ public class UserService {
 
 
     // user_pk로 판매내역(낙찰) 조회
-    public ResponseEntity<List<Map<String, Object>>> requestSaleSuccess() {
+    public ResponseEntity<List<Map<String, Object>>> requestSaleSuccess(@RequestParam(value = "user_pk") Integer user_pk) {
         UserEntity user;
         List<Map<String, Object>> result = new ArrayList<>();
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         try {
-            user = userRepository.findById(userPrincipal.getUserPk())
+            user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         } catch (Exception e) {
 //            Map<String, Object> errorMessage = new HashMap<>();
@@ -550,13 +556,13 @@ public class UserService {
 
     // user_pk로 판매내역(종료) 조회
     // 종료는 입금까지 끝난 것들 + 아무도 입찰하지 않은 것들로 나뉨. 구분은 current_auction_status = 0이면 입찰X, 3이면 입금O
-    public ResponseEntity<List<Map<String, Object>>> requestSaleEnd() {
+    public ResponseEntity<List<Map<String, Object>>> requestSaleEnd(@RequestParam(value = "user_pk") Integer user_pk) {
         UserEntity user;
         List<Map<String, Object>> result = new ArrayList<>();
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         try {
-            user = userRepository.findById(userPrincipal.getUserPk())
+            user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         } catch (Exception e) {
 //            Map<String, Object> errorMessage = new HashMap<>();
@@ -685,13 +691,13 @@ public class UserService {
     }
 
     // 판매내역 전체
-    public ResponseEntity<List<Map<String, Object>>> requestSaleAll() {
+    public ResponseEntity<List<Map<String, Object>>> requestSaleAll(@RequestParam(value = "user_pk") Integer user_pk) {
         List<Map<String, Object>> result = new ArrayList<>();
 
-        if(requestSaleBid().getBody() != null || requestSaleSuccess().getBody() != null || requestSaleEnd().getBody() != null) {
-            result.addAll(requestSaleBid().getBody());
-            result.addAll(requestSaleSuccess().getBody());
-            result.addAll(requestSaleEnd().getBody());
+        if(requestSaleBid(user_pk).getBody() != null || requestSaleSuccess(user_pk).getBody() != null || requestSaleEnd(user_pk).getBody() != null) {
+            result.addAll(requestSaleBid(user_pk).getBody());
+            result.addAll(requestSaleSuccess(user_pk).getBody());
+            result.addAll(requestSaleEnd(user_pk).getBody());
         } else {
 //            Map<String, Object> errorMessage = new HashMap<>();
 //            errorMessage.put("에러", "판매이력이 존재하지 않습니다");
@@ -707,7 +713,7 @@ public class UserService {
         List<Map<String, Object>> itemList = new ArrayList<>();
         List<Map<String, Object>> itemDESC = new ArrayList<>();
 
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         UserEntity user;
 
@@ -719,8 +725,8 @@ public class UserService {
 //        UserEntity user2 = userRepository.findById(user_pk)
 //                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
 
-        if(userPrincipal.getUserPk().equals(user_pk)) {
-            user = userRepository.findById(userPrincipal.getUserPk())
+        if(user_pk.equals(user_pk)) {
+            user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
             result.put("isSelf", true);
 
@@ -878,10 +884,10 @@ public class UserService {
     }
 
     //유저 정보 반환
-    public ResponseEntity<Map<String, Object>> requestMyProfile() {
+    public ResponseEntity<Map<String, Object>> requestMyProfile(@RequestParam(value = "user_pk") Integer user_pk) {
         UserEntity user;
         Map<String, Object> result = new HashMap<>();
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 //        System.out.println(userPrincipal);
 //        System.out.println(SecurityContextHolder.getContext());
@@ -889,7 +895,7 @@ public class UserService {
 //        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 //        System.out.println(userPrincipal.getUserPk());
 
-            user = userRepository.findById(userPrincipal.getUserPk())
+            user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         String User_name = user.getUser_name();
@@ -903,13 +909,13 @@ public class UserService {
         return ResponseEntity.ok(result);
     }
 
-    public ResponseEntity<Map<String, Object>> requestMyProfileAndFollows() {
+    public ResponseEntity<Map<String, Object>> requestMyProfileAndFollows(@RequestParam(value = "user_pk") Integer user_pk) {
         UserEntity user;
         Map<String, Object> result = new HashMap<>();
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         try {
-            user = userRepository.findById(userPrincipal.getUserPk())
+            user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
         } catch (Exception e) {
             result.put("에러", "사용자가 존재하지 않습니다");
@@ -936,11 +942,11 @@ public class UserService {
         return ResponseEntity.ok(result);
     }
 
-    public ResponseEntity<List<Map<String, Object>>> requestArtFollowing() {
+    public ResponseEntity<List<Map<String, Object>>> requestArtFollowing(@RequestParam(value = "user_pk") Integer user_pk) {
         UserEntity user;
         List<Map<String, Object>> result = new ArrayList<>();
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            user = userRepository.findById(userPrincipal.getUserPk())
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         List<ArtFollowingEntity> artFollowing = artFollowingRepository.findByUserEntity(user);
@@ -973,12 +979,12 @@ public class UserService {
         return ResponseEntity.ok(result);
     }
 
-    public ResponseEntity<List<Map<String, Object>>> requestFollowing() {
+    public ResponseEntity<List<Map<String, Object>>> requestFollowing(@RequestParam(value = "user_pk") Integer user_pk) {
         UserEntity user;
         List<Map<String, Object>> result = new ArrayList<>();
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-            user = userRepository.findById(userPrincipal.getUserPk())
+            user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
             // 여기서 이미 내가 구독한 사람들 다 가져왔음.
@@ -1004,12 +1010,12 @@ public class UserService {
         }
 
 
-    public ResponseEntity<List<Map<String, Object>>> requestMyFollower () {
+    public ResponseEntity<List<Map<String, Object>>> requestMyFollower (@RequestParam(value = "user_pk") Integer user_pk) {
         UserEntity user;
         List<Map<String, Object>> result = new ArrayList<>();
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-            user = userRepository.findById(userPrincipal.getUserPk())
+            user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // 날 구독한 사람들
