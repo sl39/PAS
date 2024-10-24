@@ -105,10 +105,10 @@ const AuctionResult = ({
           <>
             {paymentCompleted ? (
               <div>
-                <h2>결제가 완료되었습니다.</h2>
+                <h1>결제가 완료되었습니다.</h1>
                 {orderData ? ( // orderData가 존재할 때만 출력
                   <>
-                    <h2>주문 정보</h2>
+                    <h1>주문 정보</h1>
                     <h2>이름: {orderData.name}</h2>  {/* 수정된 부분 */}
                     <h2>연락처: {orderData.phone_number}</h2>  {/* 수정된 부분 */}
                     <h2>주소: {orderData.address_order}</h2>  {/* 수정된 부분 */}
