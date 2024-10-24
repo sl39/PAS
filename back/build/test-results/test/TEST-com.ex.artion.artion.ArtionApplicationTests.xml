@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.ex.artion.artion.ArtionApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-10-24T06:43:58" hostname="DESKTOP-II597VG" time="0.643">
+<testsuite name="com.ex.artion.artion.ArtionApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-10-24T07:06:06" hostname="DESKTOP-II597VG" time="0.769">
   <properties/>
-  <testcase name="test2()" classname="com.ex.artion.artion.ArtionApplicationTests" time="0.643"/>
-  <system-out><![CDATA[15:43:50.414 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.ex.artion.artion.ArtionApplicationTests]: ArtionApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-15:43:50.510 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.ex.artion.artion.ArtionApplication for test class com.ex.artion.artion.ArtionApplicationTests
+  <testcase name="test2()" classname="com.ex.artion.artion.ArtionApplicationTests" time="0.769"/>
+  <system-out><![CDATA[16:05:58.115 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.ex.artion.artion.ArtionApplicationTests]: ArtionApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+16:05:58.224 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.ex.artion.artion.ArtionApplication for test class com.ex.artion.artion.ArtionApplicationTests
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -14,7 +14,7 @@
 
  :: Spring Boot ::                (v3.3.4)
 
-2024-10-24T15:43:50.817+09:00  WARN 17840 --- [    Test worker] ory$DuplicateJsonObjectContextCustomizer : 
+2024-10-24T16:05:58.535+09:00  WARN 8336 --- [    Test worker] ory$DuplicateJsonObjectContextCustomizer : 
 
 Found multiple occurrences of org.json.JSONObject on the class path:
 
@@ -23,34 +23,43 @@ Found multiple occurrences of org.json.JSONObject on the class path:
 
 You may wish to exclude one of them to ensure predictable runtime behavior
 
-2024-10-24T15:43:50.826+09:00  INFO 17840 --- [    Test worker] c.e.a.artion.ArtionApplicationTests      : Starting ArtionApplicationTests using Java 17.0.12 with PID 17840 (started by Admin in D:\sw\PAS\back)
-2024-10-24T15:43:50.827+09:00  INFO 17840 --- [    Test worker] c.e.a.artion.ArtionApplicationTests      : No active profile set, falling back to 1 default profile: "default"
-2024-10-24T15:43:51.298+09:00  INFO 17840 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
-2024-10-24T15:43:51.299+09:00  INFO 17840 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
-2024-10-24T15:43:51.399+09:00  INFO 17840 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 89 ms. Found 1 Redis repository interface.
-2024-10-24T15:43:51.573+09:00  INFO 17840 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
-2024-10-24T15:43:51.574+09:00  INFO 17840 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-10-24T15:43:51.618+09:00  INFO 17840 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data JPA - Could not safely identify store assignment for repository candidate interface com.ex.artion.artion.global.scheduler.redisscheduler.ArtRedisRepository; If you want this repository to be a JPA repository, consider annotating your entities with one of these annotations: jakarta.persistence.Entity, jakarta.persistence.MappedSuperclass (preferred), or consider extending one of the following types with your repository: org.springframework.data.jpa.repository.JpaRepository
-2024-10-24T15:43:51.643+09:00  INFO 17840 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 65 ms. Found 14 JPA repository interfaces.
-2024-10-24T15:43:52.286+09:00  INFO 17840 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-10-24T15:43:52.372+09:00  INFO 17840 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
-2024-10-24T15:43:52.422+09:00  INFO 17840 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2024-10-24T15:43:52.810+09:00  INFO 17840 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-10-24T15:43:52.835+09:00  INFO 17840 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2024-10-24T15:43:53.240+09:00  INFO 17840 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@67ceaa9
-2024-10-24T15:43:53.244+09:00  INFO 17840 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2024-10-24T15:43:54.073+09:00  INFO 17840 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-10-24T15:43:54.789+09:00  INFO 17840 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-10-24T15:43:55.075+09:00  INFO 17840 --- [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
-2024-10-24T15:43:56.738+09:00  WARN 17840 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-10-24T15:43:56.779+09:00 DEBUG 17840 --- [    Test worker] swordEncoderAuthenticationManagerBuilder : No authenticationProviders and no parentAuthenticationManager defined. Returning null.
-2024-10-24T15:43:56.992+09:00  INFO 17840 --- [    Test worker] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
-2024-10-24T15:43:57.306+09:00 DEBUG 17840 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, OAuth2AuthorizationRequestRedirectFilter, OAuth2LoginAuthenticationFilter, DefaultLoginPageGeneratingFilter, DefaultLogoutPageGeneratingFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
-2024-10-24T15:43:58.121+09:00  INFO 17840 --- [    Test worker] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
-2024-10-24T15:43:58.122+09:00  INFO 17840 --- [    Test worker] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@18547b0b]]
-2024-10-24T15:43:58.123+09:00  INFO 17840 --- [    Test worker] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
-2024-10-24T15:43:58.139+09:00  INFO 17840 --- [    Test worker] c.e.a.artion.ArtionApplicationTests      : Started ArtionApplicationTests in 7.511 seconds (process running for 8.422)
-6
+2024-10-24T16:05:58.544+09:00  INFO 8336 --- [    Test worker] c.e.a.artion.ArtionApplicationTests      : Starting ArtionApplicationTests using Java 17.0.12 with PID 8336 (started by Admin in D:\sw\PAS\back)
+2024-10-24T16:05:58.545+09:00  INFO 8336 --- [    Test worker] c.e.a.artion.ArtionApplicationTests      : No active profile set, falling back to 1 default profile: "default"
+2024-10-24T16:05:59.033+09:00  INFO 8336 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-10-24T16:05:59.036+09:00  INFO 8336 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-10-24T16:05:59.132+09:00  INFO 8336 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 85 ms. Found 1 Redis repository interface.
+2024-10-24T16:05:59.307+09:00  INFO 8336 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-10-24T16:05:59.308+09:00  INFO 8336 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-10-24T16:05:59.355+09:00  INFO 8336 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data JPA - Could not safely identify store assignment for repository candidate interface com.ex.artion.artion.global.scheduler.redisscheduler.ArtRedisRepository; If you want this repository to be a JPA repository, consider annotating your entities with one of these annotations: jakarta.persistence.Entity, jakarta.persistence.MappedSuperclass (preferred), or consider extending one of the following types with your repository: org.springframework.data.jpa.repository.JpaRepository
+2024-10-24T16:05:59.380+09:00  INFO 8336 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 69 ms. Found 14 JPA repository interfaces.
+2024-10-24T16:06:00.035+09:00  INFO 8336 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-10-24T16:06:00.110+09:00  INFO 8336 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-10-24T16:06:00.167+09:00  INFO 8336 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-10-24T16:06:00.559+09:00  INFO 8336 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-10-24T16:06:00.586+09:00  INFO 8336 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-10-24T16:06:00.988+09:00  INFO 8336 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@55c341d0
+2024-10-24T16:06:00.990+09:00  INFO 8336 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-10-24T16:06:01.801+09:00  INFO 8336 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-10-24T16:06:02.522+09:00  INFO 8336 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-10-24T16:06:02.812+09:00  INFO 8336 --- [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-10-24T16:06:05.041+09:00  WARN 8336 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-10-24T16:06:05.071+09:00 DEBUG 8336 --- [    Test worker] swordEncoderAuthenticationManagerBuilder : No authenticationProviders and no parentAuthenticationManager defined. Returning null.
+2024-10-24T16:06:05.253+09:00  INFO 8336 --- [    Test worker] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2024-10-24T16:06:05.521+09:00 DEBUG 8336 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, OAuth2AuthorizationRequestRedirectFilter, OAuth2LoginAuthenticationFilter, DefaultLoginPageGeneratingFilter, DefaultLogoutPageGeneratingFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
+2024-10-24T16:06:06.029+09:00  INFO 8336 --- [    Test worker] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-10-24T16:06:06.030+09:00  INFO 8336 --- [    Test worker] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6a3323fb]]
+2024-10-24T16:06:06.031+09:00  INFO 8336 --- [    Test worker] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-10-24T16:06:06.043+09:00  INFO 8336 --- [    Test worker] c.e.a.artion.ArtionApplicationTests      : Started ArtionApplicationTests in 7.7 seconds (process running for 8.633)
+2024-10-24T13:45:15.596 : 2024-10-25T13:45:15.596
+2024-10-10T13:49:23.416 : 2024-10-30T13:49:23.416
+2024-10-05T13:49:24.489312 : 2024-10-30T13:49:24.489
+2024-10-03T13:49:25.493296 : 2024-10-04T13:49:25.493296
+2024-10-01T13:49:26.443275 : 2024-10-01T13:49:26.443275
+2024-09-28T13:49:27.410460 : 2024-10-02T13:49:27.410460
+2024-10-05T13:50:19.082359 : 2024-10-05T13:50:19.082359
+2024-10-03T13:50:20.087655 : 2024-10-14T05:20:20.087
+2024-10-06T13:50:21.083499 : 2024-10-10T13:50:21.083499
+2024-10-04T13:50:22.057374 : 2024-10-06T13:50:22.057374
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

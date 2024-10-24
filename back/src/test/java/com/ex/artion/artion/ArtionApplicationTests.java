@@ -11,6 +11,7 @@ import com.ex.artion.artion.artimage.respository.ArtImageRepository;
 import com.ex.artion.artion.auction.entity.AuctionEntity;
 import com.ex.artion.artion.auction.respository.AuctionRepository;
 import com.ex.artion.artion.global.scheduler.redisscheduler.ArtEntityRedis;
+import com.ex.artion.artion.global.scheduler.redisscheduler.ArtRedisRepository;
 import com.ex.artion.artion.global.scheduler.redisscheduler.RedisSchedulerService;
 import com.ex.artion.artion.user.entity.UserEntity;
 import com.ex.artion.artion.user.respository.UserRepository;
@@ -51,6 +52,8 @@ class ArtionApplicationTests {
 	}
 
 	@Autowired private RedisSchedulerService redisSchedulerService;
+
+	@Autowired private ArtRedisRepository artRedisRepository;
 
 //	public List<ArtEntity> generateRandomArtAuctions(int count) {
 //		Faker faker = new Faker();
@@ -121,27 +124,29 @@ class ArtionApplicationTests {
 //		List<ArtEntity> artEntities = generateRandomArtAuctions(1000);
 //	}
 
-	@Test
-	void test1(){
-		List<ArtEntity> list = artRepository.findAll();
-		for (int i = 0; i < 10; i++) {
-			ArtEntity artEntity = list.get(i);
-			String key = "art"+ artEntity.getArt_pk();
-			System.out.println(key);
-			ArtEntityRedis artEntityRedis = ArtEntityRedis.builder()
-					.art_pk(artEntity.getArt_pk())
-					.current_auction_status(artEntity.getCurrent_auction_status())
-					.startTime(artEntity.getStartTime().toString())
-					.endTime(artEntity.getEndTime().toString())
-					.build();
-			redisSchedulerService.setDate(key,artEntityRedis);
-		}
-	}
-
-	@Test
-	void test2(){
-		ArtEntityRedis art = redisSchedulerService.getData("art6");
-		System.out.println(art.getArt_pk());
-	}
-
+//	@Test
+//	void test1(){
+//		List<ArtEntity> list = artRepository.findAll();
+//		for (int i = 0; i < 10; i++) {
+//			ArtEntity artEntity = list.get(i);
+//			String key = "art"+ artEntity.getArt_pk();
+//			ArtEntityRedis artEntityRedis = ArtEntityRedis.builder()
+//					.art_pk(artEntity.getArt_pk())
+//					.current_auction_status(artEntity.getCurrent_auction_status())
+//					.startTime(artEntity.getStartTime().toString())
+//					.endTime(artEntity.getEndTime().toString())
+//					.build();
+//
+//			artRedisRepository.save(artEntityRedis);
+//		}
+//	}
+//
+//	@Test
+//	void test2(){
+//		Optional<ArtEntityRedis> art1 = artRedisRepository.findById(6);
+//		List<ArtEntityRedis> list = artRedisRepository.findAll();
+//		for (ArtEntityRedis artEntityRedis : list) {
+//			System.out.println(artEntityRedis.getStartTime() + " : " + artEntityRedis.getEndTime());
+//		}
+//	}
 }
