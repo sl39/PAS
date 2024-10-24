@@ -60,14 +60,12 @@ export default function MainFeedItem({ type, artWorkList }) {
 
   const scrollLeft = () => {
     if (contentRef.current) {
-      console.log("scrollLeft");
       contentRef.current.scrollLeft -= 200;
     }
   };
 
   const scrollRight = () => {
     if (contentRef.current) {
-      console.log("scrollRight");
       contentRef.current.scrollLeft += 200;
     }
   };

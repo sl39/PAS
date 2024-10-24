@@ -70,7 +70,8 @@ const OptionItem = styled.div`
   border: 1px solid lightgrey;
   border-radius: 10px;
   padding: 10px 9px;
-  background-color: ${(props) => (props.isSelected ? "lightgray" : "white")};
+  background-color: ${(props) =>
+    props.isselected === 1 ? "lightgray" : "white"};
   margin: 0px 7px 7px 0px;
   cursor: pointer;
 `;
@@ -182,20 +183,17 @@ export default function SearchFilter({
   );
 
   const clickCategory = (key, value) => {
-    console.log("카테고리 선택: ", value);
     setCategory(value);
     setSelectedCategory(key);
   };
 
   const clickOrder = (value, sortBy, sort) => {
-    console.log("정렬 선택 -> 정렬기준 ", sortBy, " 정렬방법 ", sort);
     setSortBy(sortBy);
     setSort(sort);
     setSelectedOrder(value);
   };
 
   const clickPrice = (value, min, max) => {
-    console.log("가격대 선택 -> 최소 ", min, " 최대 ", max);
     setMinPrice(min);
     setMaxPrice(max);
     setSelectedPrice(value);
@@ -208,7 +206,7 @@ export default function SearchFilter({
         {categories.map((category) => (
           <OptionItem
             key={category.key}
-            isSelected={selectedCategory === category.key}
+            isselected={selectedCategory === category.key ? 1 : 0}
             onClick={() => clickCategory(category.key, category.value)}
           >
             <SmallParagraph>{category.name}</SmallParagraph>
@@ -220,7 +218,7 @@ export default function SearchFilter({
         {orderOptions.map((order) => (
           <OptionItem
             key={order.value}
-            isSelected={selectedOrder === order.value}
+            isselected={selectedOrder === order.value ? 1 : 0}
             onClick={() => clickOrder(order.value, order.sortBy, order.sort)}
           >
             <SmallParagraph>{order.name}</SmallParagraph>
@@ -232,7 +230,7 @@ export default function SearchFilter({
         {priceOptions.map((price) => (
           <OptionItem
             key={price.value}
-            isSelected={selectedPrice === price.value}
+            isselected={selectedPrice === price.value ? 1 : 0}
             onClick={() => clickPrice(price.value, price.min, price.max)}
           >
             <SmallParagraph>{price.name}</SmallParagraph>

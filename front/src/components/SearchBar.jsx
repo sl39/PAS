@@ -39,13 +39,6 @@ export default function SearchBar() {
     setSearchText(searchText);
   };
 
-  const handleSearchClick = () => {
-    if (!searchText.trim()) {
-      // 입력값이 비어있지 않으면
-      alert("검색어를 입력해주세요."); // 알림 표시
-    }
-  };
-
   return (
     <SearchContainer>
       <SearchInput
@@ -54,10 +47,7 @@ export default function SearchBar() {
         value={searchText}
         onChange={handleSearchChange}
       />
-      <UnstyledLink
-        onClick={handleSearchClick}
-        to={`/search?keyword=${encodeURIComponent(searchText)}`}
-      >
+      <UnstyledLink to={`/search?keyword=${encodeURIComponent(searchText)}`}>
         <IoIosSearch></IoIosSearch>
       </UnstyledLink>
     </SearchContainer>
