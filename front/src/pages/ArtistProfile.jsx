@@ -172,6 +172,17 @@ export default function ArtistProfile() {
   const [artistName, setArtistName] = useState("");
   const [artworkList, setArtworkList] = useState([]);
 
+  console.log(userPkObj)
+
+  //구독 버튼 기능
+  const handleSubscription = async() => {
+    try{
+      await axios.post(`https://artion.site/api/following/1/follow/${userPkObj.user_pk}`);
+    } catch(error){
+      console.error("구독 실패:", error);
+    }
+  };
+
   // 작가 페이지 정보 불러오기
   useEffect(() => {
     const fetchData = async () => {
@@ -201,7 +212,7 @@ export default function ArtistProfile() {
                 <ProfileInfoBox>
                   <BoldParagraph>{artistName}</BoldParagraph>
                 </ProfileInfoBox>
-                <FollowBox>
+                <FollowBox onClick={handleSubscription}>
                   <NormalParagraph>구독</NormalParagraph>
                 </FollowBox>
               </NameBox>

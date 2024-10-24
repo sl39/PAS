@@ -368,7 +368,7 @@ export default function DetailItem ({ artWork }) {
                 </ButtonContainer>
                 <Title>{artWork.artName}{artWork.qurater ? <QuraterIcon onClick={handleQuraterIconClick} /> : null }</Title>
                 <Artist><SpanBold>작가 :</SpanBold> {artWork.artistName}</Artist>
-                <Registrant><SpanBold>등록자 :</SpanBold> {artWork.sellerName}</Registrant>
+                <Registrant><SpanBold>등록자 :</SpanBold> <Link to={`/artist/${artWork.sellerPk}`} style={{textDecoration: 'none', color: "black"}}>{artWork.sellerName}</Link></Registrant>
                 <MaxPrice>
                     <SpanBold>즉시판매가</SpanBold>
                     <SpanBold style={{textAlign: "right"}}>{maxPriceRE} 원</SpanBold>

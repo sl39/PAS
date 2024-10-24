@@ -131,9 +131,11 @@ const Following = ({ user_pk }) => {
         };
         fetchFollowing();
     }, [user_pk]);
-const handleUnSubscribe = (seller_pk) => {
-    setFollowing(following.filter(user => user.user_pk !== seller_pk));
-};
+    
+    const handleUnSubscribe = (seller_pk) => {
+        setFollowing(following.filter(user => user.user_pk !== seller_pk));
+    };
+    
     return (
         <div style={{marginTop: 50}}>
             {following.length > 0 ? (
