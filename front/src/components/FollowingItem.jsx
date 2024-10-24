@@ -66,6 +66,7 @@ const FollowingItem = ({ user, onUnSubscribe}) => {
         try {
             await axios.delete(`https://artion.site/api/following/${customer_pk}/unfollow/${seller_pk}`);
             onUnSubscribe(seller_pk);
+            alert("더 이상 구독하지 않습니다.")
         } catch(error){
             console.error("구독취소 실패:", error);
         }

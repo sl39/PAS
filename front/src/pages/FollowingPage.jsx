@@ -124,7 +124,8 @@ const Following = ({ user_pk }) => {
         const fetchFollowing = async() => {
             try{
                 const response = await axios.get(`https://artion.site/api/user/fol?user_pk=1`);
-                setFollowing(response.data);
+                const sortedFollowing = response.data.sort((a,b) => a.user_name.localeCompare(b.user_name));
+                setFollowing(sortedFollowing);
             } catch(error){
                 console.error("팔로잉 에러:", error);
             }
@@ -155,7 +156,9 @@ const Followers = ({ user_pk }) => {
         const fetchFollowers = async() => {
             try{
                 const response = await axios.get(`https://artion.site/api/user/myfol?user_pk=1`);
-                setFollowers(response.data);
+                const sortedFollower = response.data.sort((a, b) => 
+                    a.user_name.localeCompare(b.user_name));
+                setFollowers(sortedFollower);
             } catch(error){
                 console.error("팔로워 에러", error);
             }

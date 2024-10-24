@@ -172,14 +172,15 @@ export default function ArtistProfile() {
   const [artistName, setArtistName] = useState("");
   const [artworkList, setArtworkList] = useState([]);
 
-  console.log(userPkObj)
 
   //구독 버튼 기능
   const handleSubscription = async() => {
     try{
       await axios.post(`https://artion.site/api/following/1/follow/${userPkObj.user_pk}`);
+      alert("구독에 성공했습니다.");
     } catch(error){
       console.error("구독 실패:", error);
+      alert("구독에 실패했습니다.", error);
     }
   };
 
