@@ -10,6 +10,8 @@ import com.ex.artion.artion.artimage.entity.ArtImageEntity;
 import com.ex.artion.artion.artimage.respository.ArtImageRepository;
 import com.ex.artion.artion.auction.entity.AuctionEntity;
 import com.ex.artion.artion.auction.respository.AuctionRepository;
+import com.ex.artion.artion.global.scheduler.redisscheduler.ArtEntityRedis;
+import com.ex.artion.artion.global.scheduler.redisscheduler.RedisSchedulerService;
 import com.ex.artion.artion.user.entity.UserEntity;
 import com.ex.artion.artion.user.respository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,7 +50,7 @@ class ArtionApplicationTests {
 	void contextLoads() {
 	}
 
-	@Autowired private RedisTemplate<String ,Object> redisTemplate;
+	@Autowired private RedisSchedulerService redisSchedulerService;
 
 //	public List<ArtEntity> generateRandomArtAuctions(int count) {
 //		Faker faker = new Faker();
@@ -118,6 +120,23 @@ class ArtionApplicationTests {
 //	void test() {
 //		List<ArtEntity> artEntities = generateRandomArtAuctions(1000);
 //	}
+
+	@Test
+	void test1(){
+		List<ArtEntity> list = artRepository.findAll();
+		for (ArtEntity artEntity : list) {
+			String key = "art"+ artEntity.getArt_pk();
+			ArtEntityRedis artEntityRedis = ArtEntityRedis.builder()
+					.art_pk(artEntity.getArt_pk())
+					.current_auction_status(artEntity.getCurrent_auction_status())
+					.startTime(artEntity.getStartTime())
+					.endTime(artEntity.getEndTime())
+					.build();
+			redisSchedulerService.setDate(key,artEntityRedis);
+		}
+
+
+	}
 
 
 

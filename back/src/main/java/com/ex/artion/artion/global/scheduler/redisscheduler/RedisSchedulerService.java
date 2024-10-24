@@ -10,4 +10,11 @@ import org.springframework.stereotype.Service;
 public class RedisSchedulerService {
     private final RedisTemplate<String, Object> redisTemplate;
 
+    public void setDate(String key, ArtEntityRedis artEntityRedis) {
+        redisTemplate.opsForValue().set(key, artEntityRedis);
+    }
+    public String getData(String key){
+        return (String) redisTemplate.opsForValue().get(key);
+    }
+
 }
