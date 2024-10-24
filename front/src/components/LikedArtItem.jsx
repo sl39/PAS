@@ -68,6 +68,7 @@ const LikedArtworkItem = ({ artWork, isSelected, onClick }) => {
     const art_pk = artWork.art_pk;
     const seller_pk = artWork.seller_pk;
     const user_pk = user.user_pk
+    console.log(artWork)
 
     if (!artWork) {
         return null;

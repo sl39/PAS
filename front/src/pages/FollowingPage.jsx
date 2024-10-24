@@ -86,7 +86,8 @@ const LikedArtworks = ({user_pk}) => {
         const fetchLikedArtworks = async() =>{
             try{
                 const response = await axios.get(`https://artion.site/api/user/artfol?user_pk=1`);
-                setLikedArtworks(response.data);
+                const sortedArt = response.data.sort((a,b) => new Date(b.upload) - new Date(a.upload))
+                setLikedArtworks(sortedArt);
             } catch(error){
                 console.error("작품 좋아요 오류 :", error);
             }
