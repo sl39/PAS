@@ -66,9 +66,11 @@ public class ArtService {
     private final OrderRepostory orderRepostory;
     private final PayingRepository payingRepository;
 
-    public void createArt(@RequestBody ArtCreateDto dto, @RequestParam(value="user_pk") Integer user_pk) {
+    public ResponseEntity<String> createArt(@RequestBody ArtCreateDto dto, @RequestParam(value="user_pk") Integer user_pk) {
 //        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        UserEntity userEntity = userRepository.findById(userPrincipal.getUserPk()).orElseThrow(() -> new IllegalArgumentException("해당하는 user_pk가 없습니다!"));
+//
+        System.out.println("dto :" + dto + "user_pk : " + user_pk);
 
         UserEntity userEntity = userRepository.findById(user_pk).orElseThrow(() -> new IllegalArgumentException("해당하는 user_pk가 없습니다!"));
         ArtEntity art = new ArtEntity();
@@ -110,7 +112,25 @@ public class ArtService {
             artCat.setArt(savedArt);
             artCat.setArt_category(cateId);
             this.artArtCategoryRepository.save(artCat);
+
         }
+
+        System.out.println(art.getArt_pk());
+        System.out.println(art.getArt_info());
+        System.out.println(art.getArt_name());
+        System.out.println(art.getDepth());
+        System.out.println(art.getHeight());
+        System.out.println(art.getPainter());
+        System.out.println(art.getWidth());
+        System.out.println(art.getStartTime());
+        System.out.println(art.getMinP());
+        System.out.println(art.getMaxP());
+        System.out.println(art.getCreatedAt());
+
+
+
+
+        return ResponseEntity.ok("그림 추가함");
     }
 
     @Transactional
