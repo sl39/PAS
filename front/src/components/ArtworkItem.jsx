@@ -5,13 +5,13 @@ import { GoHeartFill } from "react-icons/go";
 // Styled Components
 const ArtworkContainer = styled.div`
   margin: 5px;
-  width: 100px;
+  width: 90px;
   margin-bottom: 20px;
 `;
 
 const ImageContainer = styled.div`
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   overflow: hidden;
 `;
 
@@ -61,7 +61,6 @@ const HeartIcon = styled(GoHeartFill)`
 `;
 
 export default function ArtworkItem({ artWork, userPk }) {
-  // 작품 상세 페이지 url에 {artWork.art_pk} 쓰면 됨
   return (
     <StyledLink to={`/detail/${artWork.art_pk}/${userPk}`}>
       <ArtworkContainer>

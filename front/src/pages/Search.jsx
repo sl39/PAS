@@ -5,11 +5,12 @@ import {
   SearchBar,
   SearchedArtist,
   SearchedArtwork,
+  SearchFilter,
 } from "../components";
 import axios from "axios";
-import { IoIosArrowDown } from "react-icons/io";
 import { useInView } from "react-intersection-observer";
 import { useLocation } from "react-router-dom";
+import { CiFilter } from "react-icons/ci";
 
 const SearchBarContainer = styled.div`
   display: flex;
@@ -44,24 +45,22 @@ const FilterContainer = styled.div`
   max-width: 830px;
   width: 100%;
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
 `;
 
 const FilterBox = styled.div`
   display: flex;
-
-  min-width: 50px;
+  width: 50px;
   height: 20px;
   border: 1px solid black;
-  justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  padding: 1px;
-  margin-right: 10px;
-  padding: 5px;
+  padding: 0px 6px;
 `;
 
+// user-select: none -> 드래그 표시 안하기
 const NormalParagraph = styled.p`
+  user-select: none;
   font-weight: 300;
   font-size: 9px;
   margin: 0px;
@@ -76,10 +75,11 @@ export async function searchArtworkApi(options) {
       maxPrice: options.maxPrice,
       sortBy: options.sortBy,
       sort: options.sort,
-      page: 0, // 현재 페이지
+      page: options.page, // 현재 페이지
       pageSize: 20, // 페이지당 작품 개수
     },
   });
+
   return response.data;
 }
 
@@ -101,14 +101,23 @@ export default function Search() {
   // 검색어, 카테고리 추출
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const textParams = queryParams.get("keyword");
-  const categoryParams = queryParams.get("category");
+  const textParams = queryParams.get("keyword") || "";
+  const categoryParams = queryParams.get("category") || "";
+
+  // 필터 State 저장
+  const hasFetched = useRef(false);
+  const [isFilterView, setIsFilterView] = useState(false);
+  const [category, setCategory] = useState(categoryParams);
+  const [sortBy, setSortBy] = useState("LIKE");
+  const [sort, setSort] = useState("DESC");
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(2000000000000); //2조
 
   // 무한스크롤
-  const page = useRef(1);
+  const page = useRef(0);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [ref, inView] = useInView({
-    threshold: 1, // 컴포넌트의 100%가 보일 때 inView가 true로 변경
+    threshold: 0.5, // 컴포넌트의 100%가 보일 때 inView가 true로 변경
   });
 
   // 작가 리스트 가져오기
@@ -118,6 +127,10 @@ export default function Search() {
     };
 
     const fetchData = async () => {
+      if (options.keyword === "") {
+        return;
+      }
+
       try {
         const artistList = await searchArtistApi(options);
         setArtistList(artistList);
@@ -130,35 +143,65 @@ export default function Search() {
   }, [textParams]);
 
   // 작품 리스트 가져오기
-  const fetchItemList = useCallback(async () => {
-    const options = {
-      keyword: textParams,
-      category: categoryParams,
-      minPrice: 0,
-      maxPrice: 2036854000000,
-      sortBy: "LIKE",
-      sort: "DESC",
-      page: page, // 현재 페이지
-    };
+  const fetchItemList = useCallback(
+    async (code) => {
+      const options = {
+        keyword: textParams,
+        category: category,
+        minPrice: minPrice,
+        maxPrice: maxPrice,
+        sortBy: sortBy,
+        sort: sort,
+        page: page.current, // 현재 페이지
+      };
 
-    try {
-      // 작품 리스트 fetch
-      const artworkList = await searchArtworkApi(options);
-      console.log(artworkList.totalElements);
-      setSearchedItemList((prevList) => [...prevList, ...artworkList.content]);
-      // 다음에 불러올 페이지를 +1 증가
-      setHasNextPage(artworkList.length === 20);
-      if (artworkList.length) {
-        page.current += 1;
+      try {
+        // 작품 리스트 fetch
+        const artworkList = await searchArtworkApi(options);
+        console.log("현재 페이지: ", artworkList.page);
+
+        // 상황에 따라 초기화 or 유지
+        if (code === 0) {
+          console.log("기존 Artwork 데이터 초기화");
+          setSearchedItemList(artworkList.content);
+        } else if (code === 1) {
+          console.log("기존 Artwork 데이터 유지");
+          setSearchedItemList((prevList) => [
+            ...prevList,
+            ...artworkList.content,
+          ]);
+        }
+
+        // 다음에 불러올 페이지를 +1 증가
+        setHasNextPage(artworkList.content.length === 20);
+        if (artworkList.content.length) {
+          page.current += 1;
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
-    }
-  }, [textParams, categoryParams]);
+    },
+    [textParams, category, minPrice, maxPrice, sortBy, sort]
+  ); //의존성 목록에 있는게 바뀌면 새로운 함수를 반환
 
+  /* 
+        필터 조건이 변경된 경우 SearchedItemList 초기화
+  */
   useEffect(() => {
-    if (inView && hasNextPage) {
-      fetchItemList();
+    if (!hasFetched.current) {
+      hasFetched.current = true;
+      return;
+    }
+    page.current = 0;
+    fetchItemList(0);
+  }, [fetchItemList]);
+
+  /* 
+        스크롤 맨 밑에 다다를 경우 다음 페이지 로딩해서 덧붙이기
+  */
+  useEffect(() => {
+    if (inView && hasNextPage && page.current > 0) {
+      fetchItemList(1);
     }
   }, [fetchItemList, hasNextPage, inView]);
 
@@ -170,31 +213,36 @@ export default function Search() {
       </SearchBarContainer>
       <FilterWrapContainer>
         <FilterContainer>
-          <FilterBox>
-            <NormalParagraph>카테고리</NormalParagraph>
-            <IoIosArrowDown size={10}></IoIosArrowDown>
-          </FilterBox>
-          <FilterBox>
-            <NormalParagraph>가격</NormalParagraph>
-            <IoIosArrowDown size={10}></IoIosArrowDown>
-          </FilterBox>
-          <FilterBox>
-            <NormalParagraph>정렬</NormalParagraph>
-            <IoIosArrowDown size={10}></IoIosArrowDown>
+          <FilterBox onClick={() => setIsFilterView(!isFilterView)}>
+            <CiFilter></CiFilter>
+            <NormalParagraph>필터</NormalParagraph>
           </FilterBox>
         </FilterContainer>
+        {isFilterView && (
+          <SearchFilter
+            categoryValue={category}
+            sortByValue={sortBy}
+            sortValue={sort}
+            minPriceValue={minPrice}
+            maxPriceValue={maxPrice}
+            setCategory={setCategory}
+            setSortBy={setSortBy}
+            setSort={setSort}
+            setMinPrice={setMinPrice}
+            setMaxPrice={setMaxPrice}
+            setIsFilterView={setIsFilterView}
+          ></SearchFilter>
+        )}
       </FilterWrapContainer>
       <SearchedItemContainer>
-        {textParams && (
+        {textParams && artistList.length > 0 && (
           <BorderLine>
             <SearchedArtist artistList={artistList}></SearchedArtist>
           </BorderLine>
         )}
         <BorderLine>
-          <SearchedArtwork
-            ref={ref}
-            artWorkList={searchedItemList}
-          ></SearchedArtwork>
+          <SearchedArtwork artWorkList={searchedItemList}></SearchedArtwork>
+          <BorderLine ref={ref}></BorderLine>
         </BorderLine>
       </SearchedItemContainer>
     </>

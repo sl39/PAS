@@ -24,6 +24,10 @@ const LeftArrow = styled(IoIosArrowBack)`
   left: 10px;
   top: 40%;
   cursor: pointer;
+  &:hover {
+    background-color: lightgray;
+    border-radius: 50%;
+  }
 `;
 
 const RightArrow = styled(IoIosArrowForward)`
@@ -31,6 +35,10 @@ const RightArrow = styled(IoIosArrowForward)`
   right: 10px;
   top: 40%;
   cursor: pointer;
+  &:hover {
+    background-color: lightgray;
+    border-radius: 50%;
+  }
 `;
 
 const BoldParagraph = styled.p`
