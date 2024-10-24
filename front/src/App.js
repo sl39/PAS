@@ -33,7 +33,7 @@ export default function App() {
         <Route path="/following/:page/:user_pk" element={<FollowingPage />} />
         <Route path="/auction/:art_pk/:user_pk" element={<AuctionPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/create" element={<SettingPage />} />
+        <Route path="/create/:user_pk" element={<SettingPage />} />
         <Route path="/postArt/:user_pk" element={<Register />} />
         <Route path="/salesHistory/:user_pk" element={<SaleHistory />} />
         <Route path="/purchaseHistory/:user_pk" element={<PurchaseHistory />} />

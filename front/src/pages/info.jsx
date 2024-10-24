@@ -1,7 +1,7 @@
 import InfoBar from "../element/infoBar";
 import Profile from "../element/profile";
 import { useParams } from "react-router-dom";
-import { Header } from "../components";
+import { HistoryHeader } from "../components";
 import { useNavigate } from "react-router-dom";
 
 export default function Info() {
@@ -10,7 +10,7 @@ export default function Info() {
 
   const linkHamdler1 = () => {
     navigate(`/putCreate/${id.user_pk}`);
-  }
+  } 
   const linkHamdler2 = () => {
     navigate(`/purchaseHistory/${id.user_pk}`);
   }
@@ -23,7 +23,7 @@ export default function Info() {
   }
   return(
   <>
-   <Header></Header>
+   <HistoryHeader></HistoryHeader>
     <Profile user={id.user_pk} />
     <InfoBar id={id.user_pk} text="개인정보수정" onClick={linkHamdler1}/>
     <InfoBar  id={id.user_pk} text="구매내역" onClick={linkHamdler2} />
