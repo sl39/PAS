@@ -96,9 +96,8 @@ export default function SettingPage() {
               user_account : acc,
               address : fullAdd
       });
-        alert("성공");
-        console.log(request);
-        console.log("성공");
+        alert("정보가 등록되었습니다.");
+        navigate('/');
       }catch(error){
         console.error(error);
       }finally{
@@ -148,7 +147,6 @@ export default function SettingPage() {
         alert("입력이 완료되지 않았습니다. 모든 필드를 입력해주세요.");
     } else {
         setSubmit(true);
-        navigate('/');
  }
 }
 

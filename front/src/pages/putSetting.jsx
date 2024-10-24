@@ -76,7 +76,6 @@ const AllBox = styled.div`
 `;
 
 export default function SettingPage() {
-  const [userPk, setUserPk] = useState('');
   const [text, setText] = useState('');
   const [phone, setPhone] = useState('');
   const [bankName, setBankName] = useState('국민은행');
@@ -84,28 +83,23 @@ export default function SettingPage() {
   const [address, setAddress] = useState('');
   const [detailAddress, setDetailAddress] = useState('');
   const [submit, setSubmit] = useState(false);
-  const {user_pk} = useParams();
+  const id = useParams();
   const navigate = useNavigate();
   
-  useEffect(() => {
-    setUserPk(`${user_pk}`);
-}, [user_pk]);
-
   //useEffect로 URL 연결
   useEffect(() => {
     if(submit){
     async function postUserData() {
       try{
-    const request = await axios.put(`https://artion.site/api/user/update?user_pk=${user_pk}`,{
+    const request = await axios.put(`https://artion.site/api/user/update?user_pk=${id.user_pk}`,{
           user_name : text,
           phone_number : phone,
           bank_name : bankName,
           user_account : acc,
           address : fullAdd
       });
-      alert("성공");
-      console.log(request);
-      console.log("성공");
+      alert("개인정보가 수정되었습니다.");
+      navigate('/');
     }catch(error){
       console.error(error);
     }finally{
@@ -114,7 +108,7 @@ export default function SettingPage() {
   }
   postUserData();
 }
-  }, [submit]); 
+  }, [id,submit]); 
   
   function setN(event){
     const newText = event.target.value;
@@ -150,17 +144,17 @@ export default function SettingPage() {
   
   //, 앞까지 불러오는 함수
   const getFirstString = (str) => {
-    return str.split(',')[0];
+    return str.split(',')[0].trim();
   }
 
   //, 뒤를 불러오는 함수
   const getSecondString = (str) => {
-    return str.split(',')[0];
+    return str.split(',')[1]?.trim() || '';
   }
 
   //개인정보 수정전 정보 불러오는 부분
   useEffect(()=>{
-    axios.get(`https://artion.site/api/user/update?user_pk=${user_pk}`)
+    axios.get(`https://artion.site/api/user/update?user_pk=${id.user_pk}`)
     .then( response => {
         setText(response.data.user_name);
         setPhone(response.data.phone_number);
@@ -171,7 +165,7 @@ export default function SettingPage() {
     }).catch(error => {
       console.error(error); 
     })
-  },[]);
+  },[id]);
 
   const postButton = () =>{
     const requiredFields = [text, phone, bankName,acc, address, detailAddress]; 
@@ -180,7 +174,6 @@ export default function SettingPage() {
         alert("입력이 완료되지 않았습니다. 모든 필드를 입력해주세요.");
     } else {
         setSubmit(true);
-        navigate('/');
  }
 }
 
@@ -188,7 +181,7 @@ export default function SettingPage() {
     <AllBox>
       <GlobalStyle></GlobalStyle>
       <BackHeader />
-      <Profile user={userPk}/>
+      <Profile user={id.user_pk}/>
       <Div>
         <P>닉네임</P>
         <InputSize  placeholder="닉네임을 입력하세요." value={text} onChange={setN} ></InputSize>

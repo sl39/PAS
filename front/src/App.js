@@ -23,7 +23,7 @@ export default function App() {
         <Route path="/salesHistory/:user_pk" element={<SaleHistory />} />
         <Route path="/purchaseHistory/:user_pk" element={<PurchaseHistory />} />
         <Route path="/putArt/:art_pk" element={<PutRegister />} />
-        <Route path="/info/:user:pk" element={<Info />} />
+        <Route path="/info/:user_pk" element={<Info />} />
         <Route path="/receipt" element={<Receipt />} />
         <Route path="/putCreate/:user_pk" element={<PutSetting />} />
       </Routes>

@@ -120,7 +120,6 @@ export default function PurchaseHistory() {
       axios.get(`https://artion.site/api/user/purall?user_pk=${user_pk}`)
         .then(response => {
           setData(response.data);
-          console.log(response.data); 
         })
         .catch(error => {
           console.error(error); 
@@ -133,7 +132,6 @@ export default function PurchaseHistory() {
       axios.get(url)
       .then(response => {
         setData(response.data);
-        console.log(data)
         status(false);
         lengthStatus(response.data.length);
       }).catch(error => {
@@ -194,7 +192,7 @@ export default function PurchaseHistory() {
       </div>
       {data.map((item, index) => (
       <ListStyle key={index}>
-      <ImageSize src={jjang}></ImageSize>
+      <ImageSize src={item.image}></ImageSize>
         <ArrangeBox >
           <div>
             <P>{item.artName}</P>
