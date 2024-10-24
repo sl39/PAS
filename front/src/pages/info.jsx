@@ -10,7 +10,7 @@ export default function Info() {
 
   const linkHamdler1 = () => {
     navigate(`/putCreate/${id.user_pk}`);
-  }
+  } 
   const linkHamdler2 = () => {
     navigate(`/purchaseHistory/${id.user_pk}`);
   }

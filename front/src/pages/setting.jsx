@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { createGlobalStyle } from 'styled-components';
 import { useNavigate } from "react-router-dom";
 import { DefaultHeader } from "../components";
+import { useParams } from "react-router-dom";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -83,13 +84,14 @@ export default function SettingPage() {
   const [detailAddress, setDetailAddress] = useState('');
   const [submit, setSubmit] = useState(false);
   const navigate = useNavigate();
+  const id = useParams();
 
   //useEffect로 URL 연결
   useEffect(() => {
     if(submit){
     async function postUserData() {
       try{
-        const request = await axios.post("https://artion.site/api/user/create",{
+        const request = await axios.post(`https://artion.site/api/user/create?user_pk=${id.user_pk}`,{
               user_name : text,
               phone_number : phone,
               bank_name : bankName,
@@ -154,7 +156,7 @@ export default function SettingPage() {
     <AllBox>
       <GlobalStyle></GlobalStyle>
       <DefaultHeader></DefaultHeader>
-      <Profile />
+      <Profile user={id.user_pk}/>
       <Div>
         <P>닉네임</P>
         <InputSize  placeholder="닉네임을 입력하세요." value={text} onChange={setN} ></InputSize>
