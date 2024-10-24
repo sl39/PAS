@@ -361,8 +361,8 @@ export default function DetailItem ({ artWork }) {
                     {/* 수정 - 2 => user_pk */}
                     {2 === artWork.sellerPk && (
                         <>
-                         {artWork.auctionState === 0 && currentTime < chstartTime && <FixButton to={`/putRegister/${art_pk}`}>수정하기</FixButton>}
-                         {artWork.auctionState === 0 && currentTime > chendTime && <RetryButton to={`/putRegister/${art_pk}`}>재경매</RetryButton>}
+                         {artWork.auctionState === 0 && currentTime < chstartTime && <FixButton to={`/putArt/${art_pk}`}>수정하기</FixButton>}
+                         {artWork.auctionState === 0 && currentTime > chendTime && <RetryButton to={`/putArt/${art_pk}`}>재경매</RetryButton>}
                         </>
                     )}
                 </ButtonContainer>

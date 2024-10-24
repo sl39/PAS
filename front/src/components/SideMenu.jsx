@@ -89,7 +89,7 @@ export default function SideMenu({ handleToggle, isMenuOpen }) {
         <StyledLink to="/">
           <StyledHeading>My Page</StyledHeading>
         </StyledLink>
-        <StyledLink to="/">
+        <StyledLink to="/following/liked">
           <StyledHeading>Subscribe & Like</StyledHeading>
         </StyledLink>
         <StyledLink to="/">
