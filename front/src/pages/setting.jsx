@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { createGlobalStyle } from 'styled-components';
 import { useNavigate } from "react-router-dom";
 import { DefaultHeader } from "../components";
+import { useParams } from "react-router-dom";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -83,22 +84,22 @@ export default function SettingPage() {
   const [detailAddress, setDetailAddress] = useState('');
   const [submit, setSubmit] = useState(false);
   const navigate = useNavigate();
+  const id = useParams();
 
   //useEffect로 URL 연결
   useEffect(() => {
     if(submit){
     async function postUserData() {
       try{
-        const request = await axios.post("https://artion.site/api/user/create",{
+        const request = await axios.post(`https://artion.site/api/user/create?user_pk=${id.user_pk}`,{
               user_name : text,
               phone_number : phone,
               bank_name : bankName,
               user_account : acc,
               address : fullAdd
       });
-        alert("성공");
-        console.log(request);
-        console.log("성공");
+        alert("정보가 등록되었습니다.");
+        navigate('/');
       }catch(error){
         console.error(error);
       }finally{
@@ -148,7 +149,6 @@ export default function SettingPage() {
         alert("입력이 완료되지 않았습니다. 모든 필드를 입력해주세요.");
     } else {
         setSubmit(true);
-        navigate('/');
  }
 }
 
@@ -156,7 +156,7 @@ export default function SettingPage() {
     <AllBox>
       <GlobalStyle></GlobalStyle>
       <DefaultHeader></DefaultHeader>
-      <Profile />
+      <Profile user={id.user_pk}/>
       <Div>
         <P>닉네임</P>
         <InputSize  placeholder="닉네임을 입력하세요." value={text} onChange={setN} ></InputSize>

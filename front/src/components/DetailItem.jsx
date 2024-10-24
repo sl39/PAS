@@ -121,7 +121,7 @@ const ArtworkImage = styled.img`
     height: auto;
     margin: 5px;
     `;
-    const InfoContainer = styled.div`
+const InfoContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -136,7 +136,7 @@ const ArtworkImage = styled.img`
         width: 100%;
     }
 `;
-    const YearInfoContainer = styled.div`
+const YearInfoContainer = styled.div`
     display: flex;
     justify-content: space-between; 
     width: 100%;
@@ -253,6 +253,12 @@ const IndexIndicator = styled.div`
     font-size: 11px;
     font-weight: bold;
 `;
+const UploadAt = styled.p`
+    color: gray;
+    font-size: 16px;
+    margin: 0;
+    text-align: start;
+`;
 
 //시작
 export default function DetailItem ({ artWork }) {
@@ -295,8 +301,8 @@ export default function DetailItem ({ artWork }) {
         console.log(art_pk)
         try {
             const url = isArtFollowing 
-                ? `https://artion.site/api/artfollowing/${art_pk}/8/unlike`
-                : `https://artion.site/api/artfollowing/${art_pk}/8`;
+                ? `https://artion.site/api/artfollowing/${art_pk}/1/unlike`
+                : `https://artion.site/api/artfollowing/${art_pk}/1`;
 
             const response = await axios({
                 method: isArtFollowing ? 'delete' : 'post',
@@ -311,8 +317,8 @@ export default function DetailItem ({ artWork }) {
         }
     };
     const handleLikeToggle = async () => {
-        //수정 user_pk로 변경시켜 줘야함 - 지금 8 하드 코딩
-        const result = await toggleFollowing(art_pk, 8);
+        //수정 user_pk로 변경시켜 줘야함 - 지금 하드 코딩
+        const result = await toggleFollowing(art_pk, 1);
 
         if(result){
             setIsArtFollowing(!isArtFollowing);
@@ -341,7 +347,7 @@ export default function DetailItem ({ artWork }) {
                 <RightArrow onClick={handleNext} />
             </ImageContainer>
             <YearInfoContainer>
-                <YearInfo>제작년도<br/>{artWork.created}</YearInfo>
+                <YearInfo>작품 제작년도<br/>{artWork.created}</YearInfo>
                 <SizeInfo>{artWork.width} x {artWork.length} x {artWork.depth} cm
                     <br/>
                     <div style={{ display: 'flex', alignItems: 'center',justifyContent: 'flex-end' }}>
@@ -361,20 +367,25 @@ export default function DetailItem ({ artWork }) {
                     {/* 수정 - 2 => user_pk */}
                     {2 === artWork.sellerPk && (
                         <>
-                         {artWork.auctionState === 0 && currentTime < chstartTime && <FixButton to={`/putRegister/${art_pk}`}>수정하기</FixButton>}
-                         {artWork.auctionState === 0 && currentTime > chendTime && <RetryButton to={`/putRegister/${art_pk}`}>재경매</RetryButton>}
+                         {artWork.auctionState === 0 && currentTime < chstartTime && <FixButton to={`/putArt/${art_pk}`}>수정하기</FixButton>}
+                         {artWork.auctionState === 0 && currentTime > chendTime && <RetryButton to={`/putArt/${art_pk}`}>재경매</RetryButton>}
                         </>
                     )}
                 </ButtonContainer>
                 <Title>{artWork.artName}{artWork.qurater ? <QuraterIcon onClick={handleQuraterIconClick} /> : null }</Title>
+                <UploadAt>{artWork.uploadAt}</UploadAt>
                 <Artist><SpanBold>작가 :</SpanBold> {artWork.artistName}</Artist>
-                <Registrant><SpanBold>등록자 :</SpanBold> {artWork.sellerName}</Registrant>
+                <Registrant><SpanBold>등록자 :</SpanBold> <Link to={`/artist/${artWork.sellerPk}`} style={{textDecoration: 'none', color: "black"}}>{artWork.sellerName}</Link></Registrant>
                 <MaxPrice>
                     <SpanBold>즉시판매가</SpanBold>
                     <SpanBold style={{textAlign: "right"}}>{maxPriceRE} 원</SpanBold>
                 </MaxPrice>
                 <MinPrice>
-                    <SpanBold>현재가</SpanBold>
+                    <>
+                    {artWork.auctionState === 0 && <SpanBold>최소가</SpanBold>}
+                    {artWork.auctionState === 1 && <SpanBold>현재가</SpanBold>}
+                    {artWork.auctionState >= 2 && <SpanBold>낙찰가</SpanBold>}
+                    </>
                     <SpanBold style={{textAlign: "right"}}>{currentPriceRE} 원</SpanBold>
                 </MinPrice>
                 <TimeInfo>

@@ -57,7 +57,7 @@ const NormalParagraph = styled.p`
 export default function ArtistItem({ artist }) {
   // 작가 개인 페이지 url에 {artist.painter_pk} 쓰면 됨
   return (
-    <StyledLink to="/">
+    <StyledLink to={`/artist/${artist.painter_pk}`}>
       <ArtistContainer>
         <ImageContainer>
           <CircleImage src={artist.painter_img}></CircleImage>

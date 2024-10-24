@@ -47,7 +47,7 @@ const FollowersItem = ({ user }) => {
   return (
     <ItemContainer>
       {/* user_pk 넣어야함 */}
-        <UserPage to={`/test/${user_pk}`}>
+        <UserPage to={`/artist/${user_pk}`}>
         {user.user_image ? (
           <UserImage src={user.user_image} alt={user.user_name} />
         ) : (

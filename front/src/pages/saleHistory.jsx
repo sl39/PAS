@@ -1,9 +1,8 @@
 import styled from "styled-components";
-import jjang from '../img/jjang.jpg';
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-import { Header } from "../components";
+import { useNavigate, useParams } from "react-router-dom";
+import { HistoryHeader } from "../components";
 
 const ImageSize = styled.img`
   width: 35%;
@@ -25,6 +24,10 @@ width: 100%;
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
+
+  &>*{
+  margin: 5px;
+}
 `;
 
 const AllBox = styled.div`
@@ -69,6 +72,11 @@ const Pstylebar = styled.p`
   font-size: 20px;
   margin-bottom: 10px;
 `;
+const InfoDiv = styled.div`
+  &>*{
+    margin-bottom: 5px;
+  }
+`;
 
 export default function PurchaseHistory() {
   const [ entire, setEntire ] = useState(false);
@@ -80,8 +88,8 @@ export default function PurchaseHistory() {
   const [bidLength, setBidLength] = useState('');
   const [trueBidLength, setTrueBidLength] = useState('');
   const [endLength, setEndLength] = useState('');
-  const {user_pk} = useParams();
-  
+  const id = useParams();
+  const navigate = useNavigate();
   const [data, setData] = useState([]);
 
   //전체 영역 클릭이벤트
@@ -117,10 +125,9 @@ export default function PurchaseHistory() {
 
   // 처음 렌더링 시 한 번만 실행되는 코드
     useEffect(() => {
-      axios.get(`https://artion.site/api/user/saleall?user_pk=${user_pk}`)
+      axios.get(`https://artion.site/api/user/saleall?user_pk=${id.user_pk}`)
         .then(response => {
           setData(response.data);
-          console.log(response.data); 
         })
         .catch(error => {
           console.error(error); 
@@ -133,40 +140,44 @@ export default function PurchaseHistory() {
       axios.get(url)
       .then(response => {
         setData(response.data);
-        console.log(data)
         status(false);
         lengthStatus(response.data.length);
+        console.log(data);
       }).catch(error => {
         console.error(error);
       });
     };
 
-    fetchDataLength(`https://artion.site/api/user/saleall?user_pk=${user_pk}`,setEntireLength);
-    fetchDataLength(`https://artion.site/api/user/salebid?user_pk=${user_pk}`,setBidLength);
-    fetchDataLength(`https://artion.site/api/user/salesuc?user_pk=${user_pk}`,setTrueBidLength);
-    fetchDataLength(`https://artion.site/api/user/saleend?user_pk=${user_pk}`,setEndLength);
+    fetchDataLength(`https://artion.site/api/user/saleall?user_pk=${id.user_pk}`,setEntireLength);
+    fetchDataLength(`https://artion.site/api/user/salebid?user_pk=${id.user_pk}`,setBidLength);
+    fetchDataLength(`https://artion.site/api/user/salesuc?user_pk=${id.user_pk}`,setTrueBidLength);
+    fetchDataLength(`https://artion.site/api/user/saleend?user_pk=${id.user_pk}`,setEndLength);
  
     if(entire){
-      history(`https://artion.site/api/user/saleall?user_pk=${user_pk}`,setEntire, setEntireLength)
+      history(`https://artion.site/api/user/saleall?user_pk=${id.user_pk}`,setEntire, setEntireLength);
     }
 
     if(bid){
-      history(`https://artion.site/api/user/salebid?user_pk=${user_pk}`,setBid, setBidLength)
+      history(`https://artion.site/api/user/salebid?user_pk=${id.user_pk}`,setBid, setBidLength);
     }
 
     if(trueBid){
-      history(`https://artion.site/api/user/salesuc?user_pk=${user_pk}`,setTrueBid, setTrueBidLength)
+      history(`https://artion.site/api/user/salesuc?user_pk=${id.user_pk}`,setTrueBid, setTrueBidLength);
     }
 
     if(end){
-      history(`https://artion.site/api/user/saleend?user_pk=${user_pk}`,setEnd, setEndLength)
+      history(`https://artion.site/api/user/saleend?user_pk=${id.user_pk}`,setEnd, setEndLength);
     }
-    },[entire , bid, trueBid, end]);
+    },[entire , bid, trueBid, end, id]);
 
+    const handleItemClick = (artPk) => {
+      // art_pk를 포함한 경로로 이동
+      navigate(`/detail/${artPk}/${id.user_pk}`);
+    };
 
   return(
       <>
-        <Header></Header>
+        <HistoryHeader></HistoryHeader>
         <AllBox>  
         <div>
         <Pstylebar>판매내역</Pstylebar>
@@ -193,19 +204,24 @@ export default function PurchaseHistory() {
         </Divbar>
       </div>
       {data.map((item, index) => (
-      <ListStyle key={index}>
-      <ImageSize src={jjang}></ImageSize>
+      <ListStyle key={index} onClick={() =>  (item.currentAuctionStatus === 1 || item.currentAuctionStatus === 2) && handleItemClick(item.art_pk)}>
+      <ImageSize src={item.image}></ImageSize>
         <ArrangeBox >
-          <div>
+          <InfoDiv>
             <P>{item.artName}</P>
             <P>{item.painter}</P>
             <P>{item.current_price}</P>
-          </div>
+          </InfoDiv>
           <div>
             <P>{item.endTime}</P>
           </div>
             <div>
-              <P>{item.currentAuctionStatus}</P>
+              <P style={{margin: 0}}>
+              {item.currentAuctionStatus === 0 && '경매전'}
+              {item.currentAuctionStatus === 1 && '경매중'}
+              {item.currentAuctionStatus === 2 && '입금대기'}
+              {item.currentAuctionStatus === 3 && '판매완료'}
+              </P>
             </div>
           </ArrangeBox>
       </ListStyle>
