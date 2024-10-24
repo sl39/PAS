@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +53,13 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
 
         System.out.println(kakaoUserInfo);
 
+//        if (isUser(oAuth2User)) {
+//            response.sendRedirect("/access-user");
+//        } else {
+//            response.sendRedirect("/access-guest");
+//        }
+
+        // 위에 else에 넣어야함.
         UserEntity userEntity = authRepository.findByKakao_pk(kakao_id)
                 .orElseGet(() -> userRepository.save(kakaoUserInfo.toEntity()));
 
@@ -85,6 +93,11 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
         );
 
         return UserPrincipal.create(user);
+    }
+
+    private boolean isUser(OAuth2User oAuth2User) {
+        return oAuth2User.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
     }
 }
 

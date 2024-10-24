@@ -114,7 +114,7 @@ public class ArtService {
     }
 
     @Transactional
-    public void updateArt(@RequestBody ArtUpdateDto dto, @RequestParam(value = "art_pk") Integer art_pk) {
+    public ResponseEntity<String> updateArt(@RequestBody ArtUpdateDto dto, @RequestParam(value = "art_pk") Integer art_pk) {
         ArtEntity art = artRepository.findById(art_pk)
                 .orElseThrow(() -> new IllegalArgumentException("해당 그림이 없습니다!"));
 
@@ -161,7 +161,12 @@ public class ArtService {
                 newCates.setArt_category(cateId);
                 artArtCategoryRepository.save(newCates);
             }
+
             artRepository.save(art);
+
+            return ResponseEntity.ok("그림 수정 성공!");
+        } else {
+            return ResponseEntity.badRequest().body("경매 중 혹은 판매 완료된 그림입니다!");
         }
     }
 
@@ -185,7 +190,7 @@ public class ArtService {
 
         result.put("art_name", art.getArt_name());
         result.put("painter", art.getPainter());
-        result.put("created_at", art.getCreatedAt());
+        result.put("createdAt", art.getCreatedAt());
         result.put("width", art.getWidth());
         result.put("depth", art.getDepth());
         result.put("height", art.getHeight());
