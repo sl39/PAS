@@ -12,10 +12,12 @@ import com.ex.artion.artion.auction.entity.AuctionEntity;
 import com.ex.artion.artion.auction.respository.AuctionRepository;
 import com.ex.artion.artion.user.entity.UserEntity;
 import com.ex.artion.artion.user.respository.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -45,6 +47,8 @@ class ArtionApplicationTests {
 	@Test
 	void contextLoads() {
 	}
+
+	@Autowired private RedisTemplate<String ,Object> redisTemplate;
 
 //	public List<ArtEntity> generateRandomArtAuctions(int count) {
 //		Faker faker = new Faker();
@@ -114,5 +118,7 @@ class ArtionApplicationTests {
 //	void test() {
 //		List<ArtEntity> artEntities = generateRandomArtAuctions(1000);
 //	}
+
+
 
 }
