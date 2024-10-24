@@ -18,6 +18,7 @@ const ArtworkImage = styled.img`
     height: auto;
     aspect-ratio: 1;
     object-fit: cover;
+    border-radius: 5px;
 `;
 
 const PlaceholderImage = styled.div`
@@ -30,10 +31,12 @@ const PlaceholderImage = styled.div`
 
 const ArtworkTitle = styled.span`
     font-size: 14px;
+    font-weight: bold;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%; 
+    margin-top: 3px;
     max-width: 150px; 
     text-align: center;
 `;
