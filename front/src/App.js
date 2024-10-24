@@ -30,7 +30,7 @@ export default function App() {
         <Route path="/guide/:art_pk" element={<Guide />} />
         <Route path="/ar/:art_pk" element={<ARCanvas />} />
         <Route path="/test" element={<ArtistProfile />} />
-        <Route path="/following/:page" element={<FollowingPage />} />
+        <Route path="/following/:page/:user_pk" element={<FollowingPage />} />
         <Route path="/auction/:art_pk/:user_pk" element={<AuctionPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/create" element={<SettingPage />} />

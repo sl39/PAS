@@ -201,20 +201,20 @@ const FollowingPage = () => {
         <FollowingContainer>
             <HeadContainer>
                 <ButtonContainer>
-                    <Link to={`/test`}>
+                    <Link to={`/artist/${user_pk}`}>
                     <BackButton />
                     </Link>
                 </ButtonContainer>
                 <Title>user</Title>
             </HeadContainer>
             <SelectContainer>
-                <SelectLink to="/following/liked" onClick={() => handleSelect('liked')}>
+                <SelectLink to={`/following/liked/${user_pk}`} onClick={() => handleSelect('liked')}>
                     <SelectButton selected={selectedPage === 'liked'}>좋아요</SelectButton>
                 </SelectLink>
-                <SelectLink to="/following/following" onClick={() => handleSelect('following')}>
+                <SelectLink to={`/following/following/${user_pk}`} onClick={() => handleSelect('following')}>
                     <SelectButton selected={selectedPage === 'following'}>팔로잉</SelectButton>
                 </SelectLink>
-                <SelectLink to="/following/followers" onClick={() => handleSelect('followers')}>
+                <SelectLink to={`/following/followers/${user_pk}`} onClick={() => handleSelect('followers')}>
                     <SelectButton selected={selectedPage === 'followers'}>팔로워</SelectButton>
                 </SelectLink>
             </SelectContainer>

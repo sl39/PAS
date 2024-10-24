@@ -215,15 +215,15 @@ export default function ArtistProfile() {
             </TopBox>
             <BottomBox>
               <SocialBox>
-                <StyledLink to={`/following/liked`}>
+                <StyledLink to={`/following/liked/${userPkObj.user_pk}`}>
                   <SmallDiv>좋아요</SmallDiv>
                 </StyledLink>
                 <Divider></Divider>
-                <StyledLink to={`/following/following`}>
+                <StyledLink to={`/following/following/${userPkObj.user_pk}`}>
                   <SmallDiv>팔로잉</SmallDiv>
                 </StyledLink>
                 <Divider></Divider>
-                <StyledLink to={`/following/followers`}>
+                <StyledLink to={`/following/followers/${userPkObj.user_pk}`}>
                   <SmallDiv style={{ borderRight: 0 }}>팔로워</SmallDiv>
                 </StyledLink>
               </SocialBox>
