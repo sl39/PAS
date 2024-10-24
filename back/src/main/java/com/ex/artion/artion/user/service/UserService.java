@@ -44,7 +44,6 @@ public class UserService {
     private final ArtImageRepository artImageRepository;
     private final ArtFollowingRepository artFollowingRepository;
     private final FollowingRepository followingRepository;
-    private final AuthRepository authRepository;
 
     // 소셜로그인 전 기본적인 유저 생성 테스트
     public void createUser(@RequestBody UserCreateDto dto, @RequestParam(value = "user_pk") Integer user_pk) {
@@ -156,6 +155,16 @@ public class UserService {
                     Integer currentAuctionStatus = artEntity.getCurrent_auction_status();
                     LocalDateTime endTime = artEntity.getEndTime();
 
+                    List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
+
+                    if (!artImage.isEmpty()) {
+                        String image = String.valueOf(artImage.get(0).getArt_image_url());
+                        map.put("image", image);
+                    } else {
+                        String image = null;
+                        map.put("image", image);
+                    }
+
                     Long current_price = auction.getCurrent_price();
 
                     map.put("auction_pk", auction_pk);
@@ -215,6 +224,16 @@ public class UserService {
 
                     Long current_price = auction.getCurrent_price();
 
+                    List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
+
+                    if (!artImage.isEmpty()) {
+                        String image = String.valueOf(artImage.get(0).getArt_image_url());
+                        map.put("image", image);
+                    } else {
+                        String image = null;
+                        map.put("image", image);
+                    }
+
                     map.put("paying_pk", paying_pk);
                     map.put("auction_pk", auction_pk);
                     map.put("current_price", current_price);
@@ -249,7 +268,6 @@ public class UserService {
             result.add(errorMessage);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
         }
-
         //auc = 사용자가 참여한 경매 뽑아내기.
         List<AuctionEntity> auc = auctionRepository.findAllByUser_pk(user.getUser_pk());
 
@@ -279,6 +297,16 @@ public class UserService {
 
                     Long current_price = auction.getCurrent_price();
 
+                    List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
+
+                    if (!artImage.isEmpty()) {
+                        String image = String.valueOf(artImage.get(0).getArt_image_url());
+                        map.put("image", image);
+                    } else {
+                        String image = null;
+                        map.put("image", image);
+                    }
+
                     map.put("auction_pk", auction_pk);
                     map.put("current_price", current_price);
                     map.put("art_pk", art_pk);
@@ -286,12 +314,11 @@ public class UserService {
                     map.put("painter", painter);
                     map.put("currentAuctionStatus", currentAuctionStatus);
                     map.put("endTime", endTime);
-                    map.put("type", 0);
 
                     if (!result.contains(map)) {
                         result.add(map); // 중복이 아닐 때만 추가
                     }
-                }
+                } else {
                 for (PayingEntity payingEntity : pay) {
                     List<OrderEntity> order = orderRepostory.findAllByPaying_pk(payingEntity.getPaying_pk());
                     for (OrderEntity orderEntity : order) {
@@ -305,6 +332,17 @@ public class UserService {
                         String painter = artEntity.getPainter();
                         LocalDate createdAt = artEntity.getCreatedAt();
                         LocalDateTime endTime = artEntity.getEndTime();
+                        Integer currentAuctionStatus = artEntity.getCurrent_auction_status();
+
+                        List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
+
+                        if (!artImage.isEmpty()) {
+                            String image = String.valueOf(artImage.get(0).getArt_image_url());
+                            map.put("image", image);
+                        } else {
+                            String image = null;
+                            map.put("image", image);
+                        }
 
                         map.put("order_pk", order_pk);
                         map.put("paying_pk", paying_pk);
@@ -312,10 +350,9 @@ public class UserService {
                         map.put("art_pk", art_pk);
                         map.put("artName", artName);
                         map.put("painter", painter);
-
+                        map.put("currentAuctionStatus", currentAuctionStatus);
                         map.put("createdAt", createdAt);
                         map.put("endTime", endTime);
-                        map.put("type", 1);
 
                         if (!result.contains(map)) {
                             result.add(map); // 중복이 아닐 때만 추가
@@ -324,8 +361,9 @@ public class UserService {
                 }
             }
         }
-        return ResponseEntity.ok(result);
     }
+    return ResponseEntity.ok(result);
+}
 
     // 구매내역 전체
     public ResponseEntity<List<Map<String, Object>>> requestPurchaseAll(@RequestParam(value = "user_pk") Integer user_pk) {
@@ -373,19 +411,32 @@ public class UserService {
         } else {
             for (ArtEntity artEntity : art) {
                 System.out.println("아트 pk는? :" + artEntity.getArt_pk());
-                List<AuctionEntity> auction = auctionRepository.findAllByArt_pk(artEntity.getArt_pk());
+
+                AuctionEntity auction = auctionRepository.findMaxOneByArt_pk(artEntity.getArt_pk());
+//                List<AuctionEntity> auction = auctionRepository.findAllByArt_pk(artEntity.getArt_pk());
                 System.out.println("옥션 데이터는 ? :" + auction);
-                for (AuctionEntity auctionEntity : auction) {
-                    if (!auction.isEmpty() && artEntity.getCurrent_auction_status() == 1) {
+//                for (AuctionEntity auctionEntity : auction) {
+                    if (auction != null && artEntity.getCurrent_auction_status() == 1) {
                         Map<String, Object> map = new HashMap<>();
-                        Integer auction_pk = auctionEntity.getAuction_pk();
-                        Long current_price = auctionEntity.getCurrent_price();
+                        Integer auction_pk = auction.getAuction_pk();
+                        Long current_price = auction.getCurrent_price();
 
                         Integer art_pk = artEntity.getArt_pk();
                         String artName = artEntity.getArt_name();
                         String painter = artEntity.getPainter();
                         LocalDate createdAt = artEntity.getCreatedAt();
                         LocalDateTime endTime = artEntity.getEndTime();
+                        Integer currentAuctionStatus = artEntity.getCurrent_auction_status();
+
+                        List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
+
+                        if (!artImage.isEmpty()) {
+                            String image = String.valueOf(artImage.get(0).getArt_image_url());
+                            map.put("image", image);
+                        } else {
+                            String image = null;
+                            map.put("image", image);
+                        }
 
                         map.put("auction_pk", auction_pk);
                         map.put("current_price", current_price);
@@ -394,14 +445,17 @@ public class UserService {
                         map.put("painter", painter);
                         map.put("createdAt", createdAt);
                         map.put("endTime", endTime);
+                        map.put("currentAuctionStatus", currentAuctionStatus);
 
-                        result.add(map);
+                        result.add(map); // 중복이 아닐 때만 추가
+
                     }
                 }
             }
             return ResponseEntity.ok(result);
         }
-    }
+
+
 
     // user_pk로 판매내역(낙찰) 조회
     public ResponseEntity<List<Map<String, Object>>> requestSaleSuccess(@RequestParam(value = "user_pk") Integer user_pk) {
@@ -429,11 +483,11 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
         } else {
             for (ArtEntity artEntity : art) {
-                List<AuctionEntity> auction = auctionRepository.findAllByArt_pk(artEntity.getArt_pk());
-//                System.out.println("유저로 art 조회 후 모든 art 중 auction 들어가 있는 것들" + auction.size());
-                for (AuctionEntity auctionEntity : auction) {
+                //                System.out.println("유저로 art 조회 후 모든 art 중 auction 들어가 있는 것들" + auction.size());
+//                List<AuctionEntity> auction = auctionRepository.findAllByArt_pk(artEntity.getArt_pk());
+//                for (AuctionEntity auctionEntity : auction) {
 //                    System.out.println("옥션Pk : " + auctionEntity.getAuction_pk());
-                    List<PayingEntity> pay = payingRepository.findAllByAuction_pk(auctionEntity.getAuction_pk());
+//                List<PayingEntity> pay = payingRepository..findAllByAuction_pk(auctionEntity.getAuction_pk());
 //                    System.out.println("페이 : " + pay);
 //                    System.out.println("페이 크기 : " + pay.size());
 //                    if (pay.isEmpty()) {
@@ -441,39 +495,57 @@ public class UserService {
 //                        errorMessage.put("에러", "사용자가 등록한 그림 중 낙찰된 그림이 없습니다");
 //                        result.add(errorMessage);
 //                    } else {
-                    for (PayingEntity payingEntity : pay) {
-                        if (!pay.isEmpty() && artEntity.getCurrent_auction_status() == 2) {
-                            Map<String, Object> map = new HashMap<>();
+                //                    for (PayingEntity payingEntity : pay) {
 
-                            Integer paying_pk = payingEntity.getPaying_pk();
+                System.out.println(artEntity.getArt_pk());
 
-                            Integer auction_pk = auctionEntity.getAuction_pk();
-                            Long current_price = auctionEntity.getCurrent_price();
+                AuctionEntity auction = auctionRepository.findMaxOneByArt_pk(artEntity.getArt_pk());
 
-                            Integer art_pk = artEntity.getArt_pk();
-                            String artName = artEntity.getArt_name();
-                            String painter = artEntity.getPainter();
-                            LocalDate createdAt = artEntity.getCreatedAt();
-                            LocalDateTime endTime = artEntity.getEndTime();
+                if(auction != null) {
+                    PayingEntity pay = payingRepository.findOneByAuction_pk(auction.getAuction_pk());
 
-                            map.put("paying_pk", paying_pk);
-                            map.put("auction_pk", auction_pk);
-                            map.put("current_price", current_price);
-                            map.put("art_pk", art_pk);
-                            map.put("artName", artName);
-                            map.put("painter", painter);
+                    if (pay != null && artEntity.getCurrent_auction_status() == 2) {
+                        Map<String, Object> map = new HashMap<>();
 
-                            map.put("createdAt", createdAt);
-                            map.put("endTime", endTime);
+                        Integer paying_pk = pay.getPaying_pk();
 
-                            result.add(map);
+                        Integer auction_pk = auction.getAuction_pk();
+                        Long current_price = auction.getCurrent_price();
+
+                        Integer art_pk = artEntity.getArt_pk();
+                        String artName = artEntity.getArt_name();
+                        String painter = artEntity.getPainter();
+                        LocalDate createdAt = artEntity.getCreatedAt();
+                        LocalDateTime endTime = artEntity.getEndTime();
+
+                        List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
+
+                        if (!artImage.isEmpty()) {
+                            String image = String.valueOf(artImage.get(0).getArt_image_url());
+                            map.put("image", image);
+                        } else {
+                            String image = null;
+                            map.put("image", image);
                         }
+
+                        map.put("paying_pk", paying_pk);
+                        map.put("auction_pk", auction_pk);
+                        map.put("current_price", current_price);
+                        map.put("art_pk", art_pk);
+                        map.put("artName", artName);
+                        map.put("painter", painter);
+
+                        map.put("createdAt", createdAt);
+                        map.put("endTime", endTime);
+
+                        result.add(map);
+
+                    }
                     }
                 }
             }
             return ResponseEntity.ok(result);
         }
-    }
 
     // user_pk로 판매내역(종료) 조회
     // 종료는 입금까지 끝난 것들 + 아무도 입찰하지 않은 것들로 나뉨. 구분은 current_auction_status = 0이면 입찰X, 3이면 입금O
@@ -518,6 +590,15 @@ public class UserService {
                             LocalDate createdAt = artEntity.getCreatedAt();
                             LocalDateTime endTime = artEntity.getEndTime();
 
+                            List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
+
+                            if (!artImage.isEmpty()) {
+                                String image = String.valueOf(artImage.get(0).getArt_image_url());
+                                map.put("image", image);
+                            } else {
+                                String image = null;
+                                map.put("image", image);
+                            }
 
                             map.put("auction_pk", auction_pk);
                             map.put("art_pk", art_pk);
@@ -564,6 +645,16 @@ public class UserService {
                                             String painter = artEntity.getPainter();
                                             LocalDate createdAt = artEntity.getCreatedAt();
                                             LocalDateTime endTime = artEntity.getEndTime();
+
+                                            List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
+
+                                            if (!artImage.isEmpty()) {
+                                                String image = String.valueOf(artImage.get(0).getArt_image_url());
+                                                map.put("image", image);
+                                            } else {
+                                                String image = null;
+                                                map.put("image", image);
+                                            }
 
                                             map.put("order_pk", order_pk);
                                             map.put("paying_pk", paying_pk);
