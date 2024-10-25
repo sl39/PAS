@@ -115,56 +115,42 @@ public class RedisSchedulerService {
 
             }
             // status 가2 이고 결제 종료 시간까지 조금 남았을 때 와 끝났을 때  분기 처리
-//            else if ((artEntityRedis.getCurrent_auction_status() == 2) &&  artEntityRedis.getEndTime().isAfter(now)){
-//                Optional<PayingEntityRedis> paying = payingRedisRepository.findByArt_Id(artEntityRedis.getArt_pk());
-//                if(paying.isEmpty()){
-//                    artRedisRepository.delete(artEntityRedis);
-//                } else{
-//                    if(artEntityRedis.getEndTime().minusHours(1).isBefore(now)){
-//                        PayingEntityRedis payingEntityRedis = paying.get();
-//
-//                        // 메시지 보내기
-//                        Optional<PayingEntity> pay = payingRepository.findById(payingEntityRedis.getPaying_pk());
-//                        if(pay.isPresent()){
-//                            PayingEntity payingEntity = pay.get();
-//                            payingEntity.setStatus(1);
-//                            payingRepository.save(payingEntity);
-//                        }
-//                        payingRedisRepository.delete(payingEntityRedis);
-//                    }
-//                }
-//            } else if ((artEntityRedis.getCurrent_auction_status() == 2) &&  artEntityRedis.getEndTime().isBefore(now)){
-//                Optional<PayingEntityRedis> payingEntityRedis = payingRedisRepository.findByArt_Id(artEntityRedis.getArt_pk());
-//                Optional<ArtEntity> artEntity = artRepository.findById(artEntityRedis.getArt_pk());
-//                if(artEntity.isEmpty()){
-//                    artRedisRepository.delete(artEntityRedis);
-//                    continue;
-//                }
-//                ArtEntity art = artEntity.get();
-//                if(payingEntityRedis.isEmpty()){
-//                    artRedisRepository.delete(artEntityRedis);
-//                    art.setCurrent_auction_status(0);
-//                    artRepository.save(art);
-//                    continue;
-//                }
-//
-//                Optional<PayingEntity> paying = payingRepository.findById(payingEntityRedis.get().getPaying_pk());
-//                if(paying.isEmpty()){
-//                    artRedisRepository.delete(artEntityRedis);
-//                    art.setCurrent_auction_status(0);
-//                    artRepository.save(art);
-//                    continue;
-//                }
-//
-//                Optional<OrderEntity> orderEntity = orderRepostory.findByPaying(paying.get());
-//                if(orderEntity.isEmpty()){
-//                    artRedisRepository.delete(artEntityRedis);
-//                    continue;
-//                }
-//                artRedisRepository.delete(artEntityRedis);
-//            }
+            else if (artEntityRedis.getCurrent_auction_status() == 2){
+                PayingEntityRedis payingEntityRedis = payingRedisRepository.findByArt_Id(artEntityRedis.getArt_pk()).orElseGet(()-> null);
+                if(payingEntityRedis == null){
+                    artRedisRepository.delete(artEntityRedis);
+                }
 
+                if(artEntityRedis.getEndTime().isAfter(now) &&artEntityRedis.getEndTime().minusHours(1).isBefore(now) && payingEntityRedis.getStatus() == 0){
+                    PayingEntity paying = payingRepository.findById(payingEntityRedis.getPaying_pk()).orElseGet(() -> null);
+                    if(paying == null){
+                        artRedisRepository.delete(artEntityRedis);
+                        payingRedisRepository.delete(payingEntityRedis);
+                    }
+                    OrderEntity orderEntity = orderRepostory.findByPaying(paying).orElseGet(()-> null);
+                    if(orderEntity == null){
+                        paying.setStatus(1);
+                        payingEntityRedis.setStatus(1);
+                        payingRedisRepository.save(payingEntityRedis);
+                        payingRepository.save(paying);
+                        // 남은 시간 문자 보내기
+                    } else {
+                        artRedisRepository.delete(artEntityRedis);
+                        payingRedisRepository.delete(payingEntityRedis);
+                    }
 
+                } else if(artEntityRedis.getEndTime().isBefore(now)){
+                    PayingEntity paying = payingRepository.findById(payingEntityRedis.getPaying_pk()).orElseGet(() -> null);
+                    if(paying == null){
+                        artRedisRepository.delete(artEntityRedis);
+                        payingRedisRepository.delete(payingEntityRedis);
+                    }
+                    OrderEntity orderEntity = orderRepostory.findByPaying(paying).orElseGet(()-> null);
+                    if(orderEntity == null){
+
+                    }
+                }
+            }
 
 
         }
