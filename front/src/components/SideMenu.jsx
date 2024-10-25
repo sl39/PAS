@@ -11,7 +11,7 @@ const MenuContainer = styled.div`
   bottom: 0;
   left: 0;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-  z-index: 1;
+  z-index: 10;
   padding: 20px 35px 20px 20px;
   background-color: white;
 `;

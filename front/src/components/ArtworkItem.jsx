@@ -38,9 +38,6 @@ const BoldParagraph = styled.p`
 `;
 
 const NormalParagraph = styled.p`
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;
@@ -67,8 +64,8 @@ export default function ArtworkItem({ artWork, userPk }) {
         <ImageContainer>
           <SquareImage src={artWork.artImage}></SquareImage>
         </ImageContainer>
-        <BoldParagraph>{artWork.artistName}</BoldParagraph>
-        <NormalParagraph>{artWork.artName}</NormalParagraph>
+        <BoldParagraph>{artWork.artName}</BoldParagraph>
+        <NormalParagraph>{artWork.artistName}</NormalParagraph>
         <BoldParagraph>{artWork.price} 원</BoldParagraph>
         <LikeBox>
           <HeartIcon></HeartIcon>
