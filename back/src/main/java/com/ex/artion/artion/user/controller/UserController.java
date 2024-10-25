@@ -18,15 +18,13 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/create")
-    public ResponseEntity<String> createUser(@RequestBody UserCreateDto dto) {
-        userService.createUser(dto);
-        return ResponseEntity.ok("회원가입 성공!");
+    public ResponseEntity<String> createUser(@RequestBody UserCreateDto dto, @RequestParam(value="user_pk") Integer user_pk) {
+        return userService.createUser(dto, user_pk);
     }
 
     @PutMapping("/update")
     public ResponseEntity<String> updateUser(@RequestBody UserUpdateDto dto, @RequestParam(value = "user_pk") Integer user_pk) {
-        userService.updateUser(dto, user_pk);
-        return ResponseEntity.ok("회원정보 수정!");
+        return userService.updateUser(dto, user_pk);
     }
 
     @GetMapping("/update")

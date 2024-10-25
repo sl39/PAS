@@ -49,11 +49,12 @@ public class UserService {
     private final FollowingRepository followingRepository;
 
     // 소셜로그인 전 기본적인 유저 생성 테스트
-    public void createUser(@RequestBody UserCreateDto dto) {
+    public ResponseEntity<String> createUser(@RequestBody UserCreateDto dto, @RequestParam(value="user_pk") Integer user_pk) {
 
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        UserEntity user = userRepository.findById(userPrincipal.getUserPk())
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserEntity user = userRepository.findById(userPrincipal.getUserPk())
+//                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        UserEntity user = userRepository.findById(user_pk)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         user.setPhone_number(dto.getPhone_number());
@@ -65,6 +66,8 @@ public class UserService {
         user.setUser_cash(Long.valueOf(0));
 
         this.userRepository.save(user);
+
+        return ResponseEntity.ok("회원가입 성공!");
     }
 
     // 이거 상대방 user_pk 사용하는 거겠지?
@@ -75,12 +78,10 @@ public class UserService {
     }
 
     // 유저 정보 수정
-    public void updateUser(@RequestBody UserUpdateDto dto, @RequestParam(value = "user_pk") Integer user_pk) {
+    public ResponseEntity<String> updateUser(@RequestBody UserUpdateDto dto, @RequestParam(value = "user_pk") Integer user_pk) {
 
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        System.out.println(userPrincipal);
-
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(userPrincipal);
 //        UserEntity user = userRepository.findById(userPrincipal.getUserPk())
 //                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -94,13 +95,14 @@ public class UserService {
         user.setAddress(dto.getAddress());
 
         this.userRepository.save(user);
+
+        return ResponseEntity.ok("유저 정보 수정!");
     }
 
     public ResponseEntity<Map<String, Object>> updateBeforeUser(@RequestParam(value = "user_pk") Integer user_pk) {
 
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        System.out.println(userPrincipal);
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(userPrincipal);
 
         Map<String, Object> Message = new HashMap<>();
 
@@ -135,9 +137,9 @@ public class UserService {
         List<Map<String, Object>> result = new ArrayList<>();
         UserEntity user;
         List<Object[]> prices = new ArrayList<>();
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        System.out.println(userPrincipal);
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(userPrincipal);
 
             user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -196,9 +198,9 @@ public class UserService {
     public ResponseEntity<List<Map<String, Object>>> requestPurchaseSuccess(@RequestParam(value = "user_pk") Integer user_pk) {
         List<Map<String, Object>> result = new ArrayList<>();
         UserEntity user;
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        System.out.println(userPrincipal);
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(userPrincipal);
 
             user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -260,9 +262,9 @@ public class UserService {
     public ResponseEntity<List<Map<String, Object>>> requestPurchaseEnd(@RequestParam(value = "user_pk") Integer user_pk) {
         List<Map<String, Object>> result = new ArrayList<>();
         UserEntity user;
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        System.out.println(userPrincipal);
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(userPrincipal);
 
             user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -368,9 +370,8 @@ public class UserService {
     public ResponseEntity<List<Map<String, Object>>> requestPurchaseAll(@RequestParam(value = "user_pk") Integer user_pk) {
         List<Map<String, Object>> result = new ArrayList<>();
 
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        System.out.println(userPrincipal);
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(userPrincipal);
 
         if(requestPurchaseBid(user_pk) != null || requestPurchaseSuccess(user_pk) != null || requestPurchaseEnd(user_pk).getBody() != null) {
             result.addAll(requestPurchaseBid(user_pk).getBody());
@@ -393,9 +394,8 @@ public class UserService {
         UserEntity user;
         List<Map<String, Object>> result = new ArrayList<>();
 
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        System.out.println(userPrincipal);
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(userPrincipal);
 
             user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -458,9 +458,8 @@ public class UserService {
         UserEntity user;
         List<Map<String, Object>> result = new ArrayList<>();
 
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        System.out.println(userPrincipal);
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(userPrincipal);
 
 
             user = userRepository.findById(user_pk)
@@ -545,9 +544,9 @@ public class UserService {
     public ResponseEntity<List<Map<String, Object>>> requestSaleEnd(@RequestParam(value = "user_pk") Integer user_pk) {
         UserEntity user;
         List<Map<String, Object>> result = new ArrayList<>();
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        System.out.println(userPrincipal);
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(userPrincipal);
 
             user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -677,9 +676,8 @@ public class UserService {
     public ResponseEntity<List<Map<String, Object>>> requestSaleAll(@RequestParam(value = "user_pk") Integer user_pk) {
         List<Map<String, Object>> result = new ArrayList<>();
 
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        System.out.println(userPrincipal);
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(userPrincipal);
 
         if(requestSaleBid(user_pk).getBody() != null || requestSaleSuccess(user_pk).getBody() != null || requestSaleEnd(user_pk).getBody() != null) {
             result.addAll(requestSaleBid(user_pk).getBody());
@@ -700,9 +698,8 @@ public class UserService {
         List<Map<String, Object>> itemList = new ArrayList<>();
         List<Map<String, Object>> itemDESC = new ArrayList<>();
 
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        System.out.println(userPrincipal);
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(userPrincipal);
 
         UserEntity user;
 
@@ -714,8 +711,8 @@ public class UserService {
 //        UserEntity user2 = userRepository.findById(user_pk)
 //                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
 
-        if(userPrincipal.getUserPk().equals(user_pk)) {
-
+        if(user_pk.equals(user_pk)) {
+//        if(userPrincipal.getUserPk().equals(user_pk)) {
             user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
             result.put("isSelf", true);
@@ -791,6 +788,7 @@ public class UserService {
                         Long price = auctionRepository.findMaxPriceByArtPk(art_pk);
                         List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
                         LocalDate upload = artEntity.getUpload();
+                        String painter = artEntity.getPainter();
 
                         if (!artImage.isEmpty()) {
                             String image = String.valueOf(artImage.get(0).getArt_image_url());
@@ -808,6 +806,7 @@ public class UserService {
                             itemData.put("follows", 0);
                         }
 
+                        itemData.put("painter", painter);
                         itemData.put("price", price);
                         itemData.put("art_name", art_name);
                         itemData.put("art_pk", art_pk);
@@ -822,6 +821,7 @@ public class UserService {
                         Long price = artEntity.getMinP();
                         List<ArtImageEntity> artImage = artImageRepository.findAllByArtEntity(artEntity.getArt_pk());
                         LocalDate upload = artEntity.getUpload();
+                        String painter = artEntity.getPainter();
 
                         if (!artImage.isEmpty() && artImage != null) {
                             String image = String.valueOf(artImage.get(0).getArt_image_url());
@@ -839,6 +839,7 @@ public class UserService {
                             itemData.put("follows", 0);
                         }
 
+                        itemData.put("painter", painter);
                         itemData.put("price", price);
                         itemData.put("art_name", art_name);
                         itemData.put("art_pk", art_pk);
@@ -877,9 +878,9 @@ public class UserService {
     public ResponseEntity<Map<String, Object>> requestMyProfile(@RequestParam(value = "user_pk") Integer user_pk) {
         UserEntity user;
         Map<String, Object> result = new HashMap<>();
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        System.out.println(userPrincipal);
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(userPrincipal);
 
 //        System.out.println(userPrincipal);
 //        System.out.println(SecurityContextHolder.getContext());
@@ -904,9 +905,9 @@ public class UserService {
     public ResponseEntity<Map<String, Object>> requestMyProfileAndFollows(@RequestParam(value = "user_pk") Integer user_pk) {
         UserEntity user;
         Map<String, Object> result = new HashMap<>();
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        System.out.println(userPrincipal);
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(userPrincipal);
 
         user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
@@ -934,9 +935,9 @@ public class UserService {
     public ResponseEntity<List<Map<String, Object>>> requestArtFollowing(@RequestParam(value = "user_pk") Integer user_pk) {
         UserEntity user;
         List<Map<String, Object>> result = new ArrayList<>();
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        System.out.println(userPrincipal);
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(userPrincipal);
 
             user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -975,9 +976,8 @@ public class UserService {
         UserEntity user;
         List<Map<String, Object>> result = new ArrayList<>();
 
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        System.out.println(userPrincipal);
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(userPrincipal);
 
             user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -1009,9 +1009,8 @@ public class UserService {
         UserEntity user;
         List<Map<String, Object>> result = new ArrayList<>();
 
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        System.out.println(userPrincipal);
+//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(userPrincipal);
 
             user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
