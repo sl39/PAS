@@ -67,11 +67,12 @@ export default function ArtworkInProfile({ artWork, userPk }) {
         <ImageContainer>
           <SquareImage src={artWork.image}></SquareImage>
         </ImageContainer>
+        <BoldParagraph>{artWork.painter}</BoldParagraph>
         <NormalParagraph>{artWork.art_name}</NormalParagraph>
         <BoldParagraph>{artWork.price}원</BoldParagraph>
         <LikeBox>
           <HeartIcon></HeartIcon>
-          <NormalParagraph>132</NormalParagraph>
+          <NormalParagraph>{artWork.follows}</NormalParagraph>
         </LikeBox>
       </ArtworkContainer>
     </StyledLink>
