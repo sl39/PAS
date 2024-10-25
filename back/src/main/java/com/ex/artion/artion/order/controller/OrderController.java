@@ -25,7 +25,7 @@ public class OrderController {
     public ResponseEntity<OrderGetResponseDto> getOrder(@RequestParam Integer payingPk) {
         return ResponseEntity.ok(orderService.getOrder(payingPk));
     }
-    @GetMapping("/aa")
+    @GetMapping("/ab")
     public String test(){
         return "test";
     }
