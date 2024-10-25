@@ -147,7 +147,15 @@ public class RedisSchedulerService {
                     }
                     OrderEntity orderEntity = orderRepostory.findByPaying(paying).orElseGet(()-> null);
                     if(orderEntity == null){
+                        // 메시지 보내기 및 블랙 리스트 등재하기
+                        payingRedisRepository.delete(payingEntityRedis);
+                        artRedisRepository.delete(artEntityRedis);
+                        payingRepository.delete(paying);
+                        List<AuctionEntity> auctionEntities = auctionRepository.fin
 
+                    } else {
+                        artRedisRepository.delete(artEntityRedis);
+                        payingRedisRepository.delete(payingEntityRedis);
                     }
                 }
             }
