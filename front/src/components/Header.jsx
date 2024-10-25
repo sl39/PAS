@@ -46,7 +46,7 @@ export default function Header() {
         <StyledLink to="/">
           <Logo>Artion</Logo>
         </StyledLink>
-        <StyledLink to={`/artist/6`}>
+        <StyledLink to={`/artist/1`}>
           <PiUserCircleThin size={40} />
         </StyledLink>
       </HeaderContainer>
