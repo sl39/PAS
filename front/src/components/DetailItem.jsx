@@ -299,6 +299,7 @@ export default function DetailItem ({ artWork }) {
     const toggleFollowing = async ( art_pk, user_pk ) => {
         try {
             const url = isArtFollowing 
+            //수정
                 ? `https://artion.site/api/artfollowing/${art_pk}/1/unlike`
                 : `https://artion.site/api/artfollowing/${art_pk}/1`;
 
