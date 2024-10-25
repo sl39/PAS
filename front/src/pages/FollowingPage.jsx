@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { FollowingItem, Header, LikedArtItem, FollowersItem } from "../components";
 import styled from "styled-components";
 import { IoIosArrowBack } from 'react-icons/io';
@@ -85,7 +85,7 @@ const LikedArtworks = ({user_pk}) => {
     useEffect(() => {
         const fetchLikedArtworks = async() =>{
             try{
-                const response = await axios.get(`https://artion.site/api/user/artfol?user_pk=1`);
+                const response = await axios.get(`https://artion.site/api/user/artfol?user_pk=${user_pk}`);
                 const sortedArt = response.data.sort((a,b) => new Date(b.upload) - new Date(a.upload))
                 setLikedArtworks(sortedArt);
             } catch(error){
@@ -124,9 +124,10 @@ const Following = ({ user_pk }) => {
     useEffect(() => {
         const fetchFollowing = async() => {
             try{
-                const response = await axios.get(`https://artion.site/api/user/fol?user_pk=1`);
+                const response = await axios.get(`https://artion.site/api/user/fol?user_pk=${user_pk}`);
                 const sortedFollowing = response.data.sort((a,b) => a.user_name.localeCompare(b.user_name));
                 setFollowing(sortedFollowing);
+
             } catch(error){
                 console.error("팔로잉 에러:", error);
             }
@@ -156,10 +157,11 @@ const Followers = ({ user_pk }) => {
     useEffect (() => {
         const fetchFollowers = async() => {
             try{
-                const response = await axios.get(`https://artion.site/api/user/myfol?user_pk=1`);
+                const response = await axios.get(`https://artion.site/api/user/myfol?user_pk=${user_pk}`);
                 const sortedFollower = response.data.sort((a, b) => 
                     a.user_name.localeCompare(b.user_name));
                 setFollowers(sortedFollower);
+
             } catch(error){
                 console.error("팔로워 에러", error);
             }
@@ -182,8 +184,11 @@ const Followers = ({ user_pk }) => {
 // 페이지
 const FollowingPage = () => {
     const { page } = useParams();
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const artistName = searchParams.get('artistName');
     const [selectedPage, setSelectedPage] = useState(page);
-    const user_pk = 1;
+    const user_pk = 6;
 
     const renderPage = () => {
         switch (selectedPage) {
@@ -211,16 +216,16 @@ const FollowingPage = () => {
                     <BackButton />
                     </Link>
                 </ButtonContainer>
-                <Title>user</Title>
+                <Title>{artistName}</Title>
             </HeadContainer>
             <SelectContainer>
-                <SelectLink to={`/following/liked/${user_pk}`} onClick={() => handleSelect('liked')}>
+                <SelectLink to={`/following/liked/${user_pk}?artistName=${encodeURIComponent(artistName)}`} onClick={() => handleSelect('liked')}>
                     <SelectButton selected={selectedPage === 'liked'}>좋아요</SelectButton>
                 </SelectLink>
-                <SelectLink to={`/following/following/${user_pk}`} onClick={() => handleSelect('following')}>
+                <SelectLink to={`/following/following/${user_pk}?artistName=${encodeURIComponent(artistName)}`} onClick={() => handleSelect('following')}>
                     <SelectButton selected={selectedPage === 'following'}>팔로잉</SelectButton>
                 </SelectLink>
-                <SelectLink to={`/following/followers/${user_pk}`} onClick={() => handleSelect('followers')}>
+                <SelectLink to={`/following/followers/${user_pk}?artistName=${encodeURIComponent(artistName)}`} onClick={() => handleSelect('followers')}>
                     <SelectButton selected={selectedPage === 'followers'}>팔로워</SelectButton>
                 </SelectLink>
             </SelectContainer>
