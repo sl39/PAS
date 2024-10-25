@@ -36,8 +36,8 @@ const FollowBox = styled.div`
   height: 20px;
   border: 1px solid black;
   cursor: pointer;
-  background-color: ${(props) => (props.followState ? 'red' : 'transparent')};
-  color: ${(props) => (props.followState ? 'white' : 'black')};
+  background-color: ${(props) => (props.followState ? "red" : "transparent")};
+  color: ${(props) => (props.followState ? "white" : "black")};
 `;
 
 const ArtworkBox = styled.div`
@@ -171,28 +171,30 @@ export default function ArtistProfile() {
   // URL에서 path variable 추출
   const userPkObj = useParams();
   const [artistName, setArtistName] = useState("");
+  const [artistProfileImage, setArtistProfileImage] = useState("");
   const [artworkList, setArtworkList] = useState([]);
   const [followState, setFollowState] = useState(false);
-  
+  const [isSelf, setIsSelf] = useState(false);
+
   //구독/구독취소 변경
-  const handleSubscription = async() => {
+  const handleSubscription = async () => {
     setFollowState((prevState) => !prevState);
     const url = followState
-        ? `https://artion.site/api/following/1/unfollow/${userPkObj.user_pk}`
-        : `https://artion.site/api/following/1/follow/${userPkObj.user_pk}`
+      ? `https://artion.site/api/following/1/unfollow/${userPkObj.user_pk}`
+      : `https://artion.site/api/following/1/follow/${userPkObj.user_pk}`;
 
-    try{      
-        await axios({
-          method: followState ? 'delete' : 'post',
-          url: url,
-        });
-        alert(followState ? "구독이 취소되었습니다." : "구독에 성공했습니다.");
-    } catch(error){
+    try {
+      await axios({
+        method: followState ? "delete" : "post",
+        url: url,
+      });
+      alert(followState ? "구독이 취소되었습니다." : "구독에 성공했습니다.");
+    } catch (error) {
       console.error(error);
       alert("요청에 실패했습니다.");
       setFollowState((prevState) => !prevState);
     }
-  }
+  };
 
   // 작가 페이지 정보 불러오기
   useEffect(() => {
@@ -200,7 +202,9 @@ export default function ArtistProfile() {
       try {
         const artistProfileInfo = await getArtistProfileApi(userPkObj.user_pk);
         setArtistName(artistProfileInfo.User_name);
+        setArtistProfileImage(artistProfileInfo.user_Image);
         setArtworkList(artistProfileInfo.artList);
+        setIsSelf(artistProfileInfo.isSelf);
         setFollowState(artistProfileInfo.followState);
       } catch (error) {
         console.error("데이터를 가져오는 중에 오류가 발생했습니다: ", error);
@@ -210,15 +214,13 @@ export default function ArtistProfile() {
     fetchData();
   }, [userPkObj]);
 
-  
-
   return (
     <>
-      <Header ></Header>
+      <Header></Header>
       <ArtistContainer>
         <ProfileBox>
           <ImageContainer>
-            <CircleImage src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFfltVt8k_O8R9Hh3eBO1cEsLXP6RkJfh-Jw&s"></CircleImage>
+            <CircleImage src={artistProfileImage}></CircleImage>
           </ImageContainer>
           <BoxContainer>
             <TopBox>
@@ -226,14 +228,21 @@ export default function ArtistProfile() {
                 <ProfileInfoBox>
                   <BoldParagraph>{artistName}</BoldParagraph>
                 </ProfileInfoBox>
-                <FollowBox onClick={handleSubscription} followState={followState}>
-                  <NormalParagraph>구독</NormalParagraph>
-                </FollowBox>
+                {!isSelf && (
+                  <FollowBox
+                    onClick={handleSubscription}
+                    followState={followState}
+                  >
+                    <NormalParagraph>구독</NormalParagraph>
+                  </FollowBox>
+                )}
               </NameBox>
               <SettingBox>
-                <StyledLink to={"/"}>
-                  <CiMenuKebab size={25}></CiMenuKebab>
-                </StyledLink>
+                {isSelf && (
+                  <StyledLink to={`/info/${userPkObj.user_pk}`}>
+                    <CiMenuKebab size={25}></CiMenuKebab>
+                  </StyledLink>
+                )}
               </SettingBox>
             </TopBox>
             <BottomBox>
