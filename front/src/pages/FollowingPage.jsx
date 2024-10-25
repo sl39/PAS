@@ -16,6 +16,8 @@ const HeadContainer = styled.div`
     align-items: center;
     padding: 0 20px;
     justify-content: space-between; 
+    margin: 20px 0;
+
 `;
 const ButtonContainer = styled.div`
     display: flex;
@@ -27,7 +29,7 @@ const BackButton = styled(IoIosArrowBack)`
     font-size: 25px;
     
 `;
-const Title = styled.h1`
+const Title = styled.h2`
     margin: 0;
     text-align: center;
     padding-right: 30px;
@@ -183,12 +185,11 @@ const Followers = ({ user_pk }) => {
 
 // 페이지
 const FollowingPage = () => {
-    const { page } = useParams();
+    const { page, user_pk } = useParams();
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const artistName = searchParams.get('artistName');
     const [selectedPage, setSelectedPage] = useState(page);
-    const user_pk = 6;
 
     const renderPage = () => {
         switch (selectedPage) {
