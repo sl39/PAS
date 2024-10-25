@@ -174,7 +174,7 @@ export default function ArtistProfile() {
   const [artworkList, setArtworkList] = useState([]);
   const [followState, setFollowState] = useState(false);
   
-  //나중에 구독버튼 눌렸을때 구독/구독취소 파트
+  //구독/구독취소 변경
   const handleSubscription = async() => {
     setFollowState((prevState) => !prevState);
     const url = followState
