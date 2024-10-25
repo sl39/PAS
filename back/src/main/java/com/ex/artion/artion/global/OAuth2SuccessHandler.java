@@ -90,7 +90,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private ResponseCookie createCookie(String key, String value) {
         return ResponseCookie.from(key, value)
-                .sameSite("")
+                .httpOnly(true)
+                .secure(false)
+                .sameSite("None")
                 .path("/")
                 .build();
     }
