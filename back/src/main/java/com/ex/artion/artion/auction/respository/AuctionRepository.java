@@ -28,6 +28,12 @@ public interface AuctionRepository extends JpaRepository<AuctionEntity, Integer>
             ,nativeQuery = true)
     AuctionEntity findOneByArt_pk(@Param("art_pk") Integer art_pk);
 
+    @Query(value = "SELECT * FROM auction_entity a " +
+            "WHERE a.art_entity_art_pk =:art_pk and a.current_price = " +
+            "(SELECT MAX(b.current_price) FROM auction_entity b WHERE b.art_entity_art_pk = :art_pk)" , nativeQuery = true
+    )
+    AuctionEntity findMaxOneByArt_pk(@Param("art_pk") Integer art_pk);
+
     // 경매하는 미술품의 최고 값과 자신의 최고 값
     @Query(value = "SELECT " +
             "MAX(a.current_price) AS maxPrice, " +

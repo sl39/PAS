@@ -1,38 +1,39 @@
-package com.ex.artion.artion.global.scheduler;
-
-import com.ex.artion.artion.art.entity.ArtEntity;
-import com.ex.artion.artion.art.respository.ArtRepository;
-import com.ex.artion.artion.auction.entity.AuctionEntity;
-import com.ex.artion.artion.auction.respository.AuctionRepository;
-import com.ex.artion.artion.global.error.CustomException;
-import com.ex.artion.artion.global.error.ErrorCode;
-import com.ex.artion.artion.order.entity.OrderEntity;
-import com.ex.artion.artion.order.respository.OrderRepostory;
-import com.ex.artion.artion.paying.entity.PayingEntity;
-import com.ex.artion.artion.paying.repository.PayingRepository;
-import com.ex.artion.artion.user.entity.UserEntity;
-import com.ex.artion.artion.user.respository.UserRepository;
-import jakarta.annotation.PostConstruct;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-import org.springframework.stereotype.Service;
-
-import java.time.*;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
-@Service
-@RequiredArgsConstructor
-public class ScheduledMessageService {
+//package com.ex.artion.artion.global.scheduler;
+//
+//import com.ex.artion.artion.art.entity.ArtEntity;
+//import com.ex.artion.artion.art.respository.ArtRepository;
+//import com.ex.artion.artion.auction.entity.AuctionEntity;
+//import com.ex.artion.artion.auction.respository.AuctionRepository;
+//import com.ex.artion.artion.global.error.CustomException;
+//import com.ex.artion.artion.global.error.ErrorCode;
+//import com.ex.artion.artion.order.entity.OrderEntity;
+//import com.ex.artion.artion.order.respository.OrderRepostory;
+//import com.ex.artion.artion.paying.entity.PayingEntity;
+//import com.ex.artion.artion.paying.repository.PayingRepository;
+//import com.ex.artion.artion.user.entity.UserEntity;
+//import com.ex.artion.artion.user.respository.UserRepository;
+//import jakarta.annotation.PostConstruct;
+//import jakarta.transaction.Transactional;
+//import lombok.RequiredArgsConstructor;
+//import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+//import org.springframework.stereotype.Service;
+//
+//import java.time.*;
+//import java.util.Calendar;
+//import java.util.Date;
+//import java.util.List;
+//import java.util.Optional;
+//
+//@Service
+//@RequiredArgsConstructor
+//public class ScheduledMessageService {
 //    private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
 //    private final AuctionRepository auctionRepository;
 //    private final ArtRepository artRepository;
 //    private final PayingRepository payingRepository;
 //    private final UserRepository userRepository;
 //    private final OrderRepostory orderRepository;
+//    private final SMSService smsService;
 //
 //
 //    // status == 0 이고 현재 시간이 < 시작시간이면
@@ -66,20 +67,15 @@ public class ScheduledMessageService {
 //    // status == 1 이고 end 시간이 < 12시간 + 하는거 보다 작을 경우
 //    @Transactional
 //    public Runnable acceptAuction(ScheduleDto dto) {
-//        return () -> {
-//
-//
 //        LocalDateTime now = LocalDateTime.now();
-//        System.out.println(dto.getArt_pk() + "여기는 acceptAuction" + now);
+//        return () -> {
 //        Optional<AuctionEntity> auction = auctionRepository.findByIdAndMaxPrice(dto.getArt_pk());
 //        ArtEntity art = artRepository.findById(dto.getArt_pk()).orElseThrow( () -> new CustomException(ErrorCode.ART_NOT_FOUND));
 //        if(auction.isEmpty()){
 //            art.setCurrent_auction_status(0);
 //            artRepository.save(art);
-//
-//            // 재경매 해야 됨 /////////////////////
-//
-//                System.out.println("낙찰 되지 않았습니다. 재경매 하십시요");
+//            String phone_number = "";
+////            smsService.noBid(art.getArt_name(),phone_number);
 //        } else {
 //        art.setCurrent_auction_status(2);
 //        artRepository.save(art);
@@ -140,12 +136,14 @@ public class ScheduledMessageService {
 //            paying.setStatus(1);
 //            payingRepository.save(paying);
 //            //낙찰된 유저에게 메시지를 보내야 됨
-//            System.out.println("결제시간까지 1시간 남았습니다 결제를 완료 해주세요" + now);
+//            String phone_number = "";
+////            smsService.restTimeToPay(paying.getAuction().getArt_entity().getArt_name(),phone_number);
 //        };
 //    }
 //
 //    @Transactional
 //    public Runnable afterPayingTime(ScheduleEndDto dto){
+//
 //        return () -> {
 //            Optional<PayingEntity> paying = payingRepository.findById(dto.getPaying_pk());
 //            if(paying.isPresent()){
@@ -158,15 +156,13 @@ public class ScheduledMessageService {
 //                }
 //            }
 //
-//                LocalDateTime now = LocalDateTime.now();
-//                System.out.println("결제 완료를 안해서 아웃입니다." + now);
-//                // blackList 만들어야 됨
-//
-//                ArtEntity art = artRepository.findById(dto.getArt_pk()).orElseThrow(() -> new CustomException(ErrorCode.ART_NOT_FOUND));
-//                List<AuctionEntity> auctionEntities = auctionRepository.findAllByArt_pk(art.getArt_pk());
-//                for (AuctionEntity auc : auctionEntities) {
-//                    payingRepository.deleteAllByAuction(auc);
-//                }
+//            ArtEntity art = artRepository.findById(dto.getArt_pk()).orElseThrow(() -> new CustomException(ErrorCode.ART_NOT_FOUND));
+//            String phone_number = "";
+////            smsService.endTime(art.getArt_name(),phone_number);
+//            List<AuctionEntity> auctionEntities = auctionRepository.findAllByArt_pk(art.getArt_pk());
+//            for (AuctionEntity auc : auctionEntities) {
+//                payingRepository.deleteAllByAuction(auc);
+//            }
 //
 //                auctionRepository.deleteAllByArt_entity(art.getArt_pk());
 //                art.setCurrent_auction_status(0);
@@ -187,6 +183,9 @@ public class ScheduledMessageService {
 //                    .end_time(art.getEndTime())
 //                    .start_time(art.getStartTime())
 //                    .build();
+//            if(art.getEndTime() == null || art.getStartTime() == null){
+//                continue;
+//            }
 //            if(art.getStartTime().isAfter(now)){
 //                beforeTask(dto);
 //            } else if (art.getEndTime().isAfter(now) && art.getStartTime().isBefore(now) && (art.getCurrent_auction_status() == 1 || art.getCurrent_auction_status() == 0)){
@@ -216,4 +215,4 @@ public class ScheduledMessageService {
 //        Date scheduledTime = calendar.getTime();  // 지정된 시간 후의 Date 반환
 //        return scheduledTime;
 //    }
-}
+//}

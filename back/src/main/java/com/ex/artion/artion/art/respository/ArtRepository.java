@@ -44,7 +44,7 @@ public interface ArtRepository extends JpaRepository<ArtEntity, Integer> {
     List<ArtSearchResponseDto> findAllWithRecent();
 
     // 카테고리, 키워드, max, min, sortby, sort, pagination 해야됨
-    @Query(value = "SELECT new com.ex.artion.artion.art.dto.ArtSearchKeywordResponseDto(a.art_pk, COALESCE(c.price, a.minP), a.art_name, a.painter, COALESCE(d.f_c, 0), COALESCE(im.image,'') ), COALESCE(c.price, a.minP) as price , COALESCE(d.f_c, 0) as artFollowingNum " +
+    @Query(value = "SELECT new com.ex.artion.artion.art.dto.ArtSearchKeywordResponseDto(a.art_pk, COALESCE(c.price, a.minP), a.art_name, a.painter, COALESCE(d.f_c, 0), COALESCE(im.image,'') ), COALESCE(c.price, a.minP) as price , COALESCE(d.f_c, 0) as artFollowingNum, ROW_NUMBER() OVER (ORDER BY a.art_pk ASC) as ran " +
             "FROM ArtEntity a " +
             "LEFT JOIN (SELECT b.art_entity.art_pk AS art_pk, MAX(b.current_price) AS price " +
             "            FROM AuctionEntity b " +
@@ -52,14 +52,12 @@ public interface ArtRepository extends JpaRepository<ArtEntity, Integer> {
             "LEFT JOIN (SELECT COUNT(*) AS f_c, f.artEntity.art_pk AS art_entity_art_pk " +
             "            FROM ArtFollowingEntity f " +
             "            GROUP BY f.artEntity.art_pk) AS d ON a.art_pk = d.art_entity_art_pk " +
-            "LEFT JOIN (SELECT image.art_image_pk as art_pk, MAX(image.art_image_url) as image " +
+            "LEFT JOIN (SELECT image.art_entity.art_pk as art_pk, MAX(image.art_image_url) as image " +
             "           FROM ArtImageEntity as image " +
             "           GROUP BY art_pk) as im ON a.art_pk = im.art_pk " +
             "WHERE (:minPrice <= COALESCE(c.price, a.minP) and COALESCE(c.price, a.minP)<= :maxPrice) " +
             "AND (:keyword IS NULL OR :keyword = '' OR a.art_name LIKE %:keyword% OR a.art_info LIKE %:keyword%) " +
-            "AND a.art_pk in (SELECT DISTINCT(k.art.art_pk) FROM ArtArtCategory as k WHERE (:category IS NULL OR :category = '' OR k.art_category.art_category_name = :category)) "
-
-            )
+            "AND a.art_pk in (SELECT DISTINCT(k.art.art_pk) FROM ArtArtCategory as k WHERE (:category IS NULL OR :category = '' OR k.art_category.art_category_name = :category)) ")
     Page<ArtSearchKeywordResponseDto> findAllWithDetails(@Param("keyword") String keyword, @Param("category") String category, @Param("minPrice") Long minPrice, @Param("maxPrice") Long maxPrice, Pageable pageable);
     @Query(value = "SELECT * FROM art_entity a " +
             "WHERE a.user_entity_user_pk = :user_pk "

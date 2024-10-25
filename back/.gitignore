@@ -30,6 +30,7 @@ out/
 /nbbuild/
 /dist/
 
+LightsailDefaultKey-ap-northeast-2.pem
 Artion.pem
 /nbdist/
 /.nb-gradle/
@@ -37,3 +38,5 @@ Artion.pem
 ### VS Code ###
 .vscode/
 *.yml
+
+*.pem

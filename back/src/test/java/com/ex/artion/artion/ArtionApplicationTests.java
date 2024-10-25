@@ -10,7 +10,6 @@ import com.ex.artion.artion.artimage.entity.ArtImageEntity;
 import com.ex.artion.artion.artimage.respository.ArtImageRepository;
 import com.ex.artion.artion.auction.entity.AuctionEntity;
 import com.ex.artion.artion.auction.respository.AuctionRepository;
-import com.ex.artion.artion.global.scheduler.ScheduledMessageService;
 import com.ex.artion.artion.user.entity.UserEntity;
 import com.ex.artion.artion.user.respository.UserRepository;
 import net.datafaker.Faker;
@@ -46,26 +45,15 @@ class ArtionApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-//
-//	@Autowired
-//	private ScheduledMessageService service;
-
-//	@Test
-//	public void getTimeTest(){
-//		for(int i = 0 ; i < 10 ; i++){
-//			service.scheduleTask(i);
-//
-//		}
-//	}
 
 //	public List<ArtEntity> generateRandomArtAuctions(int count) {
 //		Faker faker = new Faker();
 //		Random random = new Random();
 //		List<ArtEntity> auctions = new ArrayList<>();
-//		Optional<UserEntity> user = userRepository.findById(2);
+//		Optional<UserEntity> user = userRepository.findById(15);
 //		UserEntity userEntity = user.get();
 //		for (int i = 0; i < count; i++) {
-//			String art_name 	= faker.oscarMovie().movieName();
+//			String art_name = faker.oscarMovie().movieName();
 //			String art_info = faker.lorem().sentence();
 //			Long minP = (long) (random.nextInt(5000) + 1000); // Random price between 1000 and 6000
 //			Long maxP = minP + random.nextInt(5000); // Max price higher than min price
@@ -76,8 +64,8 @@ class ArtionApplicationTests {
 //			LocalDate createdAt = LocalDate.now().minusDays(random.nextInt(1000)); // Random date in the past 1000 days
 //			LocalDate upload = LocalDate.now().minusDays(random.nextInt(100)); // Random upload date in the past 100 days
 //			LocalDateTime startTime = LocalDateTime.now().minusDays(random.nextInt(10)); // Random start time in the past 10 days
-//			LocalDateTime endTime = startTime.plusDays(random.nextInt(5)); // End time a few days after start time
-//			Integer current_auction_status = random.nextInt(5); // Random status between 0 and 4
+//			LocalDateTime endTime = LocalDateTime.now().plusDays(random.nextInt(10)); // End time a few days after start time
+//			Integer current_auction_status = 0; // Random status between 0 and 4
 //			String painter = faker.artist().name();
 //
 //			ArtEntity artEntity = ArtEntity.builder()
@@ -99,15 +87,15 @@ class ArtionApplicationTests {
 //					.build();
 //
 //			artRepository.save(artEntity);
-//			for(int j = 1; j < 10; j++) {
-//				ArtCategoryEntity en = artCategoryRepository.findById(j).orElse(null);
 //
+//			for(int j = 1; j < 5; j++) {
+//				ArtCategoryEntity en = artCategoryRepository.findById(j).orElse(null);
 //				ArtArtCategory category = ArtArtCategory.builder()
 //						.art(artEntity)
 //						.art_category(en)
 //						.build();
 //
-//				artArtCategoryRepository.save(category);
+//				artArtCategoryRepository.saveAndFlush(category);
 //			}
 //
 //			for (int j =0; j< 5 ; j ++ ){
@@ -124,7 +112,7 @@ class ArtionApplicationTests {
 //
 //	@Test
 //	void test() {
-//		List<ArtEntity> artEntities = generateRandomArtAuctions(5);
+//		List<ArtEntity> artEntities = generateRandomArtAuctions(1000);
 //	}
 
 }

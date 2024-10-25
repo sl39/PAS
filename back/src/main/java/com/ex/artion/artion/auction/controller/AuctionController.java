@@ -1,7 +1,6 @@
 package com.ex.artion.artion.auction.controller;
 
 
-import com.ex.artion.artion.art.dto.ArtDetailResponseDto;
 import com.ex.artion.artion.auction.dto.AuctionBitRequestDto;
 import com.ex.artion.artion.auction.dto.AuctionBitResponseDto;
 import com.ex.artion.artion.auction.dto.AuctionDetailResponseDto;
@@ -9,7 +8,6 @@ import com.ex.artion.artion.auction.service.AuctionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

@@ -15,6 +15,8 @@ import com.ex.artion.artion.blacklistuser.entity.BlackListUserEntity;
 import com.ex.artion.artion.blacklistuser.repository.BlackListUserRepository;
 import com.ex.artion.artion.global.error.CustomException;
 import com.ex.artion.artion.global.error.ErrorCode;
+import com.ex.artion.artion.global.scheduler.SMSDto.SuccessfulBidDto;
+import com.ex.artion.artion.global.scheduler.SMSService;
 import com.ex.artion.artion.order.entity.OrderEntity;
 import com.ex.artion.artion.order.respository.OrderRepostory;
 import com.ex.artion.artion.paying.entity.PayingEntity;
@@ -43,6 +45,7 @@ public class AuctionService {
     private final BlackListUserRepository blackListUserRepository;
     private final PayingRepository payingRepository;
     private final OrderRepostory orderRepostory;
+    private final SMSService smsService;
 
 
     public AuctionBitResponseDto updateBid(Integer artPk, AuctionBitRequestDto auctionBitRequestDto){
@@ -90,6 +93,19 @@ public class AuctionService {
             payingRepository.save(paying);
             auctionBitResponseDto.setPaying_pk(paying.getPaying_pk());
             // 메시지 처리 해야 됨
+            LocalDateTime date = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+            SuccessfulBidDto dto = SuccessfulBidDto.builder()
+                    // user phone_number
+                    .phone_number("")
+                    .art_name(artEntity.getArt_name())
+                    .artPk(artEntity.getArt_pk().toString())
+                    .time(formatter.format(date))
+                    .userPk(userEntity.getUser_pk().toString())
+
+                    .build();
+            smsService.setPaymentAlarm(dto);
         }
 
         messagingTemplate.convertAndSend("/sub/auction/" + artPk, auctionBitResponseDto);
@@ -173,13 +189,14 @@ public class AuctionService {
             dto.setState(1);
         } else {
 
-            PayingEntity paying = payingRepository.findByAuction(auction.get()).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+            PayingEntity paying = payingRepository.findByAuction(auction.get()).orElseThrow(()-> new CustomException(ErrorCode.PAYING_NOT_FOUND));
             Optional<OrderEntity> order = orderRepostory.findByPaying(paying);
+            dto.setPaying_pk(paying.getPaying_pk());
             if(order.isPresent()){
                 dto.setState(3);
             } else {
                 dto.setState(2);
-                dto.setPaying_pk(paying.getPaying_pk());
+
             }
 
         }

@@ -21,21 +21,23 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ArtController {
     private final ArtService artService;
-
+    //그림 생성
     @PostMapping("/create")
-    public ResponseEntity<String> createArt(
-            @RequestBody ArtCreateDto dto,
-            @RequestParam(value = "user_pk") Integer user_pk) {
-        artService.createArt(dto, user_pk);
-        return ResponseEntity.ok("그림 추가 성공!");
+    public ResponseEntity<String> createArt(@RequestBody ArtCreateDto dto, @RequestParam(value="user_pk") Integer user_pk) {
+        return artService.createArt(dto, user_pk);
     }
-
+    //그림 수정
     @PutMapping("/update")
     public ResponseEntity<String> updateArt(
             @RequestBody ArtUpdateDto dto,
             @RequestParam(value = "art_pk") Integer art_pk) {
-        artService.updateArt(dto, art_pk);
-        return ResponseEntity.ok("그림 수정 성공!");
+        return artService.updateArt(dto, art_pk);
+    }
+    //그림 수정 전 불러오기
+    @GetMapping("/update")
+    public ResponseEntity<Map<String, Object>> updateArt(
+            @RequestParam(value = "art_pk") Integer art_pk) {
+        return artService.updateBeforeArt(art_pk);
     }
 
     @PostMapping("/changed")
@@ -53,7 +55,7 @@ public class ArtController {
         return ResponseEntity.ok("그림 삭제 성공!");
     }
 
-    @PostMapping("/ordered/{art_pk}")
+    @GetMapping("/ordered/{art_pk}")
     public ResponseEntity<Map<String, Object>> orderedArt(
             @PathVariable(value="art_pk") Integer art_pk) {
         return artService.orderedArt(art_pk);

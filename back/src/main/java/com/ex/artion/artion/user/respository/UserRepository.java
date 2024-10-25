@@ -7,6 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import org.springframework.data.jpa.repository.Query;
+
+import javax.swing.text.html.parser.Entity;
+import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
@@ -18,4 +22,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
             "ORDER BY follow.cnt DESC " +
             "LIMIT 10")
     List<ArtistSearchResponseDto> findByPainterKeyword(@Param(value = "keyword") String keyword);
+
+    @Query(value = "SELECT * FROM user_entity a " +
+            "WHERE a.kakao_pk = :kakao_pk "
+            ,nativeQuery = true)
+    Optional<UserEntity> findByKakao_pk(String kakao_pk);
+
 }
