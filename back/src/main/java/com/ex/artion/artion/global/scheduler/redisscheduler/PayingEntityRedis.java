@@ -11,15 +11,15 @@ import org.springframework.data.redis.core.RedisHash;
 @Builder
 public class PayingEntityRedis {
     @Id
-    private Integer paying_pk;
+    private Integer payingPk;
 
     private Integer status;
-    private Integer art_pk;
+    private Integer artPk;
 
     public PayingEntityRedis(Integer paying_pk, Integer status, Integer art_pk) {
-        this.paying_pk = paying_pk;
+        this.payingPk = paying_pk;
         this.status = status;
-        this.art_pk = art_pk;
+        this.artPk = art_pk;
     }
 
 }

@@ -52,10 +52,11 @@ public class RedisSchedulerService {
 
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 60000)
     public void schedule(){
         List<ArtEntityRedis> artEntityRedisList = artRedisRepository.findAll();
         LocalDateTime now = LocalDateTime.now();
+        System.out.println(1);
         for(ArtEntityRedis artEntityRedis : artEntityRedisList){
             // 만약에 재 경매를 해야 될 경우 삭제
             if(artEntityRedis.getCurrent_auction_status() == 0 && artEntityRedis.getEndTime().isBefore(now)){
@@ -96,8 +97,8 @@ public class RedisSchedulerService {
                             .auction(auction.get())
                             .build();
                     PayingEntityRedis payingEntityRedis = PayingEntityRedis.builder()
-                            .paying_pk(paying.getPaying_pk())
-                            .art_pk(artEntity.getArt_pk())
+                            .payingPk(paying.getPaying_pk())
+                            .artPk(artEntity.getArt_pk())
                             .status(0)
                             .build();
                     artEntityRedis.setEndTime(paying.getCreatedAt().plusHours(12));
@@ -116,13 +117,14 @@ public class RedisSchedulerService {
             }
             // status 가2 이고 결제 종료 시간까지 조금 남았을 때 와 끝났을 때  분기 처리
             else if (artEntityRedis.getCurrent_auction_status() == 2){
-                PayingEntityRedis payingEntityRedis = payingRedisRepository.findByArt_pk(artEntityRedis.getArt_pk()).orElseGet(()-> null);
+                PayingEntityRedis payingEntityRedis = payingRedisRepository.findByArtPk(artEntityRedis.getArt_pk()).orElseGet(()-> null);
                 if(payingEntityRedis == null){
                     artRedisRepository.delete(artEntityRedis);
+                    continue;
                 }
 
                 if(artEntityRedis.getEndTime().isAfter(now) &&artEntityRedis.getEndTime().minusHours(1).isBefore(now) && payingEntityRedis.getStatus() == 0){
-                    PayingEntity paying = payingRepository.findById(payingEntityRedis.getPaying_pk()).orElseGet(() -> null);
+                    PayingEntity paying = payingRepository.findById(payingEntityRedis.getPayingPk()).orElseGet(() -> null);
                     if(paying == null){
                         artRedisRepository.delete(artEntityRedis);
                         payingRedisRepository.delete(payingEntityRedis);
@@ -140,7 +142,7 @@ public class RedisSchedulerService {
                     }
 
                 } else if(artEntityRedis.getEndTime().isBefore(now)){
-                    PayingEntity paying = payingRepository.findById(payingEntityRedis.getPaying_pk()).orElseGet(() -> null);
+                    PayingEntity paying = payingRepository.findById(payingEntityRedis.getPayingPk()).orElseGet(() -> null);
                     if(paying == null){
                         artRedisRepository.delete(artEntityRedis);
                         payingRedisRepository.delete(payingEntityRedis);
@@ -166,6 +168,7 @@ public class RedisSchedulerService {
             }
 
         }
+        System.out.println(2);
     }
 
 

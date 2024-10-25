@@ -5,6 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 public interface PayingRedisRepository extends CrudRepository<PayingEntityRedis, Integer> {
-    Optional<PayingEntityRedis> findByArt_pk(Integer artId);
-
+    Optional<PayingEntityRedis> findByArtPk(Integer artId);
 }
