@@ -93,7 +93,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         System.out.println("로그 7: 리프레쉬토큰 쿠키 생성 : " + refreshToken );
 
 
-        if(!Objects.requireNonNull(user).getAddress().isEmpty() ) {
+        if(Objects.requireNonNull(user).getAddress() != null && !Objects.requireNonNull(user).getAddress().isEmpty()) {
             System.out.println("기존 유저입니다!");
             redirectStrategy.sendRedirect(request, response, isMemberUrl);
         } else {
