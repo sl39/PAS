@@ -116,7 +116,7 @@ public class RedisSchedulerService {
             }
             // status 가2 이고 결제 종료 시간까지 조금 남았을 때 와 끝났을 때  분기 처리
             else if (artEntityRedis.getCurrent_auction_status() == 2){
-                PayingEntityRedis payingEntityRedis = payingRedisRepository.findByArt_Id(artEntityRedis.getArt_pk()).orElseGet(()-> null);
+                PayingEntityRedis payingEntityRedis = payingRedisRepository.findByArt_pk(artEntityRedis.getArt_pk()).orElseGet(()-> null);
                 if(payingEntityRedis == null){
                     artRedisRepository.delete(artEntityRedis);
                 }
@@ -144,6 +144,7 @@ public class RedisSchedulerService {
                     if(paying == null){
                         artRedisRepository.delete(artEntityRedis);
                         payingRedisRepository.delete(payingEntityRedis);
+                        continue;
                     }
                     OrderEntity orderEntity = orderRepostory.findByPaying(paying).orElseGet(()-> null);
                     if(orderEntity == null){
@@ -151,15 +152,18 @@ public class RedisSchedulerService {
                         payingRedisRepository.delete(payingEntityRedis);
                         artRedisRepository.delete(artEntityRedis);
                         payingRepository.delete(paying);
-                        List<AuctionEntity> auctionEntities = auctionRepository.fin
-
-                    } else {
-                        artRedisRepository.delete(artEntityRedis);
-                        payingRedisRepository.delete(payingEntityRedis);
+                        List<AuctionEntity> auctionEntities = auctionRepository.findAllByArt_pk(artEntityRedis.getArt_pk());
+                        auctionRepository.deleteAll(auctionEntities);
+                        ArtEntity artEntity = artRepository.findById(artEntityRedis.getArt_pk()).orElseGet(()-> null);
+                        if(artEntity != null){
+                            artEntity.setCurrent_auction_status(0);
+                            artRepository.save(artEntity);
+                        }
                     }
+                    artRedisRepository.delete(artEntityRedis);
+                    payingRedisRepository.delete(payingEntityRedis);
                 }
             }
-
 
         }
     }
