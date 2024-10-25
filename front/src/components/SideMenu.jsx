@@ -86,7 +86,7 @@ export default function SideMenu({ handleToggle, isMenuOpen }) {
             </StyledLink>
           ))}
         </CategoryContainer>
-        <StyledLink to="/">
+        <StyledLink to={`/artist/1`}>
           <StyledHeading>My Page</StyledHeading>
         </StyledLink>
         {/* 수정 */}

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { ArtworkInProfile, Header } from "../components";
 import { CiMenuKebab } from "react-icons/ci";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -167,6 +167,8 @@ export async function getArtistProfileApi(userPk) {
   return response.data;
 }
 
+let currentPath = "";
+
 export default function ArtistProfile() {
   // URL에서 path variable 추출
   const userPkObj = useParams();
@@ -175,6 +177,14 @@ export default function ArtistProfile() {
   const [artworkList, setArtworkList] = useState([]);
   const [followState, setFollowState] = useState(false);
   const [isSelf, setIsSelf] = useState(false);
+
+  // Link 클릭 시 같은 페이지여도 새로고침 하기
+  let location = useLocation();
+  useEffect(() => {
+    if (currentPath === location.pathname) window.location.reload();
+
+    currentPath = location.pathname;
+  }, [location]);
 
   //구독/구독취소 변경
   const handleSubscription = async () => {
