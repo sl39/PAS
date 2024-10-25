@@ -276,7 +276,6 @@ export default function DetailItem ({ artWork }) {
     const maxPriceRE = maxPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
     const currentPriceRE = currentPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
     
-
     console.log(user_pk)
     
     if(!artWork) return null;
@@ -298,7 +297,6 @@ export default function DetailItem ({ artWork }) {
     }
     
     const toggleFollowing = async ( art_pk, user_pk ) => {
-        console.log(art_pk)
         try {
             const url = isArtFollowing 
                 ? `https://artion.site/api/artfollowing/${art_pk}/1/unlike`
@@ -348,7 +346,7 @@ export default function DetailItem ({ artWork }) {
             </ImageContainer>
             <YearInfoContainer>
                 <YearInfo>작품 제작년도<br/>{artWork.created}</YearInfo>
-                <SizeInfo>{artWork.width} x {artWork.length} x {artWork.depth} cm
+                <SizeInfo>{artWork.width} x {artWork.length} x {(artWork.depth || 0)} cm
                     <br/>
                     <div style={{ display: 'flex', alignItems: 'center',justifyContent: 'flex-end' }}>
                     <CameraLink to={`/guide/${art_pk}?image=${artWork.artImages[0]}&width=${(artWork.width / 100).toFixed(2)}&length=${(artWork.length / 100).toFixed(2)}`}>
