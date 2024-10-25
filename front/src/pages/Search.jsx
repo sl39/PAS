@@ -95,7 +95,6 @@ export async function searchArtworkApi(options) {
       pageSize: 20, // 페이지당 작품 개수
     },
   });
-
   return response.data;
 }
 
@@ -108,6 +107,8 @@ export async function searchArtistApi(options) {
   });
   return response.data;
 }
+
+let currentPath = "";
 
 export default function Search() {
   // 작가, 작품 리스트
@@ -135,6 +136,13 @@ export default function Search() {
   const [ref, inView] = useInView({
     threshold: 0.5, // 컴포넌트의 100%가 보일 때 inView가 true로 변경
   });
+
+  // Link 클릭 시 같은 페이지여도 새로고침 하기
+  useEffect(() => {
+    if (currentPath === location.pathname) window.location.reload();
+
+    currentPath = location.pathname;
+  }, [location]);
 
   // 작가 리스트 가져오기
   useEffect(() => {
