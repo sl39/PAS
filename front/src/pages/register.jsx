@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import { createGlobalStyle } from 'styled-components';
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -239,7 +239,7 @@ export default function Register(){
     })
   };
  
-    const uploadImage = async (file) => {
+  const uploadImage = async (file) => {
         const storageRef = ref(storage, `images/${file.name}`);
         // 이미지 업로드
         await uploadBytes(storageRef, file);
@@ -248,16 +248,16 @@ export default function Register(){
 
         // URL을 images 배열에 추가
         setImage(prevImages => [...prevImages, url]);
-    };
+  };
 
-    const imageChange = (e) => {
+  const imageChange = (e) => {
       const files = Array.from(e.target.files);
       files.forEach(file => uploadImage(file)); // 여러 파일 업로드
 
-    };
+  };
 
     //이미지 클릭시 삭제 부분
-    const imageDelete =(index) =>{
+  const imageDelete =(index) =>{
       const confirmDelete = window.confirm("삭제하시겠습니까?");
       if (confirmDelete) {
         setImage(prevImages => prevImages.filter((_, i) => i !== index));
@@ -268,7 +268,7 @@ export default function Register(){
         }
 
         console.log(images);
-    };
+  };
 
   //현재 이전 날짜 선택 불가 옵션
   useEffect(() => {
@@ -364,7 +364,7 @@ export default function Register(){
       </ArtSize>
       <SelectList>
         <SelectSize onChange={selecetOption} >
-        <option disabled selected value="default">--카테고리 선택--</option>
+        <option value="default">--카테고리 선택--</option>
           <option value="유화">유화</option>
           <option value="수채화">수채화</option>
           <option value="아크릴화">아크릴화</option>

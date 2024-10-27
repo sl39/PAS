@@ -59,11 +59,12 @@ const P = styled.p`
 `;
 
 const AccountDiv = styled.div`
-   display: flex;
+  display: flex;
   flex-direction: column;
   width: 80%;
-   margin-bottom: 5%;
-   &>*{
+  margin-bottom: 5%;
+
+  &>*{
   width: 100%;
   margin-bottom: 0;
   padding: 5px;
@@ -100,7 +101,7 @@ const AddressSerchDiv = styled.div`
 export default function SettingPage() {
   const [text, setText] = useState('');
   const [phone, setPhone] = useState('');
-  const [bankName, setBankName] = useState('국민은행');
+  const [bankName, setBankName] = useState('');
   const [acc, setAccount] = useState('');
   const [address, setAddress] = useState('');
   const [detailAddress, setDetailAddress] = useState('');
@@ -115,7 +116,7 @@ export default function SettingPage() {
   //주소 객체 관리를 위한 state
     const [form, setForm] = useState({
       address2: '',
-      zonecode: '', // zonecode를 문자열로 설정
+      zonecode: '', 
   });
 
   //주소 팝업 열기
@@ -229,15 +230,19 @@ export default function SettingPage() {
     })
   },[]);
 
-  const postButton = () =>{
-    const requiredFields = [text, phone, bankName,acc, address, detailAddress]; 
-    const allFieldsFilled = requiredFields.every(field => field.trim() !== '');
+  const postButton = () => {
+    // 필드 값이 비어 있거나 'default' 값인지 확인
+    const requiredFields = [text, phone, bankName, acc, address, detailAddress]; 
+    const allFieldsFilled = requiredFields.every(field => 
+        field && field.trim() !== '' && field !== 'default'
+    );
+
     if (!allFieldsFilled) {
         alert("입력이 완료되지 않았습니다. 모든 필드를 입력해주세요.");
     } else {
         setSubmit(true);
- }
-}
+    }
+};
 
   return (
     <AllBox>
@@ -253,7 +258,7 @@ export default function SettingPage() {
         <P>계좌정보</P>
         <AccountDiv>
         <Select value={bankName} onChange={setB}>
-        <option disabled selected value="default">--은행선택--</option>
+        <option value="default">--은행선택--</option>
         <option value="국민은행 ">KB국민은행</option>
             <option value="신한은행">신한은행</option>
             <option value="하나은행">하나은행</option>

@@ -19,14 +19,13 @@ const ListStyle = styled.div`
 `;
 
 const ArrangeBox = styled.div`
-width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
   padding: 5px;
   &>*{
-  margin: 5px;
+  margin: 0;
 }
 `;
 
@@ -41,9 +40,11 @@ const AllBox = styled.div`
   margin-bottom: 10px;
   }
 `;
+
 const P = styled.p`
   font-size: 80%;
-`;
+  margin-bottom: 0;
+`
 
 const Divbar = styled.div`
   display: flex;
@@ -54,6 +55,8 @@ const Divbar = styled.div`
 
   &>*{
     cursor: pointer;
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
 `;
 
@@ -61,6 +64,8 @@ const Pbar = styled.p`
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: bolder;
+  margin-bottom: 0;
 `;
 
 const Linebar = styled.div`
@@ -79,39 +84,60 @@ const InfoDiv = styled.div`
   }
 `;
 
+const InfoDetail = styled.div`
+  display : flex;
+  &>*{
+  margin: 0 5px 0 5px;
+  }
+`;
+
+const Tab = styled.div`
+  cursor: pointer;
+  border-radius: 20px;
+  width: 20%;
+  background-color: ${props => (props.isActive ? 'darkgray' : 'lightgray')}; 
+  color: ${props => (props.isActive ? 'white' : 'black')}; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 export default function PurchaseHistory() {
   const [ entire, setEntire ] = useState(false);
   const [ bid, setBid] = useState(false);
   const [ trueBid, setTrueBid ] = useState(false); 
   const [ end, setEnd ] = useState(false);
-
   const [entireLength, setEntireLength] = useState('');
   const [bidLength, setBidLength] = useState('');
   const [trueBidLength, setTrueBidLength] = useState('');
   const [endLength, setEndLength] = useState('');
   const id = useParams();
-  
   const [data, setData] = useState([]);
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('전체');
 
   //전체 
   const entireHandler = () => {
+    setActiveTab('전체');
     setEntire(true);
   }
 
   //입찰
   const bidHandler = () => {
+    setActiveTab('입찰');
     setBid(true);
   }
 
   //낙찰
   const trueBidHandler = () => {
     setTrueBid(true);
+    setActiveTab('낙찰');
   }
 
   //종료
   const endHandler = () => {
     setEnd(true);
+    setActiveTab('종료');
   }
 
   // 각 URL 별로 데이터를 가져와 길이를 반환하는 함수
@@ -176,6 +202,21 @@ export default function PurchaseHistory() {
       navigate(`/detail/${artPk}/${id.user_pk}`);
     };
 
+    const getStatusStyle = (status) => {
+      switch (status) {
+        case 0:
+          return { color: 'darkgray' }; // 경매전
+        case 1:
+          return { color: 'blue' }; // 경매중
+        case 2:
+          return { color: 'darkred' }; // 입금대기
+        case 3:
+          return { color: 'darkgray' }; // 판매완료
+        default:
+            return { color: 'black' }; // 기본 색상
+        }
+    };
+
   return(
       <>
        <HistoryHeader></HistoryHeader>
@@ -183,25 +224,25 @@ export default function PurchaseHistory() {
         <div>
         <Pstylebar>구매내역</Pstylebar>
         <Divbar>
-          <div onClick = {entireHandler}>
+          <Tab onClick = {entireHandler} isActive={activeTab === '전체'}>
             <p>전체</p>
             <Pbar>{entireLength}</Pbar>
-          </div>
+          </Tab>
           <Linebar />
-          <div onClick={bidHandler}>
+          <Tab onClick={bidHandler} isActive={activeTab === '입찰'}>
             <p>입찰</p>
             <Pbar>{bidLength}</Pbar>
-          </div>
+          </Tab>
           <Linebar />
-          <div onClick={trueBidHandler}>
+          <Tab onClick={trueBidHandler} isActive={activeTab === '낙찰'}>
             <p>낙찰</p>
             <Pbar>{trueBidLength}</Pbar>
-          </div>
+          </Tab>
           <Linebar />
-          <div onClick={endHandler}>
+          <Tab onClick={endHandler} isActive={activeTab === '종료'}>
             <p>종료</p>
             <Pbar>{endLength}</Pbar>
-          </div>
+          </Tab>
         </Divbar>
       </div>
       {data.map((item, index) => (
@@ -209,21 +250,28 @@ export default function PurchaseHistory() {
       <ImageSize src={item.image}></ImageSize>
         <ArrangeBox >
           <InfoDiv>
+            <InfoDetail>
+            <P style={{whiteSpace:  'nowrap'}}>작품:</P>
             <P>{item.artName}</P>
+            </InfoDetail>
+            <InfoDetail>
+            <P style={{whiteSpace:  'nowrap'}}>작가:</P>
             <P>{item.painter}</P>
+            </InfoDetail>
+            <InfoDetail>
+            <P style={{whiteSpace:  'nowrap'}}>입찰가:</P>
             <P>{item.current_price}</P>
-          </InfoDiv>
-          <div>
-            <P>{item.endTime}</P>
-          </div>
-            <div>
-              <P style={{margin: 0}}>
-              {item.currentAuctionStatus === 0 && '경매전'}
-              {item.currentAuctionStatus === 1 && '입찰중'}
-              {item.currentAuctionStatus === 2 && '결제대기'}
-              {item.currentAuctionStatus === 3 && '판매완료'}
+            <P style={{margin: 0,  ...getStatusStyle(item.currentAuctionStatus), fontWeight: 'bold'}}>
+              {item.currentAuctionStatus === 0 && '<경매전>'}
+              {item.currentAuctionStatus === 1 && '<경매중>'}
+              {item.currentAuctionStatus === 2 && '<입금대기>'}
+              {item.currentAuctionStatus === 3 && '<판매완료>'}
               </P>
-            </div>
+            </InfoDetail>
+            <InfoDetail>
+            <P>{item.endTime}</P>
+          </InfoDetail>
+          </InfoDiv>
           </ArrangeBox>
       </ListStyle>
       ))} 

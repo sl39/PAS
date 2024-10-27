@@ -15,7 +15,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Div = styled.div`
-margin-top: 5%;
+  margin-top: 5%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -114,7 +114,7 @@ export default function SettingPage() {
   const [popup, setPopup] = useState(false);
   
   //주소 객체 관리를 위한 state
-    const [form, setForm] = useState({
+  const [form, setForm] = useState({
       address2: '',
       zonecode: '', // zonecode를 문자열로 설정
   });
@@ -122,12 +122,12 @@ export default function SettingPage() {
   //주소 팝업 열기
   const handleComplete = () => {
     setPopup(!popup);
-}  
+  }  
 
-useEffect(()=> {
-  setAddress(form.address2);
-  setMail(form.zonecode);
-},[form.zonecode])
+  useEffect(()=> {
+    setAddress(form.address2);
+    setMail(form.zonecode);
+  },[form.zonecode])
 
   //useEffect로 URL 연결
   useEffect(() => {
@@ -177,7 +177,7 @@ useEffect(()=> {
     const newDtailAdd = event.target.value;
     setDetailAddress(newDtailAdd);
   }
-
+  
   const fullAdd = mail + `,` + address + ',' +  detailAddress ;
 
   const postButton = () =>{

@@ -5,6 +5,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { BackHeader } from "../components";
+import app from "../firebase";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -216,7 +217,7 @@ export default function PutRegister(){
     return selectedOption;
   }
 
-    const addList = () => {
+  const addList = () => {
       if (selectedOption === "default") {
         alert("선택불가능한 옵션입니다.");
         return; // 함수 종료
@@ -229,15 +230,15 @@ export default function PutRegister(){
       }else{
         alert('이미 존재하는 옵션 입니다.');
       }
-    }
+  }
 
-    const deleteList = (index) => {
+  const deleteList = (index) => {
       setOptionList((prevOptions) => {
         return prevOptions.filter((_,i) => i !== index)
       })
-    };
+  };
 
-    const uploadImage = async (file) => {
+  const uploadImage = async (file) => {
       const storageRef = ref(storage, `images/${file.name}`);
       // 이미지 업로드
       await uploadBytes(storageRef, file);
@@ -247,22 +248,22 @@ export default function PutRegister(){
       setImage(prevImages => [...prevImages, url]);
   };
 
-    const imageChange = (e) => {
+  const imageChange = (e) => {
       const files = Array.from(e.target.files);
        // 여러 파일 업로드
       files.forEach(file => uploadImage(file)); 
-    };
+  };
 
     //이미지 클릭시 삭제 부분
-    const imageDelete =(index) =>{
+  const imageDelete =(index) =>{
       const confirmDelete = window.confirm("삭제하시겠습니까?");
       if (confirmDelete) {
         setImage(prevImages => prevImages.filter((_, i) => i !== index));
       }
-    };
+  };
 
     //선택날짜 최대 최소를 위한 부분
-    useEffect(() => {
+  useEffect(() => {
       const now = new Date();
       const year = now.getFullYear();
       const month = String(now.getMonth() +1).padStart(2,'0');
@@ -274,10 +275,10 @@ export default function PutRegister(){
       const currentDate = `${year}-${month}-${day}`;
       setMinDateTime(currentDateTime);
       setDate(currentDate);
-    }, []);
+  }, []);
 
     // 그림 등록 부분
-    useEffect(()=>{
+  useEffect(()=>{
       if(submit === true ){
       async function postArt() {
         try{
@@ -308,10 +309,10 @@ export default function PutRegister(){
       }
       postArt(); 
     }
-    }, [submit, id]);
+  }, [submit, id]);
 
     //입력 상태 확인
-    const submitButton = () => {
+  const submitButton = () => {
       const requiredFields = [name, description, minP, maxP, width, depth, height, created, start, end, painter, images, optionList]; 
       let allFieldsFilled = true;
   
@@ -340,7 +341,6 @@ export default function PutRegister(){
       }
   }
   
-
   //그림 정보 불러오는 부분
   useEffect(()=>{
     axios.get(`https://artion.site/api/art/update?art_pk=${id.art_pk}`)
@@ -383,7 +383,7 @@ export default function PutRegister(){
       </ArtSize>
       <SelectList>
         <SelectSize onChange={selecetOption}  >
-        <option disabled selected value="default">--카테고리 선택--</option>
+        <option value="default">--카테고리 선택--</option>
           <option value="유화">유화</option>
           <option value="수채화">수채화</option>
           <option value="아크릴화">아크릴화</option>
