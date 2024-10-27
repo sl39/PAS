@@ -92,22 +92,22 @@ export default function PurchaseHistory() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
 
-  //전체 영역 클릭이벤트
+  //전체 
   const entireHandler = () => {
     setEntire(true);
   }
 
-  //입찰 영역 클릭이벤트
+  //입찰
   const bidHandler = () => {
     setBid(true);
   }
 
-  //낙찰 영역 클릭이벤트
+  //낙찰 
   const trueBidHandler = () => {
     setTrueBid(true);
   }
 
-  //종료 영역 클릭이벤트
+  //종료
   const endHandler = () => {
     setEnd(true);
   }
@@ -116,14 +116,14 @@ export default function PurchaseHistory() {
   const fetchDataLength = (url, setLength) => {
     axios.get(url)
       .then(response => {
-        setLength(response.data.length); // 데이터 길이를 설정
+        setLength(response.data.length); 
       })
       .catch(error => {
         console.error(error);
       });
   };
 
-  // 처음 렌더링 시 한 번만 실행되는 코드
+    // 처음 렌더링 시 한 번만 실행되는 코드
     useEffect(() => {
       axios.get(`https://artion.site/api/user/saleall?user_pk=${id.user_pk}`)
         .then(response => {
@@ -134,25 +134,24 @@ export default function PurchaseHistory() {
         });
     }, []);
 
-  //영역 누를 때마다 리스트 로드
-  useEffect(()=>{
-    const history = (url, status, lengthStatus) => {
-      axios.get(url)
-      .then(response => {
-        setData(response.data);
-        status(false);
-        lengthStatus(response.data.length);
-        console.log(data);
-      }).catch(error => {
-        console.error(error);
-      });
-    };
+    //영역 누를 때마다 리스트 로드
+    useEffect(()=>{
+      const history = (url, status, lengthStatus) => {
+        axios.get(url)
+        .then(response => {
+          setData(response.data);
+          status(false);
+          lengthStatus(response.data.length);
+        }).catch(error => {
+          console.error(error);
+        });
+      };
 
-    fetchDataLength(`https://artion.site/api/user/saleall?user_pk=${id.user_pk}`,setEntireLength);
-    fetchDataLength(`https://artion.site/api/user/salebid?user_pk=${id.user_pk}`,setBidLength);
-    fetchDataLength(`https://artion.site/api/user/salesuc?user_pk=${id.user_pk}`,setTrueBidLength);
-    fetchDataLength(`https://artion.site/api/user/saleend?user_pk=${id.user_pk}`,setEndLength);
- 
+      fetchDataLength(`https://artion.site/api/user/saleall?user_pk=${id.user_pk}`,setEntireLength);
+      fetchDataLength(`https://artion.site/api/user/salebid?user_pk=${id.user_pk}`,setBidLength);
+      fetchDataLength(`https://artion.site/api/user/salesuc?user_pk=${id.user_pk}`,setTrueBidLength);
+      fetchDataLength(`https://artion.site/api/user/saleend?user_pk=${id.user_pk}`,setEndLength);
+  
     if(entire){
       history(`https://artion.site/api/user/saleall?user_pk=${id.user_pk}`,setEntire, setEntireLength);
     }

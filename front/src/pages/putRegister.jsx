@@ -26,22 +26,26 @@ const Div = styled.div`
 `;
 
 const P = styled.p`
-  font-size: 20px;
+   font-size: 20px;
   width: 80%;
   padding-left: 0;
+  margin-bottom: 1%;
+  margin-top: 5%;
 `;
 
 const DetailP = styled.p`
   width: 80%;
   margin: 0 0 5px 0;
   color: darkgray;
+  padding: 0;
 `;
 
 const InputSize = styled.input`
   width: 80%;
   height: 40%;
   font-size: 20px;
-  border: 2px solid #d0d0d0;
+  border: 1px solid #d0d0d0;
+   background-color: #f0f0f0;
 `;
 
 const TextBox = styled.textarea`
@@ -49,14 +53,22 @@ const TextBox = styled.textarea`
   height: 100px;
   font-size: 20px;
   resize: none;
-  border: 2px solid #d0d0d0;
+  border: 1px solid #d0d0d0;
+   background-color: #f0f0f0;
 `;
 
 const SelectSize = styled.select`
   width: 80%;
-  height:31px;
   font-size: 20px;
-  border: 2px solid #d0d0d0;
+  border: 1px solid #d0d0d0;
+  background-color: #f0f0f0;
+`;
+
+const SelectButton = styled.button`
+    padding: 5px;
+    border: 1px solid #d0d0d0;
+    width: 30%;
+    background-color: lightgray;
 `;
 
 const ArtSize = styled.div`
@@ -79,10 +91,8 @@ const SelectList = styled.div`
   padding: 0;
 
   &> *{
-  width: 100%;
   margin-right: 5px;
   margin-left: 5px;
-  padding-left: 0;
   }
 `;
 
@@ -92,26 +102,31 @@ const AddList = styled.div`
   width: calc(80% + 10px);
   padding: 0;
 
-
   &> *{
-    width: 100%;
     margin-right: 5px;
     margin-left: 5px;
-    padding-left: 0;
     }
 `;
 
 const List = styled.div`
-  border : 2px solid darkgray;
-  border-radius: 5px;
+  height: auto;
+  border: 1px solid #d0d0d0;
+  width:80%;
+`;
+
+const StatusP = styled.p`
   font-size: 20px;
+  margin:0;
+  padding: 2px;
+  background-color: #d0d0d0;
 `;
 
 const Button = styled.button`
   width: 80%;
   padding: 5px;
-  border: 2px solid #d0d0d0;
-  margin-bottom: 5%;
+  border: 1px solid #d0d0d0;
+  margin-bottom: 10%;
+  background-color: lightgray;
 `;
 
 const ImageDiv = styled.div`
@@ -132,11 +147,11 @@ const ImageDiv = styled.div`
 export default function PutRegister(){
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [minP, setMinP] = useState(0);
-  const [maxP, setMaxP] = useState(0);
-  const [width, setWidth]= useState(0);
-  const [depth, setDepth]= useState(0);
-  const [height, setHeight] = useState(0);
+  const [minP, setMinP] = useState();
+  const [maxP, setMaxP] = useState();
+  const [width, setWidth]= useState();
+  const [depth, setDepth]= useState();
+  const [height, setHeight] = useState();
   const [created, setCreated] = useState('');
   const [start, setStart]=  useState('');
   const [end, setEnd] = useState('');
@@ -209,7 +224,6 @@ export default function PutRegister(){
       if(selectedOption && !optionList.includes(selectedOption)){
         setOptionList((prevOptions) => {
           const updatedOptions = [...prevOptions, selectedOption];
-          console.log(optionList);
           return updatedOptions;
         });
       }else{
@@ -296,12 +310,12 @@ export default function PutRegister(){
     }
     }, [submit, id]);
 
+    //입력 상태 확인
     const submitButton = () => {
       const requiredFields = [name, description, minP, maxP, width, depth, height, created, start, end, painter, images, optionList]; 
       let allFieldsFilled = true;
   
       requiredFields.forEach((field, index) => {
-          console.log(`Field ${index} value:`, field, `Type:`, typeof field); // 각 필드의 값과 타입 출력
   
           if (Array.isArray(field)) {
               if (field.length === 0) {
@@ -319,9 +333,6 @@ export default function PutRegister(){
               allFieldsFilled = false; // 배열도 아니고 문자열도 아닌 경우 false로 설정
           }
       });
-  
-      console.log("All fields filled:", allFieldsFilled); 
-  
       if (!allFieldsFilled) {
           alert("입력이 완료되지 않았습니다. 모든 필드를 입력해주세요.");
       } else {
@@ -371,8 +382,8 @@ export default function PutRegister(){
         <InputSize type="text" placeholder="depth" value={depth} onChange={setDep}></InputSize>
       </ArtSize>
       <SelectList>
-        <SelectSize onChange={selecetOption}>
-        <option value="default">--카테고리 선택--</option>
+        <SelectSize onChange={selecetOption}  >
+        <option disabled selected value="default">--카테고리 선택--</option>
           <option value="유화">유화</option>
           <option value="수채화">수채화</option>
           <option value="아크릴화">아크릴화</option>
@@ -389,12 +400,16 @@ export default function PutRegister(){
           <option value="누드화">누드화</option>
           <option value="초상화">초상화</option>
         </SelectSize>
-      <button onClick={addList} style={{border: '2px solid #d0d0d0'}}>추가</button>
+      <SelectButton onClick={addList} style={{border: '2px solid #d0d0d0'}}>추가</SelectButton>
       </SelectList>
         {optionList.map((option, index) => (
             <AddList  key={index}>
-              <List>{option}</List>
-              <button onClick={() => {deleteList(index)}}>삭제</button>
+              <List>
+                <StatusP>
+                  {option}
+                </StatusP>
+              </List>
+              <SelectButton onClick={() => {deleteList(index)}}>삭제</SelectButton>
             </AddList>
         ))}
         <P>입찰 정보</P>
@@ -405,10 +420,9 @@ export default function PutRegister(){
         <DetailP>작품판매가</DetailP>
         <InputSize type="text" placeholder="최소 입찰 가격" value={minP} onChange={setMip}></InputSize>
         <InputSize type="text" placeholder="즉시 판매 가격" value={maxP} onChange={setMap}></InputSize>
-      
         <P>작품 사진</P>
         <DetailP>첫번째 사진은 뒷 배경이 나오지 않은 사진을 넣어주세요. </DetailP>
-        <InputSize type="file" multiple accept="image/*" onChange={imageChange} style={{border: 0}}></InputSize>
+        <InputSize type="file" multiple accept="image/*" onChange={imageChange} style={{border: 0, backgroundColor: 'white'}}></InputSize>
         <ImageDiv>
           {images.map((image, index) => (
             <img

@@ -94,22 +94,22 @@ export default function PurchaseHistory() {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
 
-  //전체 영역 클릭이벤트
+  //전체 
   const entireHandler = () => {
     setEntire(true);
   }
 
-  //입찰 영역 클릭이벤트
+  //입찰
   const bidHandler = () => {
     setBid(true);
   }
 
-  //낙찰 영역 클릭이벤트
+  //낙찰
   const trueBidHandler = () => {
     setTrueBid(true);
   }
 
-  //종료 영역 클릭이벤트
+  //종료
   const endHandler = () => {
     setEnd(true);
   }

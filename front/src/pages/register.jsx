@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import { createGlobalStyle } from 'styled-components';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -30,19 +30,23 @@ const P = styled.p`
   font-size: 20px;
   width: 80%;
   padding-left: 0;
+  margin-bottom: 1%;
+  margin-top: 5%;
 `;
 
 const DetailP = styled.p`
   width: 80%;
   margin: 0 0 5px 0;
   color: darkgray;
+  padding-left: 0;
 `;
 
 const InputSize = styled.input`
   width: 80%;
   height: 40%;
   font-size: 20px;
-  border: 2px solid #d0d0d0;
+  border: 1px solid #d0d0d0;
+   background-color: #f0f0f0;
 `;
 
 const TextBox = styled.textarea`
@@ -50,13 +54,22 @@ const TextBox = styled.textarea`
   height: 100px;
   font-size: 20px;
   resize: none;
-  border: 2px solid #d0d0d0;
+  border: 1px solid #d0d0d0;
+   background-color: #f0f0f0;
 `;
 
 const SelectSize = styled.select`
   width: 80%;
-  height:31px;
   font-size: 20px;
+  border: 1px solid #d0d0d0;
+  background-color: #f0f0f0;
+`;
+
+const SelectButton = styled.button`
+    padding: 5px;
+    border: 1px solid #d0d0d0;
+    width: 30%;
+    background-color: lightgray;
 `;
 
 const ArtSize = styled.div`
@@ -78,11 +91,10 @@ const SelectList = styled.div`
   width: calc(80% + 10px);
   padding: 0;
 
+
   &> *{
-  width: 100%;
   margin-right: 5px;
   margin-left: 5px;
-  padding-left: 0;
   }
 `;
 
@@ -91,26 +103,31 @@ const AddList = styled.div`
   flex-direction: row;
   width: calc(80% + 10px);
   padding: 0;
-
-
+  
   &> *{
-    width: 100%;
     margin-right: 5px;
     margin-left: 5px;
-    padding-left: 0;
     }
 `;
 
 const List = styled.div`
-  border : 2px solid darkgray;
-  border-radius: 5px;
+  height: auto;
+  border: 1px solid #d0d0d0;
+  width:80%;
+`;
+
+const StatusP = styled.p`
   font-size: 20px;
+  margin:0;
+  padding: 2px;
+  background-color: #d0d0d0;
 `;
 
 const Button = styled.button`
   width: 80%;
-  padding: 5px;
-  margin-bottom: 5%;
+  margin-bottom: 10%;
+  border: 1px solid #d0d0d0;
+  background-color: lightgray;
 `;
 
 const ImageDiv = styled.div`
@@ -201,7 +218,7 @@ export default function Register(){
   }
 
   const addList = () => {
-    if (selectedOption === "default") {
+    if (selectedOption === "default"  || selectedOption === "") {
       alert("선택불가능한 옵션입니다.");
       return; // 함수 종료
   }
@@ -221,7 +238,7 @@ export default function Register(){
       return prevOptions.filter((_,i) => i !== index)
     })
   };
-
+ 
     const uploadImage = async (file) => {
         const storageRef = ref(storage, `images/${file.name}`);
         // 이미지 업로드
@@ -236,6 +253,7 @@ export default function Register(){
     const imageChange = (e) => {
       const files = Array.from(e.target.files);
       files.forEach(file => uploadImage(file)); // 여러 파일 업로드
+
     };
 
     //이미지 클릭시 삭제 부분
@@ -243,7 +261,13 @@ export default function Register(){
       const confirmDelete = window.confirm("삭제하시겠습니까?");
       if (confirmDelete) {
         setImage(prevImages => prevImages.filter((_, i) => i !== index));
-      }
+
+      // 삭제 시 파일 input 초기화
+      const fileInput = document.querySelector('input[type="file"]');
+      if (fileInput) fileInput.value = '';
+        }
+
+        console.log(images);
     };
 
   //현재 이전 날짜 선택 불가 옵션
@@ -266,7 +290,7 @@ export default function Register(){
     if(submit === true ){
     async function postArt() {
       try{
-        const request = await axios.post(`https://artion.site/api/art/create?user_pk=${id.user_pk}`,{
+        const response = await axios.post(`https://artion.site/api/art/create?user_pk=${id.user_pk}`,{
           art_name: name2,
           art_info: description2,
           minP: minP2,
@@ -314,16 +338,12 @@ export default function Register(){
             allFieldsFilled = false; // 배열도 아니고 문자열도 아닌 경우 false로 설정
         }
     });
-
-    console.log("All fields filled:", allFieldsFilled); 
-
     if (!allFieldsFilled) {
         alert("입력이 완료되지 않았습니다. 모든 필드를 입력해주세요.");
     } else {
         setSubmit(true);
     }
 }
-
   return(
     <>
      <GlobalStyle />
@@ -343,8 +363,8 @@ export default function Register(){
         <InputSize type="number" placeholder="depth" value={depth2} onChange={setDep}></InputSize>
       </ArtSize>
       <SelectList>
-        <SelectSize onChange={selecetOption}>
-        <option value="default">--카테고리 선택--</option>
+        <SelectSize onChange={selecetOption} >
+        <option disabled selected value="default">--카테고리 선택--</option>
           <option value="유화">유화</option>
           <option value="수채화">수채화</option>
           <option value="아크릴화">아크릴화</option>
@@ -361,12 +381,16 @@ export default function Register(){
           <option value="누드화">누드화</option>
           <option value="초상화">초상화</option>
         </SelectSize>
-      <button onClick={addList}>추가</button>
+      <SelectButton onClick={addList}>추가</SelectButton>
       </SelectList>
         {optionList.map((option, index) => (
             <AddList  key={index}>
-              <List>{option}</List>
-              <button onClick={() => {deleteList(index)}}>삭제</button>
+              <List>
+                  <StatusP>
+                    {option}
+                  </StatusP>
+                </List>
+              <SelectButton onClick={() => {deleteList(index)}}>삭제</SelectButton>
             </AddList>
         ))}
         <P>입찰 정보</P>
@@ -377,10 +401,9 @@ export default function Register(){
         <DetailP>작품판매가</DetailP>
         <InputSize type="number" placeholder="최소 입찰 가격" value={minP2} onChange={setMip}></InputSize>
         <InputSize type="number" placeholder="즉시 판매 가격" value={maxP2} onChange={setMap}></InputSize>
-      
         <P>작품 사진</P>
         <DetailP>첫번째 사진은 뒷 배경이 나오지 않은 사진을 넣어주세요. </DetailP>
-        <InputSize type="file" multiple accept="image/*" onChange={imageChange} style={{border: 0}}></InputSize>
+        <InputSize type="file" multiple accept="image/*" onChange={imageChange} style={{border: 0, backgroundColor: 'white'}}></InputSize>
         <ImageDiv>
           {images.map((image, index) => (
             <img

@@ -9,13 +9,12 @@ import Login from "./login";
 import Info from "./info";
 import PurchaseHistory from "./purchaseHistory";
 import PutRegister from "./putRegister";
-import Receipt from "./receipt";
 import Register from "./register";
 import SaleHistory from "./saleHistory";
 import SettingPage from "./setting";
 import Guide from "./Guide";
 import PutSetting from "./putSetting";
 
-export { MainFeed, Search, ArtistProfile, DetailPage, ARCanvas, FollowingPage, AuctionPage, Login, Info, PurchaseHistory, PutRegister, Receipt, Register, SaleHistory, SettingPage, PutSetting,
+export { MainFeed, Search, ArtistProfile, DetailPage, ARCanvas, FollowingPage, AuctionPage, Login, Info, PurchaseHistory, PutRegister, Register, SaleHistory, SettingPage, PutSetting,
   Guide
 };

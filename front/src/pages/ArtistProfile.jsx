@@ -237,7 +237,7 @@ export default function ArtistProfile() {
                 </FollowBox>
               </NameBox>
               <SettingBox>
-                <StyledLink to={"/"}>
+                <StyledLink to={`/info/${userPkObj.user_pk}`}>
                   <CiMenuKebab size={25}></CiMenuKebab>
                 </StyledLink>
               </SettingBox>
