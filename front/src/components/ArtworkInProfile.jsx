@@ -38,9 +38,6 @@ const BoldParagraph = styled.p`
 `;
 
 const NormalParagraph = styled.p`
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;
@@ -67,11 +64,12 @@ export default function ArtworkInProfile({ artWork, userPk }) {
         <ImageContainer>
           <SquareImage src={artWork.image}></SquareImage>
         </ImageContainer>
-        <NormalParagraph>{artWork.art_name}</NormalParagraph>
+        <BoldParagraph>{artWork.art_name}</BoldParagraph>
+        <NormalParagraph>{artWork.painter}</NormalParagraph>
         <BoldParagraph>{artWork.price}원</BoldParagraph>
         <LikeBox>
           <HeartIcon></HeartIcon>
-          <NormalParagraph>132</NormalParagraph>
+          <NormalParagraph>{artWork.follows}</NormalParagraph>
         </LikeBox>
       </ArtworkContainer>
     </StyledLink>

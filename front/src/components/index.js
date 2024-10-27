@@ -15,6 +15,7 @@ import DefaultHeader from "./DefaultHeader";
 import BackHeader from "./BackHeader";
 import SearchFilter from "./SearchFilter";
 import HistoryHeader from "./HistoryHeader";
+import DaumPost from "./DaumPost";
 
 export {
   Header,
@@ -33,5 +34,6 @@ export {
   DefaultHeader,
   BackHeader,
   SearchFilter,
-  HistoryHeader
+  HistoryHeader,
+  DaumPost
 };
