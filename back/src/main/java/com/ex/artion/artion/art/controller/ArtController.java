@@ -23,9 +23,13 @@ public class ArtController {
     private final ArtService artService;
     //그림 생성
     @PostMapping("/create")
-    public ResponseEntity<String> createArt(@RequestBody ArtCreateDto dto, @RequestParam(value="user_pk") Integer user_pk) {
-        return artService.createArt(dto, user_pk);
+    public ResponseEntity<String> createArt(@RequestBody ArtCreateDto dto) {
+        return artService.createArt(dto);
     }
+//    @PostMapping("/create")
+//    public ResponseEntity<String> createArt(@RequestBody ArtCreateDto dto, @RequestParam(value="user_pk") Integer user_pk) {
+//        return artService.createArt(dto, user_pk);
+//    }
     //그림 수정
     @PutMapping("/update")
     public ResponseEntity<String> updateArt(
@@ -63,7 +67,7 @@ public class ArtController {
 
     @GetMapping("/detail")
     public ResponseEntity<ArtDetailResponseDto> artDetail(@RequestParam Integer artPk, @RequestParam Integer userPk) {
-        return new ResponseEntity<>(artService.getArtDetail(artPk, userPk), HttpStatus.OK);
+        return new ResponseEntity<>(artService.getArtDetail(artPk), HttpStatus.OK);
     }
 
     @GetMapping("/main/popular")

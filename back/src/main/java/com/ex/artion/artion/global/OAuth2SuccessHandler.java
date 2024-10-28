@@ -50,6 +50,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         Integer userPk = Integer.parseInt(String.valueOf(oauth2User.getName()));
         UserEntity user = userRepository.findById(userPk).orElse(null);
 
+        System.out.println("로그1" + oauth2User);
+        System.out.println("로그 2" + oauth2User.getName());
+
         // access token, refresh token 발급
         String accessToken = jwtTokenProvider.createAccessToken(user_pk);
         String refreshToken = jwtTokenProvider.createRefreshToken(user_pk);
@@ -63,35 +66,54 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                 .token(refreshToken)
                 .build();
 
-        System.out.println("refreshToken 저장? : " + newToken);
+
+
+        System.out.println("로그 3 : refreshToken 저장? : " + newToken);
 
         Optional<RefreshTokenEntity> optionalToken = tokenRepository.findByUserPk(user_pk);
         if(optionalToken.isPresent()) {
             RefreshTokenEntity oldToken = optionalToken.get();
             oldToken.setToken(refreshToken);
             tokenRepository.save(oldToken);
+            System.out.println("로그 4: 리프레쉬토큰 유효성 검사" + oldToken );
         } else {
             tokenRepository.save(newToken);
+            System.out.println("로그 5: 리프레쉬토큰 유효성 검사" + newToken );
         }
+
+
 
         // Response Header 설정
         response.addHeader("Set-Cookie", createCookie("accessToken", accessToken).toString());
+
+        System.out.println("로그 6: 액세스토큰 쿠키 생성 : " + accessToken );
+
         response.addHeader("Set-Cookie", createCookie("refreshToken", refreshToken).toString());
 
-        if(!Objects.requireNonNull(user).getAddress().isEmpty() ) {
+        System.out.println("로그 7: 리프레쉬토큰 쿠키 생성 : " + refreshToken );
+
+
+        if(Objects.requireNonNull(user).getAddress() != null && !Objects.requireNonNull(user).getAddress().isEmpty()) {
             System.out.println("기존 유저입니다!");
             redirectStrategy.sendRedirect(request, response, isMemberUrl);
         } else {
             System.out.println("기존 유저가 아닙니다!");
             redirectStrategy.sendRedirect(request, response, notIsMemberUrl);
         }
-//        redirectStrategy.sendRedirect(request, response, url);
     }
 
     private ResponseCookie createCookie(String key, String value) {
+
+        System.out.println("로그 8 :쿠키 생성 ");
+
         return ResponseCookie.from(key, value)
-                .sameSite("")
+//                .domain("artion.site")
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
                 .path("/")
                 .build();
+
+
     }
 }

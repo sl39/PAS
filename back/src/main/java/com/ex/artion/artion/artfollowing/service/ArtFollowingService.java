@@ -7,10 +7,10 @@ import com.ex.artion.artion.artfollowing.entity.ArtFollowingEntity;
 import com.ex.artion.artion.artfollowing.respository.ArtFollowingRepository;
 import com.ex.artion.artion.following.entity.FollowingEntity;
 import com.ex.artion.artion.following.respository.FollowingRepository;
+import com.ex.artion.artion.global.jwt.UserPrincipal;
 import com.ex.artion.artion.user.entity.UserEntity;
 import com.ex.artion.artion.user.respository.UserRepository;
 import com.ex.artion.artion.user.service.UserService;
-import com.sun.security.auth.UserPrincipal;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,8 +28,12 @@ public class ArtFollowingService {
     private final UserRepository userRepository;
 
     @Transactional
-    public String Followingart(Integer userId, Integer artId) {
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    public String Followingart(Integer artId) {
+
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+//        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        UserEntity user = userRepository.findById(userPrincipal.getUserPk()).orElseThrow(() -> new RuntimeException("User not found"));
         ArtEntity art = artRepository.findById(artId).orElseThrow(() -> new RuntimeException("Art not found"));
         Optional<ArtFollowingEntity> existingLike = artfollowingRepository.findByUserEntityAndArtEntity(user, art);
         if (existingLike.isPresent()) {
@@ -42,15 +46,16 @@ public class ArtFollowingService {
         return "liked good";
     }
     @Transactional
-    public String unlikeartfollowing(Integer userId, Integer artId) {
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    public String unlikeartfollowing(Integer artId) {
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+//        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        UserEntity user = userRepository.findById(userPrincipal.getUserPk()).orElseThrow(() -> new RuntimeException("User not found"));
         ArtEntity art = artRepository.findById(artId).orElseThrow(() -> new RuntimeException("Art not found"));
         Optional<ArtFollowingEntity> existingLike = artfollowingRepository.findByUserEntityAndArtEntity(user, art);
         if(existingLike.isPresent()) {
             artfollowingRepository.deleteByUserEntityAndArtEntity(user, art);
             return "unliked";
-
-
         }
         else{
             return "not liked";
