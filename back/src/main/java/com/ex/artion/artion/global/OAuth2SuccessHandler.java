@@ -84,11 +84,11 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
 
         // Response Header 설정
-        response.addHeader("Set-Cookie", createCookie("accessToken", accessToken).toString() + " Secure; Partitioned");
+        response.addHeader("Set-Cookie", createCookie("accessToken", accessToken).toString() + " Secure; Path=/; SameSite=None; Partitioned;");
 
         System.out.println("로그 6: 액세스토큰 쿠키 생성 : " + accessToken );
 
-        response.addHeader("Set-Cookie", createCookie("refreshToken", refreshToken).toString() + " Secure; Partitioned");
+        response.addHeader("Set-Cookie", createCookie("refreshToken", refreshToken).toString() + " Secure; Path=/; SameSite=None; Partitioned;");
 
         System.out.println("로그 7: 리프레쉬토큰 쿠키 생성 : " + refreshToken );
 
