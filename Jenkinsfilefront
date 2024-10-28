@@ -16,8 +16,8 @@ pipeline {
                     // Credentials로 저장된 yml 내용을 파일로 생성
                     withCredentials([file(credentialsId: 'frontenvfile', variable: 'ENV_CONTENT')]) {
                      script {
-                        sh 'chmod 755 -f front/.env'
-                        sh 'cp $ENV_CONTENT front/.env'
+                        sh 'chmod 755 -f /front/.env'                        
+                        sh 'cp $ENV_CONTENT /front/.env'
                     }
                 }
             }
