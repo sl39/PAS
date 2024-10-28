@@ -107,7 +107,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         System.out.println("로그 8 :쿠키 생성 ");
 
         return ResponseCookie.from(key, value)
-//                .domain("artion.site")
+                .domain("localhost")
                 .httpOnly(true)
                 .secure(false)
                 .sameSite("None")
