@@ -19,17 +19,17 @@ public class UserController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createUser(@RequestBody UserCreateDto dto, @RequestParam(value="user_pk") Integer user_pk) {
-        return userService.createUser(dto, user_pk);
+        return userService.createUser(dto);
     }
 
     @PutMapping("/update")
     public ResponseEntity<String> updateUser(@RequestBody UserUpdateDto dto, @RequestParam(value = "user_pk") Integer user_pk) {
-        return userService.updateUser(dto, user_pk);
+        return userService.updateUser(dto);
     }
 
     @GetMapping("/update")
     public ResponseEntity<Map<String, Object>> updateBeforeUser(@RequestParam(value = "user_pk") Integer user_pk) {
-        return userService.updateBeforeUser(user_pk);
+        return userService.updateBeforeUser();
     }
 
 //    @PostMapping("/delete")
@@ -40,43 +40,43 @@ public class UserController {
 //    }
 
     @GetMapping("/purbid")
-    public ResponseEntity<List<Map<String, Object>>> requestPurchaseBid(@RequestParam(value = "user_pk") Integer user_pk) {
-        return userService.requestPurchaseBid(user_pk);
+    public ResponseEntity<List<Map<String, Object>>> requestPurchaseBid() {
+        return userService.requestPurchaseBid();
     }
 
     @GetMapping("/pursuc")
-    public ResponseEntity<List<Map<String, Object>>> requestPurchaseSuccess(@RequestParam(value = "user_pk") Integer user_pk) {
-        return userService.requestPurchaseSuccess(user_pk);
+    public ResponseEntity<List<Map<String, Object>>> requestPurchaseSuccess() {
+        return userService.requestPurchaseSuccess();
     }
 
     @GetMapping("/purend")
-    public ResponseEntity<List<Map<String, Object>>> requestPurchaseEnd(@RequestParam(value = "user_pk") Integer user_pk) {
-        return userService.requestPurchaseEnd(user_pk);
+    public ResponseEntity<List<Map<String, Object>>> requestPurchaseEnd() {
+        return userService.requestPurchaseEnd();
     }
 
     @GetMapping("/purall")
-    public ResponseEntity<List<Map<String, Object>>> requestPurchaseAll(@RequestParam(value = "user_pk") Integer user_pk) {
-        return userService.requestPurchaseAll(user_pk);
+    public ResponseEntity<List<Map<String, Object>>> requestPurchaseAll() {
+        return userService.requestPurchaseAll();
     }
 
     @GetMapping("/salebid")
-    public ResponseEntity<List<Map<String, Object>>> requestSaleBid(@RequestParam(value = "user_pk") Integer user_pk) {
-        return userService.requestSaleBid(user_pk);
+    public ResponseEntity<List<Map<String, Object>>> requestSaleBid() {
+        return userService.requestSaleBid();
     }
 
     @GetMapping("/salesuc")
-    public ResponseEntity<List<Map<String, Object>>> requestSaleSuccess(@RequestParam(value = "user_pk") Integer user_pk) {
-        return userService.requestSaleSuccess(user_pk);
+    public ResponseEntity<List<Map<String, Object>>> requestSaleSuccess() {
+        return userService.requestSaleSuccess();
     }
 
     @GetMapping("/saleend")
-    public ResponseEntity<List<Map<String, Object>>> requestSaleEnd(@RequestParam(value = "user_pk") Integer user_pk) {
-        return userService.requestSaleEnd(user_pk);
+    public ResponseEntity<List<Map<String, Object>>> requestSaleEnd() {
+        return userService.requestSaleEnd();
     }
 
     @GetMapping("/saleall")
-    public ResponseEntity<List<Map<String, Object>>> requestSaleAll(@RequestParam(value = "user_pk") Integer user_pk) {
-        return userService.requestSaleAll(user_pk);
+    public ResponseEntity<List<Map<String, Object>>> requestSaleAll() {
+        return userService.requestSaleAll();
     }
 
     @GetMapping("/myart")
@@ -85,13 +85,13 @@ public class UserController {
     }
 
     @GetMapping("/myp")
-    public ResponseEntity<Map<String, Object>> myProfiles(@RequestParam(value = "user_pk") Integer user_pk) {
-        return userService.requestMyProfile(user_pk);
+    public ResponseEntity<Map<String, Object>> myProfiles() {
+        return userService.requestMyProfile();
     }
 
     @GetMapping("/mypafs")
-    public ResponseEntity<Map<String, Object>> myProfileAndFollows(@RequestParam(value = "user_pk") Integer user_pk) {
-        return userService.requestMyProfileAndFollows(user_pk);
+    public ResponseEntity<Map<String, Object>> myProfileAndFollows() {
+        return userService.requestMyProfileAndFollows();
     }
 
     @GetMapping("/artfol")

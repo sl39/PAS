@@ -100,7 +100,6 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             System.out.println("기존 유저가 아닙니다!");
             redirectStrategy.sendRedirect(request, response, notIsMemberUrl);
         }
-//        redirectStrategy.sendRedirect(request, response, url);
     }
 
     private ResponseCookie createCookie(String key, String value) {
