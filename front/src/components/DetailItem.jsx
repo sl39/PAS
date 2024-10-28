@@ -302,7 +302,6 @@ export default function DetailItem ({ artWork }) {
             //수정
                 ? `https://artion.site/api/artfollowing/${art_pk}/unlike`
                 : `https://artion.site/api/artfollowing/${art_pk}`;
-
             const response = await axios({
                 method: isArtFollowing ? 'delete' : 'post',
                 url: url,
