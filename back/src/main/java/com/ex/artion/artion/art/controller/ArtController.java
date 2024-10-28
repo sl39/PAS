@@ -66,7 +66,7 @@ public class ArtController {
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<ArtDetailResponseDto> artDetail(@RequestParam Integer artPk, @RequestParam Integer userPk) {
+    public ResponseEntity<ArtDetailResponseDto> artDetail(@RequestParam Integer artPk) {
         return new ResponseEntity<>(artService.getArtDetail(artPk), HttpStatus.OK);
     }
 

@@ -73,28 +73,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             jwtTokenProvider.validateJwtToken(accessToken);
 
-            log.info("jwt 검증 통과");
-
-//            if (accessToken != null) {
-//                Claims claims = Jwts.parser()
-//                        .setSigningKey(secretKey)
-//                        .parseClaimsJws(accessToken)
-//                        .getBody();
-//
-//            }
-//            Header 사용하지 않음.(쿠키 사용)
-//            String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-//            String jwt = header.split(" ")[1];
-//            log.info("jwt 추출 : {}", jwt);
-
-//            if (header == null || !header.startsWith("Bearer ")) {
-//                log.info("헤더에 엑세스 토큰이 없습니다.");
-//
-//                if (request.getRequestURI().equals("/")) {
-//                    filterChain.doFilter(request, response);
-//                    return;
-//                }
-//            }
+            System.out.println("jwt 검증 통과");
+//            log.info("jwt 검증 통과");
 
             // BlackList 확인
             Optional<BlacklistEntity> entity = blacklistRepository.findByToken(accessToken);
