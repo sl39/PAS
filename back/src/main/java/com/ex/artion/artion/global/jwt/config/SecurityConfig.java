@@ -59,7 +59,8 @@ public class SecurityConfig {
                                 "/login/**",
                                 "/error/**",
                                 "/kapi/**",
-                                "/kakao/**"
+                                "/kakao/**",
+                                "/kauth"
                         ).permitAll() // 카카오 콜백 URL 허용
                         .anyRequest().authenticated())
 
