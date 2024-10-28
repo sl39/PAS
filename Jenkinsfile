@@ -62,7 +62,7 @@ pipeline {
                     '''               
         
                     // 새로운 이미지를 기반으로 컨테이너를 실행합니다.
-                    sh 'docker run -d -p 8000:8080 wjddntyvld/artion:latest'
+                    sh 'docker run -d -p 8000:8000 wjddntyvld/artion:latest'
                 }
             }
         } 
