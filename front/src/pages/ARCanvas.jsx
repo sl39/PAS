@@ -1,11 +1,12 @@
 import React, {useEffect, useRef} from "react";
 import * as THREE from 'three';
 import { ARButton } from 'three/examples/jsm/webxr/ARButton.js';
-import { Header, Warning } from "../components";
+import { Header } from "../components";
 import { useLocation } from "react-router-dom";
 
 const ARCanvas = () => {
     const containerRef = useRef();
+    const arButtonRef = useRef(null);
     const hitTestSource = useRef(null);
     const hitTestSourceRequested = useRef(false);
     const artworkRef = useRef(null); //중복 생성 방지
@@ -36,15 +37,17 @@ const ARCanvas = () => {
         containerRef.current.appendChild(renderer.domElement);
 
         //AR 버튼 추가(AR 세션 시작 버튼)
-        document.body.appendChild(ARButton.createButton(renderer, {requiredFeatures: ['hit-test']}));
+        arButtonRef.current = ARButton.createButton(renderer, {requiredFeatures: ['hit-test']});
+        containerRef.current.appendChild(arButtonRef.current);
+        // document.body.appendChild(arButtonRef.current);
+        // document.body.appendChild(ARButton.createButton(renderer, {requiredFeatures: ['hit-test']}))
 
         //조명 추가
         const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
         scene.add(light);
 
+        //이미지
         const textureLoader = new THREE.TextureLoader();
-        // const artworkTexture = textureLoader.load(`https://gi.esmplus.com/yesi1/can2734/c2734_vinci_monarisa.jpg`) // 이미지를 텍스처로 로드
-        // const artworkTexture = textureLoader.load(`https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-in-the-style-of-digital-art-image_2958544.jpg`);
         const artworkTexture = textureLoader.load(image);
         // //평면 감지를 위한 표적 생성 - 미리보기 레티클
         // let reticle = new THREE.Mesh(
@@ -237,6 +240,9 @@ const ARCanvas = () => {
         animate();
 
         return() => {
+            // if(arButtonRef.current){
+            //     document.body.removeChild(arButtonRef.current);
+            // }
             window.removeEventListener('touchstart', onTouchStart);
             window.removeEventListener('touchmove', onTouchMove);
             window.removeEventListener('touchend', onTouchEnd);
@@ -248,11 +254,11 @@ const ARCanvas = () => {
     }, [image, width, length]);
 
     return (
-        <div ref={containerRef}>
+        <div>
             <Header />
-            <h2 class="header" style={{display: "flex", justifyContent: 'center', marginTop: '30px'}}>사용 전 반드시 읽어주세요</h2>
-            <Warning />
+            <div ref={containerRef}></div>
         </div>
+       
     )
 };
 

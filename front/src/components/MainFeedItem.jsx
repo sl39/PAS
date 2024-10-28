@@ -12,7 +12,7 @@ const MainFeedContainer = styled.div`
 `;
 
 const ContentBox = styled.div`
-  margin: 35px 25px 20px 25px;
+  margin: 25px 25px 0px 25px;
   overflow: hidden;
   display: flex;
   flex-shrink: 0;
@@ -24,6 +24,10 @@ const LeftArrow = styled(IoIosArrowBack)`
   left: 10px;
   top: 40%;
   cursor: pointer;
+  &:hover {
+    background-color: lightgray;
+    border-radius: 50%;
+  }
 `;
 
 const RightArrow = styled(IoIosArrowForward)`
@@ -31,6 +35,10 @@ const RightArrow = styled(IoIosArrowForward)`
   right: 10px;
   top: 40%;
   cursor: pointer;
+  &:hover {
+    background-color: lightgray;
+    border-radius: 50%;
+  }
 `;
 
 const BoldParagraph = styled.p`
@@ -52,14 +60,12 @@ export default function MainFeedItem({ type, artWorkList }) {
 
   const scrollLeft = () => {
     if (contentRef.current) {
-      console.log("scrollLeft");
       contentRef.current.scrollLeft -= 200;
     }
   };
 
   const scrollRight = () => {
     if (contentRef.current) {
-      console.log("scrollRight");
       contentRef.current.scrollLeft += 200;
     }
   };

@@ -10,18 +10,18 @@ const ItemContainer = styled.li`
     border: 2px solid gray;
     border-radius: 15px;
     padding: 10px;
-    margin-bottom: 10px;
+    margin: 0 10px 10px 10px;
 `;
 
 const UserImage = styled.img`
-    width: 100px;  
-    height: 100px; 
+    width: 80px;  
+    height: 80px; 
     border-radius: 50%; 
 `;
 
 const PlaceholderImage = styled.div`
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     background-color: lightgray;
     border-radius: 50%;
     margin-bottom: 10px;
@@ -35,8 +35,9 @@ const UserName = styled.span`
 `;
 
 const CancelButton = styled.button`
+    color: black;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 12px;
     float: right;
     border-radius: 10px;
     border: 1px solid gray;
@@ -65,6 +66,7 @@ const FollowingItem = ({ user, onUnSubscribe}) => {
         try {
             await axios.delete(`https://artion.site/api/following/${customer_pk}/unfollow/${seller_pk}`);
             onUnSubscribe(seller_pk);
+            alert("더 이상 구독하지 않습니다.")
         } catch(error){
             console.error("구독취소 실패:", error);
         }
@@ -73,7 +75,7 @@ const FollowingItem = ({ user, onUnSubscribe}) => {
     return (
         <ItemContainer>
             {/* user_pk값 추가하기 */}
-            <UserPage to={`/test`}>
+            <UserPage to={`/artist/${seller_pk}`}>
             {user.user_image ? (
                 <UserImage src={user.user_image} alt={user.user_name} />
             ) : (

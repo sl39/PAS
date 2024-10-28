@@ -5,13 +5,13 @@ import { GoHeartFill } from "react-icons/go";
 // Styled Components
 const ArtworkContainer = styled.div`
   margin: 5px;
-  width: 120px;
+  width: 90px;
   margin-bottom: 20px;
 `;
 
 const ImageContainer = styled.div`
-  width: 120px;
-  height: 120px;
+  width: 90px;
+  height: 90px;
   overflow: hidden;
 `;
 
@@ -38,9 +38,6 @@ const BoldParagraph = styled.p`
 `;
 
 const NormalParagraph = styled.p`
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;
@@ -61,15 +58,14 @@ const HeartIcon = styled(GoHeartFill)`
 `;
 
 export default function ArtworkItem({ artWork, userPk }) {
-  // 작품 상세 페이지 url에 {artWork.art_pk} 쓰면 됨
   return (
     <StyledLink to={`/detail/${artWork.art_pk}/${userPk}`}>
       <ArtworkContainer>
         <ImageContainer>
           <SquareImage src={artWork.artImage}></SquareImage>
         </ImageContainer>
-        <BoldParagraph>{artWork.artistName}</BoldParagraph>
-        <NormalParagraph>{artWork.artName}</NormalParagraph>
+        <BoldParagraph>{artWork.artName}</BoldParagraph>
+        <NormalParagraph>{artWork.artistName}</NormalParagraph>
         <BoldParagraph>{artWork.price} 원</BoldParagraph>
         <LikeBox>
           <HeartIcon></HeartIcon>

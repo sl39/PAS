@@ -2,7 +2,6 @@ import { TfiClose } from "react-icons/tfi";
 import styled from "styled-components";
 import React from "react";
 import { Link } from "react-router-dom";
-import SearchBar from "./SearchBar";
 
 const MenuContainer = styled.div`
   position: fixed;
@@ -12,13 +11,9 @@ const MenuContainer = styled.div`
   bottom: 0;
   left: 0;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  z-index: 10;
   padding: 20px 35px 20px 20px;
   background-color: white;
-`;
-
-const StyledSearchBar = styled(SearchBar)`
-  margin-bottom: 10px;
 `;
 
 const CategoryContainer = styled.div`
@@ -27,7 +22,7 @@ const CategoryContainer = styled.div`
 
 const MenuIcon = styled.div`
   cursor: pointer;
-  margin-bottom: 43px;
+  margin-bottom: 30px;
 `;
 
 const MenuContent = styled.div`
@@ -41,49 +36,61 @@ const StyledLink = styled(Link)`
 `;
 
 const StyledParagraph = styled.p`
-  margin: 1px 0;
+  margin: 0px;
+  font-weight: 500;
+  font-size: 15px;
   user-select: none;
 `;
 
 const StyledHeading = styled.h3`
   margin-top: 10px;
-  margin-bottom: 5px;
+  margin-bottom: 0px;
   font-weight: 500;
+  font-size: 18px;
   user-select: none;
 `;
 
 export default function SideMenu({ handleToggle, isMenuOpen }) {
+  const categories = [
+    { name: "유화", value: "유화" },
+    { name: "수채화", value: "수채화" },
+    { name: "아크릴화", value: "아크릴화" },
+    { name: "수묵화", value: "수묵화" },
+    { name: "채색화", value: "채색화" },
+    { name: "벽화", value: "벽화" },
+    { name: "판화", value: "판화" },
+    { name: "콜라쥬", value: "콜라쥬" },
+    { name: "풍경화", value: "풍경화" },
+    { name: "인물화", value: "인물화" },
+    { name: "정물화", value: "정물화" },
+    { name: "크로키", value: "크로키" },
+    { name: "추상화", value: "추상화" },
+    { name: "누드화", value: "누드화" },
+    { name: "초상화", value: "초상화" },
+  ];
+
   return (
     <MenuContainer>
       <MenuIcon>
         <TfiClose size={20} onClick={handleToggle} />
       </MenuIcon>
-      <StyledSearchBar></StyledSearchBar>
       <MenuContent>
         <StyledHeading>Category</StyledHeading>
         <CategoryContainer>
-          <StyledLink to="/">
-            <StyledParagraph>유화</StyledParagraph>
-            <StyledParagraph>수채화</StyledParagraph>
-            <StyledParagraph>아크릴화</StyledParagraph>
-            <StyledParagraph>수묵화</StyledParagraph>
-            <StyledParagraph>채색화</StyledParagraph>
-            <StyledParagraph>벽화</StyledParagraph>
-            <StyledParagraph>판화</StyledParagraph>
-            <StyledParagraph>콜라쥬</StyledParagraph>
-            <StyledParagraph>풍경화</StyledParagraph>
-            <StyledParagraph>인물화</StyledParagraph>
-            <StyledParagraph>정물화</StyledParagraph>
-            <StyledParagraph>크로키</StyledParagraph>
-            <StyledParagraph>추상화</StyledParagraph>
-            <StyledParagraph>누드화</StyledParagraph>
-            <StyledParagraph>초상화</StyledParagraph>
-          </StyledLink>
+          {categories.map((category) => (
+            <StyledLink
+              key={category.value}
+              to={`/search?category=${encodeURIComponent(category.value)}`}
+            >
+              <StyledParagraph>{category.name}</StyledParagraph>
+            </StyledLink>
+          ))}
         </CategoryContainer>
-        <StyledLink to="/">
+        <StyledLink to={`/artist/1`}>
           <StyledHeading>My Page</StyledHeading>
         </StyledLink>
-        <StyledLink to="/">
+        {/* 수정 */}
+        <StyledLink to={`/following/liked/1`}>
           <StyledHeading>Subscribe & Like</StyledHeading>
         </StyledLink>
         <StyledLink to="/">

@@ -1,9 +1,8 @@
-import { CiMenuBurger } from "react-icons/ci";
 import { PiUserCircleThin } from "react-icons/pi";
+import { MdArrowBack } from "react-icons/md";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import React, { useState } from "react";
-import SideMenu from "./SideMenu";
+import { useNavigate } from "react-router-dom";
 
 // Styled Components
 const HeaderContainer = styled.header`
@@ -30,18 +29,18 @@ const StyledLink = styled(Link)`
   color: inherit;
 `;
 
-export default function Header() {
-  const [isMenuOpen, setMenuOpen] = useState(false);
+export default function HistoryHeader() {
+  const navigate = useNavigate();
 
-  const handleToggle = () => {
-    setMenuOpen((isMenuOpen) => !isMenuOpen);
+  const handleback = () => {
+    navigate(-1);
   };
 
   return (
     <>
       <HeaderContainer>
         <MenuIcon>
-          <CiMenuBurger size={30} onClick={handleToggle} />
+          <MdArrowBack size={30} onClick={handleback} />
         </MenuIcon>
         <StyledLink to="/">
           <Logo>Artion</Logo>
@@ -50,12 +49,6 @@ export default function Header() {
           <PiUserCircleThin size={40} />
         </StyledLink>
       </HeaderContainer>
-      {isMenuOpen && (
-        <SideMenu
-          handleToggle={handleToggle}
-          isMenuOpen={isMenuOpen}
-        ></SideMenu>
-      )}
     </>
   );
 }

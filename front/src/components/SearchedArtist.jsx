@@ -7,12 +7,12 @@ import { useRef } from "react";
 const SearchContainer = styled.div`
   overflow: hidden;
   position: relative;
-  padding: 10px;
+  padding: 5px;
   max-width: 830px;
 `;
 
 const ContentBox = styled.div`
-  margin: 10px 25px 0px 25px;
+  margin: 0px 20px 0px 20px;
   overflow: hidden;
   display: flex;
   flex-wrap: nowrap;
@@ -25,6 +25,10 @@ const LeftArrow = styled(IoIosArrowBack)`
   left: 10px;
   top: 50%;
   cursor: pointer;
+  &:hover {
+    background-color: lightgray;
+    border-radius: 50%;
+  }
 `;
 
 const RightArrow = styled(IoIosArrowForward)`
@@ -32,6 +36,10 @@ const RightArrow = styled(IoIosArrowForward)`
   right: 10px;
   top: 50%;
   cursor: pointer;
+  &:hover {
+    background-color: lightgray;
+    border-radius: 50%;
+  }
 `;
 
 const BoldParagraph = styled.p`
@@ -53,14 +61,12 @@ export default function SearchedArtist({ artistList }) {
 
   const scrollLeft = () => {
     if (contentRef.current) {
-      console.log("scrollLeft");
       contentRef.current.scrollLeft -= 200;
     }
   };
 
   const scrollRight = () => {
     if (contentRef.current) {
-      console.log("scrollRight");
       contentRef.current.scrollLeft += 200;
     }
   };

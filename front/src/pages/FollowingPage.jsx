@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { FollowingItem, Header, LikedArtItem, FollowersItem } from "../components";
 import styled from "styled-components";
 import { IoIosArrowBack } from 'react-icons/io';
@@ -16,6 +16,8 @@ const HeadContainer = styled.div`
     align-items: center;
     padding: 0 20px;
     justify-content: space-between; 
+    margin: 20px 0;
+
 `;
 const ButtonContainer = styled.div`
     display: flex;
@@ -23,28 +25,36 @@ const ButtonContainer = styled.div`
 `;
 const BackButton = styled(IoIosArrowBack)`
     cursor: pointer;
-    font-size: 30px;
+    color: black;
+    font-size: 25px;
+    
 `;
-const Title = styled.h1`
+const Title = styled.h2`
     margin: 0;
     text-align: center;
     padding-right: 30px;
     flex: 1; 
 `;
 const SelectContainer = styled.div`
+    color: black;
     margin-top: 10px;
     display: flex;
-    justify-content: center;
-    gap: 80px;
+    justify-content: space-around;
     border-bottom: 1px solid lightgray;
 `;
+
 const SelectButton = styled.button`
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
     background-color: white;
-    border: 0px;
-    border-bottom: ${(props) => (props.selected ? '1px solid black' : 'none')};
+    border: 0;
+    border-bottom: ${(props) => (props.selected ? '2px solid black' : 'none')};
     cursor: pointer;
+    flex: 1;
+    padding: 10px; 
+    margin: 0 5px;
+    text-align: center;
+    
     &:focus {
         outline: none;
     }
@@ -53,12 +63,14 @@ const SelectLink = styled(Link)`
     text-decoration: none;
 `;
 const ArtworkList = styled.ul`
-    display: flex;
-    flex-wrap: wrap;
-    padding: 0
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 0;
     margin: 0;
     list-style-type: none;
 `;
+
 const FollowingList = styled.ul`
     display: flex;
     flex-direction: column;
@@ -75,8 +87,9 @@ const LikedArtworks = ({user_pk}) => {
     useEffect(() => {
         const fetchLikedArtworks = async() =>{
             try{
-                const response = await axios.get(`https://artion.site/api/user/artfol/1`);
-                setLikedArtworks(response.data);
+                const response = await axios.get(`https://artion.site/api/user/artfol?user_pk=${user_pk}`);
+                const sortedArt = response.data.sort((a,b) => new Date(b.upload) - new Date(a.upload))
+                setLikedArtworks(sortedArt);
             } catch(error){
                 console.error("작품 좋아요 오류 :", error);
             }
@@ -89,7 +102,7 @@ const LikedArtworks = ({user_pk}) => {
     };
 
     return (
-        <div style={{ marginTop: 50 }}>
+        <div style={{ marginTop: 50, display: "flex" }}>
             {likedArtworks.length > 0 ? (
                 <ArtworkList>
                     {likedArtworks.map((artWork) => (
@@ -113,17 +126,21 @@ const Following = ({ user_pk }) => {
     useEffect(() => {
         const fetchFollowing = async() => {
             try{
-                const response = await axios.get(`https://artion.site/api/user/fol/1`);
-                setFollowing(response.data);
+                const response = await axios.get(`https://artion.site/api/user/fol?user_pk=${user_pk}`);
+                const sortedFollowing = response.data.sort((a,b) => a.user_name.localeCompare(b.user_name));
+                setFollowing(sortedFollowing);
+
             } catch(error){
                 console.error("팔로잉 에러:", error);
             }
         };
         fetchFollowing();
     }, [user_pk]);
-const handleUnSubscribe = (seller_pk) => {
-    setFollowing(following.filter(user => user.user_pk !== seller_pk));
-};
+    
+    const handleUnSubscribe = (seller_pk) => {
+        setFollowing(following.filter(user => user.user_pk !== seller_pk));
+    };
+    
     return (
         <div style={{marginTop: 50}}>
             {following.length > 0 ? (
@@ -142,8 +159,11 @@ const Followers = ({ user_pk }) => {
     useEffect (() => {
         const fetchFollowers = async() => {
             try{
-                const response = await axios.get(`https://artion.site/api/user/myfol/1`);
-                setFollowers(response.data);
+                const response = await axios.get(`https://artion.site/api/user/myfol?user_pk=${user_pk}`);
+                const sortedFollower = response.data.sort((a, b) => 
+                    a.user_name.localeCompare(b.user_name));
+                setFollowers(sortedFollower);
+
             } catch(error){
                 console.error("팔로워 에러", error);
             }
@@ -165,9 +185,11 @@ const Followers = ({ user_pk }) => {
 
 // 페이지
 const FollowingPage = () => {
-    const { page } = useParams();
+    const { page, user_pk } = useParams();
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const artistName = searchParams.get('artistName');
     const [selectedPage, setSelectedPage] = useState(page);
-    const user_pk = 1;
 
     const renderPage = () => {
         switch (selectedPage) {
@@ -191,20 +213,20 @@ const FollowingPage = () => {
         <FollowingContainer>
             <HeadContainer>
                 <ButtonContainer>
-                    <Link to={`/test`}>
+                    <Link to={`/artist/${user_pk}`}>
                     <BackButton />
                     </Link>
                 </ButtonContainer>
-                <Title>user</Title>
+                <Title>{artistName}</Title>
             </HeadContainer>
             <SelectContainer>
-                <SelectLink to="/following/liked" onClick={() => handleSelect('liked')}>
+                <SelectLink to={`/following/liked/${user_pk}?artistName=${encodeURIComponent(artistName)}`} onClick={() => handleSelect('liked')}>
                     <SelectButton selected={selectedPage === 'liked'}>좋아요</SelectButton>
                 </SelectLink>
-                <SelectLink to="/following/following" onClick={() => handleSelect('following')}>
+                <SelectLink to={`/following/following/${user_pk}?artistName=${encodeURIComponent(artistName)}`} onClick={() => handleSelect('following')}>
                     <SelectButton selected={selectedPage === 'following'}>팔로잉</SelectButton>
                 </SelectLink>
-                <SelectLink to="/following/followers" onClick={() => handleSelect('followers')}>
+                <SelectLink to={`/following/followers/${user_pk}?artistName=${encodeURIComponent(artistName)}`} onClick={() => handleSelect('followers')}>
                     <SelectButton selected={selectedPage === 'followers'}>팔로워</SelectButton>
                 </SelectLink>
             </SelectContainer>

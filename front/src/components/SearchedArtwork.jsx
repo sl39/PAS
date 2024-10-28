@@ -10,7 +10,7 @@ const SearchContainer = styled.div`
 `;
 
 const ContentBox = styled.div`
-  margin: 35px 25px 20px 25px;
+  margin: 15px 25px 20px 25px;
   overflow: hidden;
   display: flex;
   flex-wrap: wrap;
@@ -22,6 +22,7 @@ const BoldParagraph = styled.p`
   font-size: 17px;
   margin: 0px;
   margin-left: 30px;
+  user-select: none;
 `;
 
 const NormalParagraph = styled.p`
@@ -29,20 +30,19 @@ const NormalParagraph = styled.p`
   font-size: 11px;
   margin: 0px;
   margin-left: 30px;
+  user-select: none;
 `;
 
 export default function SearchedArtwork({ artWorkList }) {
   return (
-    <>
-      <SearchContainer>
-        <BoldParagraph>Art</BoldParagraph>
-        <NormalParagraph>작품</NormalParagraph>
-        <ContentBox>
-          {artWorkList.map((item) => (
-            <ArtworkItem key={item.art_pk} artWork={item}></ArtworkItem>
-          ))}
-        </ContentBox>
-      </SearchContainer>
-    </>
+    <SearchContainer>
+      <BoldParagraph>Art</BoldParagraph>
+      <NormalParagraph>작품</NormalParagraph>
+      <ContentBox>
+        {artWorkList.map((item) => (
+          <ArtworkItem key={item.art_pk} artWork={item} />
+        ))}
+      </ContentBox>
+    </SearchContainer>
   );
 }

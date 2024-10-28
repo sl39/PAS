@@ -5,12 +5,12 @@ import { GoHeartFill } from "react-icons/go";
 // Styled Components
 const ArtworkContainer = styled.div`
   margin: 10px;
-  width: 140px;
+  width: 90px;
 `;
 
 const ImageContainer = styled.div`
-  width: 140px;
-  height: 140px;
+  width: 90px;
+  height: 90px;
   overflow: hidden;
   margin-bottom: 3px;
 `;
@@ -38,9 +38,6 @@ const BoldParagraph = styled.p`
 `;
 
 const NormalParagraph = styled.p`
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;
@@ -60,20 +57,19 @@ const HeartIcon = styled(GoHeartFill)`
   color: red;
 `;
 
-export default function ArtworkInProfile() {
+export default function ArtworkInProfile({ artWork, userPk }) {
   return (
-    <StyledLink to="/">
+    <StyledLink to={`/detail/${artWork.art_pk}/${userPk}`}>
       <ArtworkContainer>
         <ImageContainer>
-          <SquareImage src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTn697KapdshZw4TZFDoybC8SzUhBlqTJO3A&s"></SquareImage>
+          <SquareImage src={artWork.image}></SquareImage>
         </ImageContainer>
-        <NormalParagraph>
-          빈센트 반 고흐의 자화상으로, 빈센트 반 고흐의 자화상
-        </NormalParagraph>
-        <BoldParagraph>art_price원</BoldParagraph>
+        <BoldParagraph>{artWork.art_name}</BoldParagraph>
+        <NormalParagraph>{artWork.painter}</NormalParagraph>
+        <BoldParagraph>{artWork.price}원</BoldParagraph>
         <LikeBox>
           <HeartIcon></HeartIcon>
-          <NormalParagraph>132</NormalParagraph>
+          <NormalParagraph>{artWork.follows}</NormalParagraph>
         </LikeBox>
       </ArtworkContainer>
     </StyledLink>

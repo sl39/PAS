@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Header, MainFeedItem, SearchBar } from "../components";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 export async function newFeedApi() {
   const response = await axios.get("https://artion.site/api/art/main/recent");
@@ -16,7 +17,7 @@ export async function bestFeedApi() {
 const SearchBarContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin: 40px 30px 50px 30px;
+  margin: 20px 30px 40px 30px;
 `;
 
 const MainFeedContainer = styled.div`
@@ -35,9 +36,19 @@ const BorderLine = styled.div`
   width: 850px;
 `;
 
+let currentPath = "";
+
 export default function MainFeed() {
   const [newItemList, setNewItemList] = useState([]);
   const [bestItemList, setBestItemList] = useState([]);
+
+  // Link 클릭 시 같은 페이지여도 새로고침 하기
+  let location = useLocation();
+  useEffect(() => {
+    if (currentPath === location.pathname) window.location.reload();
+
+    currentPath = location.pathname;
+  }, [location]);
 
   useEffect(() => {
     const fetchData = async () => {

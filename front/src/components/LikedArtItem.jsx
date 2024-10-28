@@ -1,26 +1,29 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 const ItemContainer = styled.li`
-    margin: 20px;
-    list-style-type: none;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
     position: relative;
+    margin: 0 5px 20px 5px;
+    flex: 1;
+    min-width: 0;
 `;
 
 const ArtworkImage = styled.img`
-    width: 150px;
+    width: 100%;
     height: auto;
-    margin-right: 10px;
-    cursor: pointer;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 5px;
 `;
 
 const PlaceholderImage = styled.div`
-    width: 100px;
-    height: 100px;
+    width: 100%;
+    height: auto;
     background-color: lightgray;
     margin-right: 10px;
     cursor: pointer;
@@ -28,7 +31,16 @@ const PlaceholderImage = styled.div`
 
 const ArtworkTitle = styled.span`
     font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%; 
+    margin-top: 3px;
+    max-width: 150px; 
+    text-align: center;
 `;
+
 const SelectMessage = styled.div`
     position: absolute;
     top: 100%;
@@ -46,17 +58,19 @@ const SelectMessage = styled.div`
 `;
 
 const Option = styled.div`
-    padding: 5px 10px;
     cursor: pointer;
 
     &:hover{
         background-color: lightgray;
+        border-radius: 3px;
     }
 `;
 
 const LikedArtworkItem = ({ artWork, isSelected, onClick }) => {
+    const user = useParams();
     const art_pk = artWork.art_pk;
-    const user_pk = artWork.user_pk;
+    const seller_pk = artWork.seller_pk;
+    const user_pk = user.user_pk
 
     if (!artWork) {
         return null;
@@ -72,12 +86,12 @@ const LikedArtworkItem = ({ artWork, isSelected, onClick }) => {
             <ArtworkTitle>{artWork.art_name}</ArtworkTitle>
             <SelectMessage visible={isSelected}>
                 <Option>
-                    <Link to={`/detail/${art_pk}/${user_pk}`} style={{ textDecoration: 'none', color: 'inherit'}}>
+                    <Link to={`/detail/${art_pk}/${user_pk}`} style={{ textDecoration: 'none', color: 'inherit', fontSize: 14}}>
                     작품 보기
                     </Link>
                 </Option>
                 <Option>
-                    <Link to={`/test`} style={{ textDecoration: 'none', color: 'inherit'}}>
+                    <Link to={`/artist/${seller_pk}`} style={{ textDecoration: 'none', color: 'inherit', fontSize: 14}}>
                     프로필 보기
                     </Link>
                 </Option>
