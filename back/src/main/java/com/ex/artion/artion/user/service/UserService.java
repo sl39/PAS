@@ -689,21 +689,15 @@ public class UserService {
         List<Map<String, Object>> itemList = new ArrayList<>();
         List<Map<String, Object>> itemDESC = new ArrayList<>();
 
-//        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        System.out.println(userPrincipal);
 
         UserEntity user;
 
         UserEntity user2;
 
-//        UserEntity user = userRepository.findById(userPrincipal.getUserPk())
-//                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
-//
-//        UserEntity user2 = userRepository.findById(user_pk)
-//                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다!"));
-
-        if(user_pk.equals(user_pk)) {
-//        if(userPrincipal.getUserPk().equals(user_pk)) {
+//        if(user.equals(user2)) {
+        if(userPrincipal.getUserPk().equals(user_pk)) {
             user = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
             result.put("isSelf", true);
