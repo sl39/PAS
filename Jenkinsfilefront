@@ -49,7 +49,7 @@ pipeline {
                     // 최신 이미지를 pull합니다.
                     sh 'docker pull wjddntyvld/artionfront:latest'
                     sh '''
-                        containers=$(docker ps -q --filter "publish=8000")
+                        containers=$(docker ps -q --filter "publish=3000")
                         echo "${containers}" | xargs docker stop
                         echo "${containers}" | xargs docker rm
                     '''
