@@ -69,6 +69,7 @@ export default function SideMenu({ handleToggle, isMenuOpen }) {
     { name: "초상화", value: "초상화" },
   ];
 
+  //
   return (
     <MenuContainer>
       <MenuIcon>
