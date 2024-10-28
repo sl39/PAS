@@ -4,7 +4,7 @@ FROM node:20
 # 작업 디렉터리 설정
 WORKDIR /home
 
-COPY package.json .
+COPY front/package.json .
 
 RUN npm install
 
