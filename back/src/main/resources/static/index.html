@@ -29,6 +29,15 @@
 
 <script>
 
+    fetch('/api/user/myp', {
+        method: 'GET',
+        credentials: 'include', // 쿠키를 포함하여 요청하도록 설정
+        headers: {
+            'Content-Type': 'application/json' // 요청이 JSON 형식임을 명시
+        }
+    })
+
+
 // 유저 정보 생성
 document.getElementById('testApiBtn1').addEventListener('click', function() {
 fetch('/api/user/create', {

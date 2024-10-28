@@ -18,17 +18,17 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/create")
-    public ResponseEntity<String> createUser(@RequestBody UserCreateDto dto, @RequestParam(value="user_pk") Integer user_pk) {
+    public ResponseEntity<String> createUser(@RequestBody UserCreateDto dto) {
         return userService.createUser(dto);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> updateUser(@RequestBody UserUpdateDto dto, @RequestParam(value = "user_pk") Integer user_pk) {
+    public ResponseEntity<String> updateUser(@RequestBody UserUpdateDto dto) {
         return userService.updateUser(dto);
     }
 
     @GetMapping("/update")
-    public ResponseEntity<Map<String, Object>> updateBeforeUser(@RequestParam(value = "user_pk") Integer user_pk) {
+    public ResponseEntity<Map<String, Object>> updateBeforeUser() {
         return userService.updateBeforeUser();
     }
 
