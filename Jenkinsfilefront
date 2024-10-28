@@ -55,8 +55,8 @@ pipeline {
                         # 먼저 실행 중인 컨테이너를 중지합니다.
                         CONTAINER_ID=$(docker ps -q --filter "ancestor=wjddntyvld/artionfront:latest")
                         if [ -n "$CONTAINER_ID" ]; then
-                            docker stop $CONTAINER_ID
-                            docker rm $CONTAINER_ID
+                            docker stop $CONTAINER_ID || true
+                            docker rm $CONTAINER_ID || true
                         fi
                     '''               
         
