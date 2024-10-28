@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/Gom534/PAS.git', credentialsId: 'github_gom5314', branch: 'back/feat/AR'
+                git url: 'https://github.com/Gom534/PAS.git', credentialsId: 'github_gom5314', branch: 'back/deploy'
                sh 'cd back'
             }
         }
@@ -60,7 +60,7 @@ pipeline {
                     '''               
         
                     // 새로운 이미지를 기반으로 컨테이너를 실행합니다.
-                    sh 'docker run -d -p 8000:8080 wjddntyvld/artion:latest'
+                    sh 'docker run -d -p 8000:8000 wjddntyvld/artion:latest'
                 }
             }
         } 
