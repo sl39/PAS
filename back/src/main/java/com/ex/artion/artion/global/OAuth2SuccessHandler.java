@@ -98,7 +98,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             redirectStrategy.sendRedirect(request, response, isMemberUrl);
         } else {
             System.out.println("기존 유저가 아닙니다!");
-            redirectStrategy.sendRedirect(request, response, notIsMemberUrl);
+            redirectStrategy.sendRedirect(request, response, notIsMemberUrl+"/" + user.getUser_pk());
         }
     }
 
@@ -107,11 +107,11 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         System.out.println("로그 8 :쿠키 생성 ");
 
         return ResponseCookie.from(key, value)
-                .domain("localhost")
+//                .domain("artion.site")
                 .httpOnly(true)
-                .secure(false)
+                .secure(true)
                 .sameSite("None")
-//                .path("/")
+                .path("/")
                 .build();
 
 
