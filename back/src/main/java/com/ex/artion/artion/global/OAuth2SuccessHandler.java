@@ -98,7 +98,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             redirectStrategy.sendRedirect(request, response, isMemberUrl);
         } else {
             System.out.println("기존 유저가 아닙니다!");
-            redirectStrategy.sendRedirect(request, response, notIsMemberUrl+"/" + user.getUser_pk());
+            redirectStrategy.sendRedirect(request, response, notIsMemberUrl);
         }
     }
 
