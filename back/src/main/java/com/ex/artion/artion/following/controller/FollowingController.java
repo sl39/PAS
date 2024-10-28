@@ -17,18 +17,16 @@ import java.util.List;
 public class FollowingController {
     private final FollowingService followingService;
     private final UserService userService;
-    @PostMapping("/{customerId}/follow/{sellerId}")
-    public String follow (@PathVariable Integer customerId, @PathVariable Integer sellerId) {
-        UserEntity customer = userService.searchUser(customerId);
+    @PostMapping("/follow/{sellerId}")
+    public String follow (@PathVariable Integer sellerId) {
         UserEntity seller = userService.searchUser(sellerId);
-        followingService.follow(customer, seller);
+        followingService.follow(seller);
         return "success";
     }
-    @DeleteMapping("/{customerId}/unfollow/{sellerId}")
-    public String unfollow (@PathVariable Integer customerId, @PathVariable Integer sellerId) {
-        UserEntity customer = userService.searchUser(customerId);
+    @DeleteMapping("/unfollow/{sellerId}")
+    public String unfollow (@PathVariable Integer sellerId) {
         UserEntity seller = userService.searchUser(sellerId);
-        followingService.unfollow(customer, seller);
+        followingService.unfollow(seller);
         return "unfollow";
     }
     @GetMapping("/{customerId}")

@@ -10,12 +10,23 @@ import org.springframework.web.bind.annotation.*;
 public class ArtFollowingController {
 
     private final ArtFollowingService artFollowingService;
-    @PostMapping("/{artId}/{userId}")
-    public String followingArt (@PathVariable Integer userId, @PathVariable Integer artId){
-       return artFollowingService.Followingart(userId,artId);
+    @PostMapping("/{artId}")
+    public String followingArt (@PathVariable Integer artId){
+       return artFollowingService.Followingart(artId);
    }
-    @DeleteMapping("/{artId}/{userId}/unlike")
-    public String unlike (@PathVariable Integer userId, @PathVariable Integer artId){
-       return artFollowingService.unlikeartfollowing(userId,artId);
+    @DeleteMapping("/{artId}/unlike")
+    public String unlike (@PathVariable Integer artId){
+       return artFollowingService.unlikeartfollowing(artId);
     }
 }
+
+//    private final ArtFollowingService artFollowingService;
+//    @PostMapping("/{artId}/{userId}")
+//    public String followingArt (@PathVariable Integer userId, @PathVariable Integer artId){
+//        return artFollowingService.Followingart(userId,artId);
+//    }
+//    @DeleteMapping("/{artId}/{userId}/unlike")
+//    public String unlike (@PathVariable Integer userId, @PathVariable Integer artId){
+//        return artFollowingService.unlikeartfollowing(userId,artId);
+//    }
+
