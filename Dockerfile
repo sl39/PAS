@@ -11,7 +11,7 @@ RUN npm install
 COPY . .
 
 # 애플리케이션 실행
-CMD ["npm" "start"]
+CMD ["npm", "start"]
 
 # 서버가 외부에 노출될 포트
 EXPOSE 3000
