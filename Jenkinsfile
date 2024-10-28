@@ -7,7 +7,9 @@ pipeline {
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/Gom534/PAS.git', credentialsId: 'github_gom5314', branch: 'back/deploy'
-               sh 'cd back'
+                sh 'ls -la'
+                sh 'pwd'
+                sh 'cd back'
             }
         }
 
