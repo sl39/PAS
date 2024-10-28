@@ -5,12 +5,10 @@ FROM node:20
 WORKDIR /home
 
 # package.json 복사 및 npm 설치
-COPY front/package.json ./
-RUN npm install
-
+COPY front/package.json .
 # 전체 프로젝트 파일 복사
 COPY . .
-
+RUN npm install
 # 포트 노출 및 앱 실행
 EXPOSE 3000
 CMD ["npm", "start"]
