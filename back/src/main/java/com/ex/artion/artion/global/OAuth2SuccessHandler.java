@@ -109,9 +109,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         return ResponseCookie.from(key, value)
 //                .domain("artion.site")
                 .httpOnly(true)
-                .secure(true)
+                .secure(false)
                 .sameSite("None")
-                .path("/")
+//                .path("/")
                 .build();
 
 
