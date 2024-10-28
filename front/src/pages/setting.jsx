@@ -134,7 +134,11 @@ export default function SettingPage() {
     if(submit){
     async function postUserData() {
       try{
-        const response = await axios.post(`https://artion.site/api/user/create?user_pk=${id.user_pk}`,{
+        const response = await axios.post(`https://artion.site/api/user/create`,
+          {
+            withCredentials: true,
+          },
+          {
               user_name : text,
               phone_number : phone,
               bank_name : bankName,
@@ -194,7 +198,7 @@ export default function SettingPage() {
       <GlobalStyle></GlobalStyle>
       {popup && <DaumPost address={form} setAddress={setForm} handleComplete={handleComplete} />}
       <DefaultHeader></DefaultHeader>
-      <Profile user={id.user_pk}/>
+      <Profile />
       <Div>
         <P>닉네임</P>
         <InputSize  placeholder="닉네임을 입력하세요." value={text} onChange={setN} ></InputSize>

@@ -5,12 +5,16 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 
 export async function newFeedApi() {
-  const response = await axios.get("https://artion.site/api/art/main/recent");
+  const response = await axios.get("https://artion.site/api/art/main/recent",     {
+    withCredentials: true,
+  });
   return response.data;
 }
 
 export async function bestFeedApi() {
-  const response = await axios.get("https://artion.site/api/art/main/popular");
+  const response = await axios.get("https://artion.site/api/art/main/popular",  {
+    withCredentials: true,
+  });
   return response.data;
 }
 

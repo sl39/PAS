@@ -83,7 +83,11 @@ const BoldParagraph = styled.p`
 `;
 
 export async function searchArtworkApi(options) {
-  const response = await axios.get("https://artion.site/api/art/search", {
+  const response = await axios.get("https://artion.site/api/art/search",
+    {
+      withCredentials: true,
+    }, 
+    {
     params: {
       keyword: options.keyword,
       category: options.category,
@@ -100,7 +104,11 @@ export async function searchArtworkApi(options) {
 
 //prettier-ignore
 export async function searchArtistApi(options) {
-  const response = await axios.get("https://artion.site/api/art/search/painter", {
+  const response = await axios.get("https://artion.site/api/art/search/painter", 
+    {
+      withCredentials: true,
+    },
+    {
     params: {
       keyword: options.keyword
     },

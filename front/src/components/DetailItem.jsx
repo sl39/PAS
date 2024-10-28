@@ -296,19 +296,19 @@ export default function DetailItem ({ artWork }) {
         }
     }
     
-    const toggleFollowing = async ( art_pk, user_pk ) => {
+    const toggleFollowing = async ( art_pk ) => {
         try {
             const url = isArtFollowing 
             //수정
-                ? `https://artion.site/api/artfollowing/${art_pk}/1/unlike`
-                : `https://artion.site/api/artfollowing/${art_pk}/1`;
+                ? `https://artion.site/api/artfollowing/${art_pk}/unlike`
+                : `https://artion.site/api/artfollowing/${art_pk}`;
 
             const response = await axios({
                 method: isArtFollowing ? 'delete' : 'post',
                 url: url,
+                withCredentials: true
             });
         
-
             return response.data;
 
         } catch(error){
@@ -317,7 +317,7 @@ export default function DetailItem ({ artWork }) {
     };
     const handleLikeToggle = async () => {
         //수정 user_pk로 변경시켜 줘야함 - 지금 하드 코딩
-        const result = await toggleFollowing(art_pk, 1);
+        const result = await toggleFollowing(art_pk);
 
         if(result){
             setIsArtFollowing(!isArtFollowing);

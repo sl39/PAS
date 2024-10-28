@@ -75,12 +75,15 @@ const BorderLine = styled.div`
   width: 100%;
 `;
 
-export default function Profile({ user }) {
+export default function Profile() {
 const [userImage, setUserImage]= useState('');
 const [name, setName] = useState('');
 
   useEffect(()=> {
-    axios.get(`https://artion.site/api/user/myp?user_pk=${user}`)
+    axios.get(`https://artion.site/api/user/myp`, 
+      {
+        withCredentials: true,
+      })
       .then(response =>{
         const userData = response.data;
         setName(userData.User_name);
@@ -90,7 +93,7 @@ const [name, setName] = useState('');
         console.error(error);
       })
     }
-  , [user]);
+  , []);
 
   return(
     <>
