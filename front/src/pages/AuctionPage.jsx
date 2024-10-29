@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import * as StompJs from "@stomp/stompjs";
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://artion.site';
+axios.defaults.baseURL = 'https:/artion.site';
 
 const ActionPage = () => {
   const { art_pk } = useParams(); // URL 파라미터에서 artPk와 userPk 가져오기
