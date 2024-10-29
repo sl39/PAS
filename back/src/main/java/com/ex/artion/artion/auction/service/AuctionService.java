@@ -15,6 +15,7 @@ import com.ex.artion.artion.blacklistuser.entity.BlackListUserEntity;
 import com.ex.artion.artion.blacklistuser.repository.BlackListUserRepository;
 import com.ex.artion.artion.global.error.CustomException;
 import com.ex.artion.artion.global.error.ErrorCode;
+import com.ex.artion.artion.global.jwt.UserPrincipal;
 import com.ex.artion.artion.global.scheduler.SMSDto.SuccessfulBidDto;
 import com.ex.artion.artion.global.scheduler.SMSService;
 import com.ex.artion.artion.order.entity.OrderEntity;
@@ -25,6 +26,7 @@ import com.ex.artion.artion.user.entity.UserEntity;
 import com.ex.artion.artion.user.respository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -49,9 +51,12 @@ public class AuctionService {
 
 
     public AuctionBitResponseDto updateBid(Integer artPk, AuctionBitRequestDto auctionBitRequestDto){
+
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         ArtEntity artEntity = artRepository.findById(artPk)
                 .orElseThrow(()-> new CustomException(ErrorCode.ART_NOT_FOUND));
-        UserEntity userEntity = userRepository.findById(auctionBitRequestDto.getUserPk())
+        UserEntity userEntity = userRepository.findById(userPrincipal.getUserPk())
                 .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         if(userEntity.getUser_pk() == artEntity.getUserEntity().getUser_pk()){
@@ -115,13 +120,15 @@ public class AuctionService {
     }
 
 
-    public AuctionDetailResponseDto getArtDetail(Integer artPk, Integer userPk) {
+    public AuctionDetailResponseDto getArtDetail(Integer artPk) {
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         Optional<ArtEntity> art = artRepository.findById(artPk);
         if(art.isEmpty()){
             throw new CustomException(ErrorCode.ART_NOT_FOUND);
         }
 
-        Optional<UserEntity> user = userRepository.findById(userPk);
+        Optional<UserEntity> user = userRepository.findById(userPrincipal.getUserPk());
         if(user.isEmpty()){
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
@@ -165,7 +172,7 @@ public class AuctionService {
         dto.setArtFollowingNum(count);
 
         // 그림의 최대값과 최솟값
-        List<Object[]> results = auctionRepository.findMaxPriceAndUserMaxPriceByArtPkAndUserPkNative(artEntity.getArt_pk(), userPk);
+        List<Object[]> results = auctionRepository.findMaxPriceAndUserMaxPriceByArtPkAndUserPkNative(artEntity.getArt_pk(), userEntity.getUser_pk());
         Long maxPrice = 0L;
         Long userMaxPrice = 0L;
         for (Object[] result : results) {

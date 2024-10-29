@@ -25,6 +25,7 @@ import com.ex.artion.artion.user.entity.UserEntity;
 import com.ex.artion.artion.user.respository.UserRepository;
 import kotlin.reflect.jvm.internal.pcollections.HashPMap;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -696,14 +697,16 @@ public class UserService {
 
         UserEntity user2;
 
-//        if(user.equals(user2)) {
         if(userPrincipal.getUserPk().equals(user_pk)) {
-            user = userRepository.findById(user_pk)
+            user = userRepository.findById(userPrincipal.getUserPk())
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
             result.put("isSelf", true);
 
             user2 = userRepository.findById(user_pk)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+            Integer userPk = user.getUser_pk();
+            result.put("my_pk", userPk);
 
             Optional<FollowingEntity> follower = followingRepository.findByCustomerAndSeller(user, user2);
 
@@ -719,10 +722,13 @@ public class UserService {
 
             result.put("isSelf", false);
 
-            user2 = userRepository.findById(user_pk)
+            user2 = userRepository.findById(userPrincipal.getUserPk())
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-            Optional<FollowingEntity> follower = followingRepository.findByCustomerAndSeller(user, user2);
+            Optional<FollowingEntity> follower = followingRepository.findByCustomerAndSeller(user2, user);
+
+            Integer userPk = user2.getUser_pk();
+            result.put("my_pk", userPk);
 
             if(follower.isPresent()) {
                 result.put("followState", true);
@@ -1031,5 +1037,16 @@ public class UserService {
             }
         }
         return ResponseEntity.ok(result);
+    }
+
+    public ResponseEntity<Integer> requestMyId () {
+        UserEntity user;
+        Map<String, Object> map = new HashMap<>();
+
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Integer user_pk = userPrincipal.getUserPk();
+
+        return ResponseEntity.ok(user_pk);
     }
 }

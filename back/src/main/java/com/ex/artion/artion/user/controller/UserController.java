@@ -80,7 +80,7 @@ public class UserController {
     }
 
     @GetMapping("/myart")
-    public ResponseEntity<Map<String, Object>> myProfile(@RequestParam(value="user_pk") Integer user_pk) {
+    public ResponseEntity<Map<String, Object>> myProfile(@RequestParam(value = "user_pk") Integer user_pk) {
         return userService.requestMyArt(user_pk);
     }
 
@@ -107,5 +107,10 @@ public class UserController {
     @GetMapping("/myfol")
     public ResponseEntity<List<Map<String, Object>>> myFollower(@RequestParam(value = "user_pk") Integer user_pk) {
         return userService.requestMyFollower(user_pk);
+    }
+
+    @GetMapping("/mine")
+    public ResponseEntity<Integer> requestMyId() {
+        return userService.requestMyId();
     }
 }

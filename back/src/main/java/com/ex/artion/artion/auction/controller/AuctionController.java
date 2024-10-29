@@ -25,8 +25,8 @@ public class AuctionController {
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<AuctionDetailResponseDto> artDetail(@RequestParam Integer artPk, @RequestParam Integer userPk) {
-        return new ResponseEntity<>(auctionService.getArtDetail(artPk,userPk), HttpStatus.OK);
+    public ResponseEntity<AuctionDetailResponseDto> artDetail(@RequestParam Integer artPk) {
+        return new ResponseEntity<>(auctionService.getArtDetail(artPk), HttpStatus.OK);
     }
 
 }

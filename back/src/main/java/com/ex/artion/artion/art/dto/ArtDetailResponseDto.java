@@ -33,4 +33,5 @@ public class ArtDetailResponseDto {
     private Integer AuctionState;
     private Boolean isArtFollowing;
     private LocalDate uploadAt;
+    private Integer myPk;
 }

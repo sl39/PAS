@@ -347,6 +347,7 @@ public class ArtService {
                 .sellerPk(artEntity.getUserEntity().getUser_pk())
                 .sellerName(artEntity.getUserEntity().getUser_name())
                 .isArtFollowing(false)
+                .myPk(userPrincipal.getUserPk())
                 .build();
 
         Optional<ArtFollowingEntity> artFollowing = artFollowingRepository.findByUserEntityAndArtEntity(userEntity, artEntity);
