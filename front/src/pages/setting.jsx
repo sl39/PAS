@@ -179,7 +179,7 @@ export default function SettingPage() {
     setDetailAddress(newDtailAdd);
   }
   
-  const fullAdd = mail + `,` + address + ',' +  detailAddress ;
+  const fullAdd = mail + `.` + address + '.' +  detailAddress ;
 
   const postButton = () =>{
     const requiredFields = [text, phone, bankName,acc, address, detailAddress]; 

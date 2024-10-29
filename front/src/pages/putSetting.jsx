@@ -181,21 +181,21 @@ export default function SettingPage() {
     setDetailAddress(newDtailAdd);
   }
 
-  const fullAdd = mail + `,` + address + ',' +  detailAddress ;
+  const fullAdd = mail + `.` + address + '.' +  detailAddress ;
   
   //, 앞까지 불러오는 함수
   const getFirstString = (str) => {
-    return str.split(',')[0].trim();
+    return str.split('.')[0].trim();
   }
 
   //, 뒤를 불러오는 함수
   const getSecondString = (str) => {
-    return str.split(',')[1]?.trim() || '';
+    return str.split('.')[1]?.trim() || '';
   }
 
   //, 뒤를 불러오는 함수
   const getThirdString = (str) => {
-    return str.split(',')[2]?.trim() || '';
+    return str.split('.')[2]?.trim() || '';
   }
 
   //개인정보 수정전 정보 불러오는 부분

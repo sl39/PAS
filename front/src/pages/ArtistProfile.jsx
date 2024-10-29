@@ -166,6 +166,7 @@ export async function getArtistProfileApi(userPk) {
     {
       withCredentials: true,
     }  );
+    console.log(response.data)
   return response.data;
 }
 
@@ -223,6 +224,9 @@ export default function ArtistProfile() {
         setIsSelf(artistProfileInfo.isSelf);
         setFollowState(artistProfileInfo.followState);
         setMyPk(artistProfileInfo.my_pk)
+
+        console.log(artworkList)
+        console.log(artistProfileInfo.artList)
       } catch (error) {
         console.error("데이터를 가져오는 중에 오류가 발생했습니다: ", error);
       }
@@ -282,9 +286,9 @@ export default function ArtistProfile() {
         <ArtworkBox>
           <BorderLine>
             <ContentBox>
-              {artworkList.map((item) => (
+              {(artworkList && artworkList.length > 0) ? artworkList.map((item) => (
                 <ArtworkInProfile key={item.art_pk} artWork={item} />
-              ))}
+              )) : []}
             </ContentBox>
           </BorderLine>
         </ArtworkBox>
