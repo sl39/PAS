@@ -156,7 +156,7 @@ export default function PurchaseHistory() {
 
     // 처음 렌더링 시 한 번만 실행되는 코드
   useEffect(() => {
-      axios.get(`https:/artion.site/api/user/saleall`, {
+      axios.get(`https://artion.site/api/user/saleall`, {
         withCredentials: true,
       })
         .then(response => {
@@ -182,25 +182,25 @@ export default function PurchaseHistory() {
         });
       };
 
-      fetchDataLength(`https:/artion.site/api/user/saleall`,setEntireLength);
-      fetchDataLength(`https:/artion.site/api/user/salebid`,setBidLength);
-      fetchDataLength(`https:/artion.site/api/user/salesuc`,setTrueBidLength);
-      fetchDataLength(`https:/artion.site/api/user/saleend`,setEndLength);
+      fetchDataLength(`https://artion.site/api/user/saleall`,setEntireLength);
+      fetchDataLength(`https://artion.site/api/user/salebid`,setBidLength);
+      fetchDataLength(`https://artion.site/api/user/salesuc`,setTrueBidLength);
+      fetchDataLength(`https://artion.site/api/user/saleend`,setEndLength);
   
     if(entire){
-      history(`https:/artion.site/api/user/saleall`,setEntire, setEntireLength);
+      history(`https://artion.site/api/user/saleall`,setEntire, setEntireLength);
     }
 
     if(bid){
-      history(`https:/artion.site/api/user/salebid`,setBid, setBidLength);
+      history(`https://artion.site/api/user/salebid`,setBid, setBidLength);
     }
 
     if(trueBid){
-      history(`https:/artion.site/api/user/salesuc`,setTrueBid, setTrueBidLength);
+      history(`https://artion.site/api/user/salesuc`,setTrueBid, setTrueBidLength);
     }
 
     if(end){
-      history(`https:/artion.site/api/user/saleend`,setEnd, setEndLength);
+      history(`https://artion.site/api/user/saleend`,setEnd, setEndLength);
     }
   },[entire , bid, trueBid, end, id]);
 

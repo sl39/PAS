@@ -17,7 +17,7 @@ export default function DetailPage() {
     useEffect(() => {
         const fetchArtwork = async () => {
             try {
-                const response = await axios.get(`https:/artion.site/api/art/detail?artPk=${art_pk}`, 
+                const response = await axios.get(`https://artion.site/api/art/detail?artPk=${art_pk}`, 
                     {
                         withCredentials: true,
                       });

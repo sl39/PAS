@@ -162,7 +162,7 @@ const NormalParagraph = styled.p`
 
 export async function getArtistProfileApi(userPk) {
   const response = await axios.get(
-    `https:/artion.site/api/user/myart?user_pk=${userPk}`,
+    `https://artion.site/api/user/myart?user_pk=${userPk}`,
     {
       withCredentials: true,
     }  );
@@ -195,8 +195,8 @@ export default function ArtistProfile() {
   const handleSubscription = async () => {
     setFollowState((prevState) => !prevState);
     const url = followState
-      ? `https:/artion.site/api/following/unfollow/${userPkObj.user_pk}`
-      : `https:/artion.site/api/following/follow/${userPkObj.user_pk}`;
+      ? `https://artion.site/api/following/unfollow/${userPkObj.user_pk}`
+      : `https://artion.site/api/following/follow/${userPkObj.user_pk}`;
 
     try {
       await axios({

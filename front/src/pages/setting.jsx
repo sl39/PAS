@@ -132,7 +132,7 @@ export default function SettingPage() {
     if(submit){
     async function postUserData() {
       try{
-         await axios.post(`https:/artion.site/api/user/create`,
+         await axios.post(`https://artion.site/api/user/create`,
           {
               user_name : text,
               phone_number : phone,

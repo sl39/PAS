@@ -135,7 +135,7 @@ export default function SettingPage() {
     if(submit){
     async function postUserData() {
       try{
-          await axios.put(`https:/artion.site/api/user/update`,{
+          await axios.put(`https://artion.site/api/user/update`,{
           user_name : text,
           phone_number : phone,
           bank_name : bankName,
@@ -200,7 +200,7 @@ export default function SettingPage() {
 
   //개인정보 수정전 정보 불러오는 부분
   useEffect(()=>{
-    axios.get(`https:/artion.site/api/user/update`,         {
+    axios.get(`https://artion.site/api/user/update`,         {
           withCredentials: true,
         })
     .then( response => {

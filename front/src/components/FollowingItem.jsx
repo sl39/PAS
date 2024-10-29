@@ -62,7 +62,7 @@ const FollowingItem = ({ user, onUnSubscribe}) => {
     // 구독취소 부분
     const handleCancelSubscription = async() => {
         try {
-            await axios.delete(`https:/artion.site/api/following/unfollow/${seller_pk}`,                     {
+            await axios.delete(`https://artion.site/api/following/unfollow/${seller_pk}`,                     {
                 withCredentials: true,
               });
             onUnSubscribe(seller_pk);

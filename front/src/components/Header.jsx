@@ -32,7 +32,7 @@ const StyledLink = styled(Link)`
 `;
 
 export async function userFeedApi() {
-  const response = await axios.get("https:/artion.site/api/user/mine",  {
+  const response = await axios.get("https://artion.site/api/user/mine",  {
     withCredentials: true,
   });
   return response.data;

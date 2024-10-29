@@ -83,7 +83,7 @@ const BoldParagraph = styled.p`
 `;
 
 export async function searchArtworkApi(options) {
-  const response = await axios.get("https:/artion.site/api/art/search",
+  const response = await axios.get("https://artion.site/api/art/search",
     {
     params: {
       keyword: options.keyword,
@@ -103,7 +103,7 @@ export async function searchArtworkApi(options) {
 
 //prettier-ignore
 export async function searchArtistApi(options) {
-  const response = await axios.get("https:/artion.site/api/art/search/painter", 
+  const response = await axios.get("https://artion.site/api/art/search/painter", 
     {
     params: {
       keyword: options.keyword

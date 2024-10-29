@@ -292,7 +292,7 @@ export default function Register(){
     if(submit === true ){
     async function postArt() {
       try{
-        await axios.post(`https:/artion.site/api/art/create`,{
+        await axios.post(`https://artion.site/api/art/create`,{
           art_name: name2,
           art_info: description2,
           minP: minP2,

@@ -282,7 +282,7 @@ export default function PutRegister(){
       if(submit === true ){
       async function postArt() {
         try{
-            await axios.put(`https:/artion.site/api/art/update?art_pk=${id.art_pk}`,{
+            await axios.put(`https://artion.site/api/art/update?art_pk=${id.art_pk}`,{
             //담아보낼 데이터
             art_name: name,
             art_info: description,
@@ -365,7 +365,7 @@ export default function PutRegister(){
 
   //그림 정보 불러오는 부분
   useEffect(()=>{
-    axios.get(`https:/artion.site/api/art/update?art_pk=${id.art_pk}`, 
+    axios.get(`https://artion.site/api/art/update?art_pk=${id.art_pk}`, 
       {
         withCredentials: true,
       })

@@ -87,7 +87,7 @@ const LikedArtworks = ({user_pk}) => {
     useEffect(() => {
         const fetchLikedArtworks = async() =>{
             try{
-                const response = await axios.get(`https:/artion.site/api/user/artfol?user_pk=${user_pk}`,                    {
+                const response = await axios.get(`https://artion.site/api/user/artfol?user_pk=${user_pk}`,                    {
                     withCredentials: true,
                   });
                 const sortedArt = response.data.sort((a,b) => new Date(b.upload) - new Date(a.upload))
@@ -128,7 +128,7 @@ const Following = ({ user_pk }) => {
     useEffect(() => {
         const fetchFollowing = async() => {
             try{
-                const response = await axios.get(`https:/artion.site/api/user/fol?user_pk=${user_pk}`,                     {
+                const response = await axios.get(`https://artion.site/api/user/fol?user_pk=${user_pk}`,                     {
                     withCredentials: true,
                   });
                 const sortedFollowing = response.data.sort((a,b) => a.user_name.localeCompare(b.user_name));
@@ -163,7 +163,7 @@ const Followers = ({ user_pk }) => {
     useEffect (() => {
         const fetchFollowers = async() => {
             try{
-                const response = await axios.get(`https:/artion.site/api/user/myfol?user_pk=${user_pk}`,                    {
+                const response = await axios.get(`https://artion.site/api/user/myfol?user_pk=${user_pk}`,                    {
                     withCredentials: true,
                   });
                 const sortedFollower = response.data.sort((a, b) => 
