@@ -395,11 +395,9 @@ public class UserService {
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         List<ArtEntity> art = artRepository.findAllByUser_pk(user.getUser_pk());
+
         if (art.isEmpty()) {
-//            Map<String, Object> errorMessage = new HashMap<>();
-////            errorMessage.put("에러", "사용자가 등록한 그림이 없습니다");
-//            result.add(errorMessage);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+            return ResponseEntity.ok(result);
         } else {
             for (ArtEntity artEntity : art) {
 
@@ -465,7 +463,7 @@ public class UserService {
 //            Map<String, Object> errorMessage = new HashMap<>();
 //            errorMessage.put("에러", "사용자가 등록한 그림이 없습니다");
 //            result.add(errorMessage);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+            return ResponseEntity.ok(result);
         } else {
             for (ArtEntity artEntity : art) {
 //                System.out.println("유저로 art 조회 후 모든 art 중 auction 들어가 있는 것들" + auction.size());
@@ -549,7 +547,7 @@ public class UserService {
 //            Map<String, Object> errorMessage = new HashMap<>();
 //            errorMessage.put("에러", "사용자가 등록한 그림이 없습니다");
 //            result.add(errorMessage);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+            return ResponseEntity.ok(result);
         } else {
             for (ArtEntity artEntity : art) {
                 List<AuctionEntity> auction = auctionRepository.findAllByArt_pk(artEntity.getArt_pk());
@@ -557,7 +555,7 @@ public class UserService {
 //                    Map<String, Object> errorMessage = new HashMap<>();
 //                    errorMessage.put("에러", "사용자는 경매를 진행한 적이 없습니다");
 //                    result.add(errorMessage);
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+                    return ResponseEntity.ok(result);
                 } else {
                     for (AuctionEntity auctionEntity : auction) {
                         if (artEntity.getCurrent_auction_status() == 0) {
@@ -601,7 +599,7 @@ public class UserService {
 //                                Map<String, Object> errorMessage = new HashMap<>();
 //                                errorMessage.put("에러", "사용자가 등록한 그림 중 낙찰된 그림이 없습니다");
 //                                result.add(errorMessage);
-                                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+                                return ResponseEntity.ok(result);
                             } else {
                                 for (PayingEntity payingEntity : pay) {
                                     List<OrderEntity> order = orderRepostory.findAllByPaying_pk(payingEntity.getPaying_pk());
@@ -609,7 +607,7 @@ public class UserService {
 //                                        Map<String, Object> errorMessage = new HashMap<>();
 //                                        errorMessage.put("에러", "해당 사용자의 판매완료된 그림이 없습니다");
 //                                        result.add(errorMessage);
-                                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+                                        return ResponseEntity.ok(result);
                                     } else {
                                         for (OrderEntity orderEntity : order) {
                                             Map<String, Object> map = new HashMap<>();
