@@ -34,7 +34,7 @@ const ActionPage = () => {
         params: { artPk},
         withCredentials: true
       });
-      console.log('API 응답:', response.data); // 응답 데이터 확인
+      // console.log('API 응답:', response.data); // 응답 데이터 확인
       setAuctionData(response.data);
       setpaying_pk(response.data.paying_pk); // payingPk 설정
       const endTime = new Date(response.data.endTime);
@@ -48,7 +48,7 @@ const ActionPage = () => {
   
   useEffect(() => {
     // payingPk가 업데이트될 때마다 로그 출력
-    console.log('현재 payingPk:', paying_pk);
+    // console.log('현재 payingPk:', paying_pk);
   }, [paying_pk]); // payingPk가 변경될 때마다 호출
   
 
@@ -67,12 +67,14 @@ const ActionPage = () => {
     const stompClient = new StompJs.Client({
       brokerURL: "wss://artion.site/api/socket/ws",
       // brokerURL: "wss://artion.site/api/socket/ws",
-      debug: (str) => { console.log(str); },
+      debug: (str) => { 
+        // console.log(str);
+       },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
       onConnect: () => {
-        console.log("WebSocket connected");
+        // console.log("WebSocket connected");
         stompClient.subscribe(`/sub/auction/${artPk}`, (message) => {
           const data = JSON.parse(message.body);
           
@@ -198,7 +200,7 @@ const ActionPage = () => {
     }));
   };
 
-  console.log(paying_pk)
+  // console.log(paying_pk)
 
   return (
     <>
