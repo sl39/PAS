@@ -764,13 +764,16 @@ public class UserService {
 
         if (art.isEmpty()) {
             result.put("에러", "사용자가 등록한 그림이 없습니다");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+            return ResponseEntity.ok(result);
         } else {
             for (ArtEntity artEntity : art) {
                 List<AuctionEntity> auction = auctionRepository.findAllByArt_pk(artEntity.getArt_pk());
                 if (auction == null) {
                     result.put("에러", "사용자는 경매를 진행한 적이 없습니다");
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+//                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+//                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+                        return ResponseEntity.ok(result);
                 } else {
                     if (artEntity.getCurrent_auction_status() != 0) {
                         Map<String, Object> itemData = new HashMap<>();
