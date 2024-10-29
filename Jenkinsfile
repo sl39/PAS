@@ -48,19 +48,12 @@ pipeline {
             steps {
                 script {
                     // 최신 이미지를 pull합니다.
-                    sh 'docker pull wjddntyvld/artion:latest'
-        
-                    // 실행 중인 컨테이너를 중지하고 제거합니다.
-                    // 컨테이너 이름 또는 ID를 확인하여 사용하세요.
-                    sh '''
-                        # 먼저 실행 중인 컨테이너를 중지합니다.
-                        CONTAINER_ID=$(docker ps -q --filter "ancestor=wjddntyvld/artion:latest")
-                        if [ -n "$CONTAINER_ID" ]; then
-                            docker stop $CONTAINER_ID
-                            docker rm $CONTAINER_ID
-                        fi
-                    '''               
-        
+                    sh 'docker pull wjddntyvld/artion:latest'       
+                   sh '''
+                        containers=$(docker ps -q --filter "publish=8000")
+                        echo "${containers}" | xargs docker stop
+                        echo "${containers}" | xargs docker rm
+                    '''   
                     // 새로운 이미지를 기반으로 컨테이너를 실행합니다.
                     sh 'docker run -d -p 8000:8000 wjddntyvld/artion:latest'
                 }
