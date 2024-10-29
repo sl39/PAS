@@ -5,7 +5,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { BackHeader } from "../components";
-import app from "../firebase";
+import app from "../firebase"
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -267,7 +267,7 @@ export default function Register(){
       if (fileInput) fileInput.value = '';
         }
 
-        console.log(images);
+        // console.log(images);
   };
 
   //현재 이전 날짜 선택 불가 옵션
@@ -285,12 +285,14 @@ export default function Register(){
     setDate(currentDate);
   }, []);
 
+
+
   // 그림 등록 부분
   useEffect(()=>{
     if(submit === true ){
     async function postArt() {
       try{
-        const response = await axios.post(`https://artion.site/api/art/create?user_pk=${id.user_pk}`,{
+        await axios.post(`https:/artion.site/api/art/create`,{
           art_name: name2,
           art_info: description2,
           minP: minP2,
@@ -304,7 +306,7 @@ export default function Register(){
           painter: painter2,
           artImage: images,
           artCategory : optionList
-        })
+        },{withCredentials: true})
         alert("작품이 등록 되었습니다.");
         navigate('/');
       }catch(e){
@@ -317,7 +319,7 @@ export default function Register(){
   }
   }, [id,submit]);
 
-  const submitButton = () => {
+   const submitButton = () => {
     const requiredFields = [name2, description2, minP2, maxP2, width2, depth2, height2, created, start, end, painter2, images, optionList]; 
     let allFieldsFilled = true;
 
@@ -340,10 +342,29 @@ export default function Register(){
     });
     if (!allFieldsFilled) {
         alert("입력이 완료되지 않았습니다. 모든 필드를 입력해주세요.");
-    } else {
-        setSubmit(true);
-    }
+        return;
+    } 
+     // 날짜 유효성 체크
+      const now = new Date();
+      const startDateTime = new Date(start);
+      const endDateTime = new Date(end);
+      const timeDiffMs = endDateTime - startDateTime;
+      const minTimeDiff = 3 * 60 * 60 * 1000; // 최소 3시간 (ms)
+      const maxTimeDiff = 7 * 24 * 60 * 60 * 1000; // 최대 7일 (ms)
+
+      if (startDateTime <= now) {
+        alert("시작일자는 현재 시간보다 이후여야 합니다.");
+      } else if (endDateTime < startDateTime) {
+        alert("종료일자가 시작일자보다 이전일 수 없습니다.");
+      } else if (timeDiffMs < minTimeDiff) {
+        alert("종료일자는 시작일자로부터 최소 3시간 이후여야 합니다.");
+      } else if (timeDiffMs > maxTimeDiff) {
+        alert("종료일자는 시작일자로부터 최대 7일 이내여야 합니다.");
+      } else {
+        setSubmit(true); // 모든 조건 충족 시 제출
+      }
 }
+
   return(
     <>
      <GlobalStyle />

@@ -14,12 +14,10 @@ justify-content: center;
 export default function DetailPage() {
     const [ artwork, setArtwork ] = useState(null);
     const { art_pk} = useParams();
-    console.log(art_pk)
     useEffect(() => {
         const fetchArtwork = async () => {
             try {
-                // 수정 - user_pk 바꾸기
-                const response = await axios.get(`https://artion.site/api/art/detail?artPk=${art_pk}`, 
+                const response = await axios.get(`https:/artion.site/api/art/detail?artPk=${art_pk}`, 
                     {
                         withCredentials: true,
                       });
@@ -30,6 +28,7 @@ export default function DetailPage() {
         };
         fetchArtwork();
     },[art_pk]);
+
 
     //조건부 렌더링
     if(!artwork){

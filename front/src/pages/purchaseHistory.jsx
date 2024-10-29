@@ -142,7 +142,9 @@ export default function PurchaseHistory() {
 
   // 각 URL 별로 데이터를 가져와 길이를 반환하는 함수
   const fetchDataLength = (url, setLength) => {
-    axios.get(url)
+    axios.get(url, {
+      withCredentials: true,
+    })
       .then(response => {
         setLength(response.data.length); // 데이터 길이를 설정
       })
@@ -153,7 +155,11 @@ export default function PurchaseHistory() {
 
   // 처음 렌더링 시 한 번만 실행되는 코드
     useEffect(() => {
-      axios.get(`https://artion.site/api/user/purall?user_pk=${id.user_pk}`)
+      axios.get(`https:/artion.site/api/user/purall`, 
+        {
+          withCredentials: true,
+        }
+      )
         .then(response => {
           setData(response.data);
         })
@@ -165,7 +171,10 @@ export default function PurchaseHistory() {
   //영역 누를 때마다 리스트 로드
   useEffect(()=>{
     const history = (url, status, lengthStatus) => {
-      axios.get(url)
+      axios.get(url, 
+        {
+          withCredentials: true,
+        })
       .then(response => {
         setData(response.data);
         status(false);
@@ -175,31 +184,31 @@ export default function PurchaseHistory() {
       });
     };
 
-    fetchDataLength(`https://artion.site/api/user/purall?user_pk=${id.user_pk}`,setEntireLength);
-    fetchDataLength(`https://artion.site/api/user/purbid?user_pk=${id.user_pk}`,setBidLength);
-    fetchDataLength(`https://artion.site/api/user/pursuc?user_pk=${id.user_pk}`,setTrueBidLength);
-    fetchDataLength(`https://artion.site/api/user/purend?user_pk=${id.user_pk}`,setEndLength);
+    fetchDataLength(`https:/artion.site/api/user/purall`,setEntireLength);
+    fetchDataLength(`https:/artion.site/api/user/purbid`,setBidLength);
+    fetchDataLength(`https:/artion.site/api/user/pursuc`,setTrueBidLength);
+    fetchDataLength(`https:/artion.site/api/user/purend`,setEndLength);
  
     if(entire){
-      history(`https://artion.site/api/user/purall?user_pk=${id.user_pk}`,setEntire, setEntireLength)
+      history(`https:/artion.site/api/user/purall`,setEntire, setEntireLength)
     }
 
     if(bid){
-      history(`https://artion.site/api/user/purbid?user_pk=${id.user_pk}`,setBid, setBidLength)
+      history(`https:/artion.site/api/user/purbid`,setBid, setBidLength)
     }
 
     if(trueBid){
-      history(`https://artion.site/api/user/pursuc?user_pk=${id.user_pk}`,setTrueBid, setTrueBidLength)
+      history(`https:/artion.site/api/user/pursuc`,setTrueBid, setTrueBidLength)
     }
 
     if(end){
-      history(`https://artion.site/api/user/purend?user_pk=${id.user_pk}`,setEnd, setEndLength)
+      history(`https:/artion.site/api/user/purend`,setEnd, setEndLength)
     }
     },[entire , bid, trueBid, end, id]);
 
     const handleItemClick = (artPk) => {
       // art_pk를 포함한 경로로 이동
-      navigate(`/detail/${artPk}/${id.user_pk}`);
+      navigate(`/detail/${artPk}`);
     };
 
     const getStatusStyle = (status) => {

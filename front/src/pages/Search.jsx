@@ -83,10 +83,7 @@ const BoldParagraph = styled.p`
 `;
 
 export async function searchArtworkApi(options) {
-  const response = await axios.get("https://artion.site/api/art/search",
-    {
-      withCredentials: true,
-    }, 
+  const response = await axios.get("https:/artion.site/api/art/search",
     {
     params: {
       keyword: options.keyword,
@@ -98,20 +95,20 @@ export async function searchArtworkApi(options) {
       page: options.page, // 현재 페이지
       pageSize: 20, // 페이지당 작품 개수
     },
-  });
+    withCredentials:true
+  }
+);
   return response.data;
 }
 
 //prettier-ignore
 export async function searchArtistApi(options) {
-  const response = await axios.get("https://artion.site/api/art/search/painter", 
-    {
-      withCredentials: true,
-    },
+  const response = await axios.get("https:/artion.site/api/art/search/painter", 
     {
     params: {
       keyword: options.keyword
     },
+    withCredentials:true
   });
   return response.data;
 }

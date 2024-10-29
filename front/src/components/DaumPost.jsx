@@ -27,11 +27,11 @@ const Div = styled.div`
   justify-content : space-between;
 `;
 
-const P = styled.div`
-  color : #fff;
-  height : 50px;
-  width : 100%;
-`;
+// const P = styled.div`
+//   color : #fff;
+//   height : 50px;
+//   width : 100%;
+// `;
 
 const Post = styled(DaumPostcode)`
  height : 50%;

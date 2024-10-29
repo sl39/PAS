@@ -162,8 +162,10 @@ const NormalParagraph = styled.p`
 
 export async function getArtistProfileApi(userPk) {
   const response = await axios.get(
-    `https://artion.site/api/user/myart?user_pk=${userPk}`
-  );
+    `https:/artion.site/api/user/myart?user_pk=${userPk}`,
+    {
+      withCredentials: true,
+    }  );
   return response.data;
 }
 
@@ -177,6 +179,9 @@ export default function ArtistProfile() {
   const [artworkList, setArtworkList] = useState([]);
   const [followState, setFollowState] = useState(false);
   const [isSelf, setIsSelf] = useState(false);
+  const [myPk, setMyPk] = useState(0);
+
+
 
   // Link 클릭 시 같은 페이지여도 새로고침 하기
   let location = useLocation();
@@ -190,13 +195,14 @@ export default function ArtistProfile() {
   const handleSubscription = async () => {
     setFollowState((prevState) => !prevState);
     const url = followState
-      ? `https://artion.site/api/following/1/unfollow/${userPkObj.user_pk}`
-      : `https://artion.site/api/following/1/follow/${userPkObj.user_pk}`;
+      ? `https:/artion.site/api/following/unfollow/${userPkObj.user_pk}`
+      : `https:/artion.site/api/following/follow/${userPkObj.user_pk}`;
 
     try {
       await axios({
         method: followState ? "delete" : "post",
         url: url,
+        withCredentials: true
       });
       alert(followState ? "구독이 취소되었습니다." : "구독에 성공했습니다.");
     } catch (error) {
@@ -216,6 +222,7 @@ export default function ArtistProfile() {
         setArtworkList(artistProfileInfo.artList);
         setIsSelf(artistProfileInfo.isSelf);
         setFollowState(artistProfileInfo.followState);
+        setMyPk(artistProfileInfo.my_pk)
       } catch (error) {
         console.error("데이터를 가져오는 중에 오류가 발생했습니다: ", error);
       }
@@ -226,7 +233,7 @@ export default function ArtistProfile() {
 
   return (
     <>
-      <Header></Header>
+      <Header key={myPk} user={myPk}></Header>
       <ArtistContainer>
         <ProfileBox>
           <ImageContainer>
@@ -249,7 +256,7 @@ export default function ArtistProfile() {
               </NameBox>
               <SettingBox>
                 {isSelf && (
-                  <StyledLink to={`/info/${userPkObj.user_pk}`}>
+                  <StyledLink to={`/info`}>
                     <CiMenuKebab size={25}></CiMenuKebab>
                   </StyledLink>
                 )}

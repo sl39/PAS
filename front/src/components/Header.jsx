@@ -2,8 +2,9 @@ import { CiMenuBurger } from "react-icons/ci";
 import { PiUserCircleThin } from "react-icons/pi";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SideMenu from "./SideMenu";
+import axios from "axios";
 
 // Styled Components
 const HeaderContainer = styled.header`
@@ -30,12 +31,33 @@ const StyledLink = styled(Link)`
   color: inherit;
 `;
 
+export async function userFeedApi() {
+  const response = await axios.get("https:/artion.site/api/user/mine",  {
+    withCredentials: true,
+  });
+  return response.data;
+}
+
 export default function Header() {
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const [userPk, setUserPk] = useState(0);
 
   const handleToggle = () => {
     setMenuOpen((isMenuOpen) => !isMenuOpen);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+      const User = await userFeedApi();
+      setUserPk(User)
+       
+      } catch (error) {
+        console.error("데이터를 가져오는 중에 오류가 발생했습니다: ", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -46,7 +68,7 @@ export default function Header() {
         <StyledLink to="/">
           <Logo>Artion</Logo>
         </StyledLink>
-        <StyledLink to={`/artist/1`}>
+        <StyledLink to={`/artist/${userPk}`}>
           <PiUserCircleThin size={40} />
         </StyledLink>
       </HeaderContainer>
@@ -54,6 +76,7 @@ export default function Header() {
         <SideMenu
           handleToggle={handleToggle}
           isMenuOpen={isMenuOpen}
+          myPk={userPk}
         ></SideMenu>
       )}
     </>

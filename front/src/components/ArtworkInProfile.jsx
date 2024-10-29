@@ -57,9 +57,9 @@ const HeartIcon = styled(GoHeartFill)`
   color: red;
 `;
 
-export default function ArtworkInProfile({ artWork, userPk }) {
+export default function ArtworkInProfile({ artWork }) {
   return (
-    <StyledLink to={`/detail/${artWork.art_pk}/${userPk}`}>
+    <StyledLink to={`/detail/${artWork.art_pk}`}>
       <ArtworkContainer>
         <ImageContainer>
           <SquareImage src={artWork.image}></SquareImage>

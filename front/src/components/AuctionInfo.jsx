@@ -17,7 +17,7 @@ const AuctionInfo = ({
   setWinnerAddress,
   setShippingMethod,
   artPk, // artPk를 props로 추가
-  userPk // userPk를 props로 추가
+  // userPk // userPk를 props로 추가
 }) => {
   const [auctionData, setAuctionData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -28,7 +28,8 @@ const AuctionInfo = ({
   const fetchAuctionDetails = async () => {
     try {
       const response = await axios.get(`/api/auction/detail`, {
-        params: { artPk, userPk }, // props로 받은 값을 사용
+        params: { artPk }, // props로 받은 값을 사용
+        withCredentials:true
       });
       setAuctionData(response.data);
       const endTime = new Date(response.data.endTime);

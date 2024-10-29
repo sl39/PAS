@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { createGlobalStyle } from 'styled-components';
 import { useNavigate } from "react-router-dom";
 import { DefaultHeader } from "../components";
-import { useParams } from "react-router-dom";
 import DaumPost from "../components/DaumPost";
 
 const GlobalStyle = createGlobalStyle`
@@ -108,7 +107,6 @@ export default function SettingPage() {
   const [submit, setSubmit] = useState(false);
   const [mail, setMail] = useState(``);
   const navigate = useNavigate(); 
-  const id = useParams();
   
   //버튼 상태를 위한 state
   const [popup, setPopup] = useState(false);
@@ -134,16 +132,15 @@ export default function SettingPage() {
     if(submit){
     async function postUserData() {
       try{
-        const response = await axios.post(`https://artion.site/api/user/create`,
-          {
-            withCredentials: true,
-          },
+         await axios.post(`https:/artion.site/api/user/create`,
           {
               user_name : text,
               phone_number : phone,
               bank_name : bankName,
               user_account : acc,
               address : fullAdd
+      },           {
+        withCredentials: true,
       });
         alert("정보가 등록되었습니다.");
         navigate('/');
@@ -162,7 +159,7 @@ export default function SettingPage() {
     setText(newText);   
   }
 
-  const setP = event => {
+  const setP = event => { 
     const newPhone = event.target.value;
     setPhone(newPhone);
   }

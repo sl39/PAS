@@ -80,7 +80,7 @@ const [userImage, setUserImage]= useState('');
 const [name, setName] = useState('');
 
   useEffect(()=> {
-    axios.get(`https://artion.site/api/user/myp`, 
+    axios.get(`https:/artion.site/api/user/myp`, 
       {
         withCredentials: true,
       })

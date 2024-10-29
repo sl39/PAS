@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const ItemContainer = styled.li`
@@ -54,9 +54,7 @@ const UserPage = styled(Link)`
 `;
 
 const FollowingItem = ({ user, onUnSubscribe}) => {
-    const { user_pk} = useParams();
     const seller_pk = user.user_pk;
-    const customer_pk = user_pk;
 
     if (!user) {
         return null;
@@ -64,7 +62,9 @@ const FollowingItem = ({ user, onUnSubscribe}) => {
     // 구독취소 부분
     const handleCancelSubscription = async() => {
         try {
-            await axios.delete(`https://artion.site/api/following/${customer_pk}/unfollow/${seller_pk}`);
+            await axios.delete(`https:/artion.site/api/following/unfollow/${seller_pk}`,                     {
+                withCredentials: true,
+              });
             onUnSubscribe(seller_pk);
             alert("더 이상 구독하지 않습니다.")
         } catch(error){
@@ -74,7 +74,6 @@ const FollowingItem = ({ user, onUnSubscribe}) => {
 
     return (
         <ItemContainer>
-            {/* user_pk값 추가하기 */}
             <UserPage to={`/artist/${seller_pk}`}>
             {user.user_image ? (
                 <UserImage src={user.user_image} alt={user.user_name} />

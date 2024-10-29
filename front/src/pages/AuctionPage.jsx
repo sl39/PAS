@@ -10,12 +10,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import * as StompJs from "@stomp/stompjs";
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://artion.site';
+axios.defaults.baseURL = 'https:/artion.site';
 
 const ActionPage = () => {
   const { art_pk } = useParams(); // URL 파라미터에서 artPk와 userPk 가져오기
   const artPk = Number(art_pk); // 숫자로 변환
-  const userPk = 13; // 숫자로 변환
 
   const [auctionData, setAuctionData] = useState(null);
   const [showBidModal, setShowBidModal] = useState(false);
@@ -30,8 +29,10 @@ const ActionPage = () => {
 
   const fetchAuctionDetails = async () => {
     try {
-      const response = await axios.get(`/api/auction/detail`, {
-        params: { artPk, userPk },
+      const response = await axios.get(`/api/auction/detail`, 
+        {
+        params: { artPk},
+        withCredentials: true
       });
       console.log('API 응답:', response.data); // 응답 데이터 확인
       setAuctionData(response.data);
@@ -64,7 +65,8 @@ const ActionPage = () => {
     fetchAuctionDetails();
 
     const stompClient = new StompJs.Client({
-      brokerURL: "wss://artion.site/api/socket/ws",
+      brokerURL: "ws://localhost:8000/api/socket/ws",
+      // brokerURL: "wss://artion.site/api/socket/ws",
       debug: (str) => { console.log(str); },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
@@ -134,8 +136,10 @@ const ActionPage = () => {
 
     try {
       const response = await axios.post(`/api/auction/bid/${artPk}`, {
-        userPk,
+        //userPk,
         price: maxBid,
+      }, {
+        withCredentials : true
       });
 
       if (response.data && response.data.currentPrice) {
@@ -194,6 +198,8 @@ const ActionPage = () => {
     }));
   };
 
+  console.log(paying_pk)
+
   return (
     <>
     <Header />
@@ -240,7 +246,7 @@ const ActionPage = () => {
             isAuctionEnded={false}
             timeRemaining={timeRemaining}
             artPk={artPk} // artPk를 전달
-            userPk={userPk} // userPk를 전달
+            // userPk={userPk} // userPk를 전달
           />
         )}
         {state === 1 && (
@@ -259,7 +265,7 @@ const ActionPage = () => {
             artName={artName}
             onPaymentComplete={handlePaymentComplete}
             artPk={artPk} // artPk를 전달
-            userPk={userPk} // userPk를 전달
+            // userPk={userPk} // userPk를 전달
             paying_pk={paying_pk}
           />
         )}
@@ -279,7 +285,7 @@ const ActionPage = () => {
             artName={artName}
             onPaymentComplete={handlePaymentComplete}
             artPk={artPk} // artPk를 전달
-            userPk={userPk} // userPk를 전달
+            // userPk={userPk} // userPk를 전달
             paying_pk={paying_pk}
           />
         )}
@@ -300,7 +306,7 @@ const ActionPage = () => {
             onPaymentComplete={handlePaymentComplete}
             paymentCompleted={true}
             artPk={artPk} // artPk를 전달
-            userPk={userPk} // userPk를 전달
+            // userPk={userPk} // userPk를 전달
             paying_pk={paying_pk}
           />
         )}

@@ -87,7 +87,9 @@ const LikedArtworks = ({user_pk}) => {
     useEffect(() => {
         const fetchLikedArtworks = async() =>{
             try{
-                const response = await axios.get(`https://artion.site/api/user/artfol?user_pk=${user_pk}`);
+                const response = await axios.get(`https:/artion.site/api/user/artfol?user_pk=${user_pk}`,                    {
+                    withCredentials: true,
+                  });
                 const sortedArt = response.data.sort((a,b) => new Date(b.upload) - new Date(a.upload))
                 setLikedArtworks(sortedArt);
             } catch(error){
@@ -126,7 +128,9 @@ const Following = ({ user_pk }) => {
     useEffect(() => {
         const fetchFollowing = async() => {
             try{
-                const response = await axios.get(`https://artion.site/api/user/fol?user_pk=${user_pk}`);
+                const response = await axios.get(`https:/artion.site/api/user/fol?user_pk=${user_pk}`,                     {
+                    withCredentials: true,
+                  });
                 const sortedFollowing = response.data.sort((a,b) => a.user_name.localeCompare(b.user_name));
                 setFollowing(sortedFollowing);
 
@@ -159,7 +163,9 @@ const Followers = ({ user_pk }) => {
     useEffect (() => {
         const fetchFollowers = async() => {
             try{
-                const response = await axios.get(`https://artion.site/api/user/myfol?user_pk=${user_pk}`);
+                const response = await axios.get(`https:/artion.site/api/user/myfol?user_pk=${user_pk}`,                    {
+                    withCredentials: true,
+                  });
                 const sortedFollower = response.data.sort((a, b) => 
                     a.user_name.localeCompare(b.user_name));
                 setFollowers(sortedFollower);
@@ -217,7 +223,9 @@ const FollowingPage = () => {
                     <BackButton />
                     </Link>
                 </ButtonContainer>
-                <Title>{artistName}</Title>
+                <Title>
+                    {artistName !== null ? artistName : "MyPage"}
+                </Title>
             </HeadContainer>
             <SelectContainer>
                 <SelectLink to={`/following/liked/${user_pk}?artistName=${encodeURIComponent(artistName)}`} onClick={() => handleSelect('liked')}>

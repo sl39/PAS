@@ -135,12 +135,14 @@ export default function SettingPage() {
     if(submit){
     async function postUserData() {
       try{
-    const response = await axios.put(`https://artion.site/api/user/update?user_pk=${id.user_pk}`,{
+          await axios.put(`https:/artion.site/api/user/update`,{
           user_name : text,
           phone_number : phone,
           bank_name : bankName,
           user_account : acc,
           address : fullAdd
+      },        {
+        withCredentials: true,
       });
       alert("개인정보가 수정되었습니다.");
       navigate('/');
@@ -198,7 +200,9 @@ export default function SettingPage() {
 
   //개인정보 수정전 정보 불러오는 부분
   useEffect(()=>{
-    axios.get(`https://artion.site/api/user/update?user_pk=${id.user_pk}`)
+    axios.get(`https:/artion.site/api/user/update`,         {
+          withCredentials: true,
+        })
     .then( response => {
       const { user_name, phone_number, bank_name, user_account, address } = response.data;
 

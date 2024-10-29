@@ -269,15 +269,13 @@ export default function DetailItem ({ artWork }) {
     const currentTime = new Date();
     const chstartTime = new Date(artWork.startTime.replace(" ","T"));
     const chendTime = new Date(artWork.endTime.replace(" ","T"));
-    const {art_pk, user_pk} = useParams();
+    const {art_pk} = useParams();
     //세자리마다 , 넣어주기
     const maxPrice = artWork.maxPrice;
     const currentPrice = artWork.currentPrice;
     const maxPriceRE = maxPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
     const currentPriceRE = currentPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-    
-    console.log(user_pk)
-    
+        
     if(!artWork) return null;
 
     const handleNext = () => {
@@ -299,9 +297,8 @@ export default function DetailItem ({ artWork }) {
     const toggleFollowing = async ( art_pk ) => {
         try {
             const url = isArtFollowing 
-            //수정
-                ? `https://artion.site/api/artfollowing/${art_pk}/unlike`
-                : `https://artion.site/api/artfollowing/${art_pk}`;
+                ? `https:/artion.site/api/artfollowing/${art_pk}/unlike`
+                : `https:/artion.site/api/artfollowing/${art_pk}`;
             const response = await axios({
                 method: isArtFollowing ? 'delete' : 'post',
                 url: url,
@@ -315,7 +312,6 @@ export default function DetailItem ({ artWork }) {
         }
     };
     const handleLikeToggle = async () => {
-        //수정 user_pk로 변경시켜 줘야함 - 지금 하드 코딩
         const result = await toggleFollowing(art_pk);
 
         if(result){
@@ -362,8 +358,7 @@ export default function DetailItem ({ artWork }) {
             </div>
             <InfoContainer>
                 <ButtonContainer>
-                    {/* 수정 - 2 => user_pk */}
-                    {2 === artWork.sellerPk && (
+                    {artWork.myPk === artWork.sellerPk && (
                         <>
                          {artWork.auctionState === 0 && currentTime < chstartTime && <FixButton to={`/putArt/${art_pk}`}>수정하기</FixButton>}
                          {artWork.auctionState === 0 && currentTime > chendTime && <RetryButton to={`/putArt/${art_pk}`}>재경매</RetryButton>}
@@ -396,14 +391,13 @@ export default function DetailItem ({ artWork }) {
                     {artWork.auctionState === 0 && currentTime >= chstartTime && currentTime <= chendTime
                     && (<GoButton>경매 진행 중입니다.</GoButton>)}
                     {artWork.auctionState === 0 && currentTime > chendTime &&(<GoButton>경매가 종료되었습니다.</GoButton>)}
-                    {artWork.auctionState === 1 && <GoButton to={`/auction/${art_pk}/7`}>입찰하러 가기</GoButton>}
-                    {artWork.auctionState === 2 && <GoButton to={`/auction/${art_pk}/7`}>경매 완료</GoButton>}
+                    {artWork.auctionState === 1 && <GoButton to={`/auction/${art_pk}`}>입찰하러 가기</GoButton>}
+                    {artWork.auctionState === 2 && <GoButton to={`/auction/${art_pk}`}>경매 완료</GoButton>}
                     {artWork.auctionState === 3 && (artWork.currentPrice === artWork.myCurrentPrice
-                    ? (<GoButton to={`/auction/${art_pk}/7`}>주문내역 확인하기</GoButton>) : (<GoButton to={`/auction/${art_pk}/8`}>판매되었습니다.</GoButton>))}
+                    ? (<GoButton to={`/auction/${art_pk}`}>주문내역 확인하기</GoButton>) : (<GoButton to={`/auction/${art_pk}`}>판매되었습니다.</GoButton>))}
                     </>
                     ): (<GoButton>경매에 참여할 수 없습니다.</GoButton>)
                 }
-                
                 
             </InfoContainer>
         </DetailItemContainer>

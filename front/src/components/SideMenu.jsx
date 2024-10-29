@@ -50,7 +50,7 @@ const StyledHeading = styled.h3`
   user-select: none;
 `;
 
-export default function SideMenu({ handleToggle, isMenuOpen }) {
+export default function SideMenu({ handleToggle, isMenuOpen, myPk }) {
   const categories = [
     { name: "유화", value: "유화" },
     { name: "수채화", value: "수채화" },
@@ -69,7 +69,6 @@ export default function SideMenu({ handleToggle, isMenuOpen }) {
     { name: "초상화", value: "초상화" },
   ];
 
-  //
   return (
     <MenuContainer>
       <MenuIcon>
@@ -87,11 +86,11 @@ export default function SideMenu({ handleToggle, isMenuOpen }) {
             </StyledLink>
           ))}
         </CategoryContainer>
-        <StyledLink to={`/artist/1`}>
+        <StyledLink to={`/artist/${myPk}`}>
           <StyledHeading>My Page</StyledHeading>
         </StyledLink>
         {/* 수정 */}
-        <StyledLink to={`/following/liked/1`}>
+        <StyledLink to={`/following/liked/${myPk}`}>
           <StyledHeading>Subscribe & Like</StyledHeading>
         </StyledLink>
         <StyledLink to="/">

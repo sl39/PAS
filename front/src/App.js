@@ -30,15 +30,15 @@ export default function App() {
         <Route path="/ar/:art_pk" element={<ARCanvas />} />
         <Route path="/test" element={<ArtistProfile />} />
         <Route path="/following/:page/:user_pk" element={<FollowingPage />} />
-        <Route path="/auction/:art_pk/:user_pk" element={<AuctionPage />} />
+        <Route path="/auction/:art_pk" element={<AuctionPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/create" element={<SettingPage />} />
-        <Route path="/postArt/:user_pk" element={<Register />} />
-        <Route path="/salesHistory/:user_pk" element={<SaleHistory />} />
-        <Route path="/purchaseHistory/:user_pk" element={<PurchaseHistory />} />
+        <Route path="/postArt" element={<Register />} />
+        <Route path="/salesHistory" element={<SaleHistory />} />
+        <Route path="/purchaseHistory" element={<PurchaseHistory />} />
         <Route path="/putArt/:art_pk" element={<PutRegister />} />
-        <Route path="/info/:user_pk" element={<Info />} />
-        <Route path="/putCreate/:user_pk" element={<PutSetting />} />
+        <Route path="/info" element={<Info />} />
+        <Route path="/putCreate" element={<PutSetting />} />
         <Route path="/artist/:user_pk" element={<ArtistProfile />} />
       </Routes>
     </Router>

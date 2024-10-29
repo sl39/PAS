@@ -17,7 +17,7 @@ const AuctionResult = ({
   onPaymentComplete,
   paymentCompleted,
   artPk,
-  userPk,
+  // userPk,
   paying_pk,
 }) => {
   const [orderData, setOrderData] = useState(null);
@@ -36,6 +36,7 @@ const AuctionResult = ({
         try {
           const response = await axios.get('/api/order', {
             params: { payingPk : paying_pk },
+            withCredentials: true,
           });
           setOrderData(response.data);
         } catch (error) {
@@ -78,8 +79,8 @@ const AuctionResult = ({
             paying_pk: paying_pk,
             name: winnerName,
             phone_number: winnerContact,
-          });
-
+          },
+          {withCredentials: true});
           onPaymentComplete();
           alert('주문이 성공적으로 처리되었습니다.');
         } catch (error) {
