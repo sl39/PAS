@@ -65,7 +65,7 @@ const ActionPage = () => {
     fetchAuctionDetails();
 
     const stompClient = new StompJs.Client({
-      brokerURL: "ws://localhost:8000/api/socket/ws",
+      brokerURL: "wss://artion.site/api/socket/ws",
       // brokerURL: "wss://artion.site/api/socket/ws",
       debug: (str) => { console.log(str); },
       reconnectDelay: 5000,
