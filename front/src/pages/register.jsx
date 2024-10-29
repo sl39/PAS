@@ -202,10 +202,12 @@ export default function Register(){
   //start
   const setStar = (e) => {
     setStart(e.target.value);
+    console.log('start' + start);
   }
   //end
   const setEn = (e) => {
     setEnd(e.target.value);
+    console.log('end' + end);
   }
   //painter
   const setPain = (e) => {
@@ -340,9 +342,27 @@ export default function Register(){
     });
     if (!allFieldsFilled) {
         alert("입력이 완료되지 않았습니다. 모든 필드를 입력해주세요.");
-    } else {
-        setSubmit(true);
-    }
+        return;
+    } 
+     // 날짜 유효성 체크
+     const now = new Date();
+  const startDateTime = new Date(start);
+  const endDateTime = new Date(end);
+  const timeDiffMs = endDateTime - startDateTime;
+  const minTimeDiff = 3 * 60 * 60 * 1000; // 최소 3시간 (ms)
+  const maxTimeDiff = 7 * 24 * 60 * 60 * 1000; // 최대 7일 (ms)
+
+  if (startDateTime <= now) {
+    alert("시작일자는 현재 시간보다 이후여야 합니다.");
+  } else if (endDateTime < startDateTime) {
+    alert("종료일자가 시작일자보다 이전일 수 없습니다.");
+  } else if (timeDiffMs < minTimeDiff) {
+    alert("종료일자는 시작일자로부터 최소 3시간 이후여야 합니다.");
+  } else if (timeDiffMs > maxTimeDiff) {
+    alert("종료일자는 시작일자로부터 최대 7일 이내여야 합니다.");
+  } else {
+    setSubmit(true); // 모든 조건 충족 시 제출
+  }
 }
   return(
     <>

@@ -170,6 +170,7 @@ export default function PurchaseHistory() {
         setData(response.data);
         status(false);
         lengthStatus(response.data.length);
+        console.log(data);
       }).catch(error => {
         console.error(error);
       });
