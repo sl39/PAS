@@ -194,7 +194,7 @@ const FollowingPage = () => {
     const { page, user_pk } = useParams();
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
-    const artistName = searchParams.get('artistName');
+    const artistName = searchParams.get('artistName') || "MyPage";
     const [selectedPage, setSelectedPage] = useState(page);
 
     const renderPage = () => {
