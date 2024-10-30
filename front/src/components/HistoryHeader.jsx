@@ -3,6 +3,8 @@ import { MdArrowBack } from "react-icons/md";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 // Styled Components
 const HeaderContainer = styled.header`
@@ -28,13 +30,33 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   color: inherit;
 `;
+export async function userFeedApi() {
+  const response = await axios.get("https://artion.site/api/user/mine",  {
+    withCredentials: true,
+  });
+  return response.data;
+}
 
 export default function HistoryHeader() {
   const navigate = useNavigate();
+  const [userPk, setUserPk] = useState();
 
   const handleback = () => {
     navigate(-1);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+      const User = await userFeedApi();
+      setUserPk(User)
+       
+      } catch (error) {
+        console.error("데이터를 가져오는 중에 오류가 발생했습니다: ", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -45,7 +67,7 @@ export default function HistoryHeader() {
         <StyledLink to="/">
           <Logo>Artion</Logo>
         </StyledLink>
-        <StyledLink to={`/artist/1`}>
+        <StyledLink to={`/artist/${userPk}`}>
           <PiUserCircleThin size={40} />
         </StyledLink>
       </HeaderContainer>
