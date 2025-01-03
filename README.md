@@ -8,13 +8,7 @@
 
 ## ⭐️ 주요 기능
 
-<iframe width="560" height="315" 
-  src="https://youtube.com/shorts/ih9wKytQdoY?si=V0ruLeY9ys0cAuIl" 
-  title="YouTube video player" 
-  frameborder="0" 
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-  allowfullscreen>
-</iframe>
+[YouTube에서 보기](https://youtube.com/shorts/ih9wKytQdoY?si=V0ruLeY9ys0cAuIl)
 
 ## 🛠️ 기술 스택
 
