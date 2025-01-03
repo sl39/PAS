@@ -2,12 +2,16 @@ package com.ex.artion.artion.artimage.entity;
 
 import com.ex.artion.artion.art.entity.ArtEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ArtImageEntity {
 
     @Id
@@ -16,6 +20,6 @@ public class ArtImageEntity {
 
     private String art_image_url;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private ArtEntity art_entity;
 }

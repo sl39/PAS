@@ -10,6 +10,9 @@ import lombok.*;
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserEntity {
 
     @Id
@@ -22,12 +25,16 @@ public class UserEntity {
 
     private String phone_number;
 
-    private String user_cash;
+    private Long user_cash;
 
     private Boolean black_list_status;
 
     private String user_account;
 
     private String bank_name;
+
+    private String kakao_pk;
+
+    private String kakao_image;
 
 }

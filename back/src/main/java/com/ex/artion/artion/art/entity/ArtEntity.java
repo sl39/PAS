@@ -3,14 +3,18 @@ package com.ex.artion.artion.art.entity;
 
 import com.ex.artion.artion.user.entity.UserEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ArtEntity {
 
     @Id
@@ -26,15 +30,13 @@ public class ArtEntity {
     private Double height;
 
     private Boolean qurator;
-    private String createdAt; // 그림을 만든 날짜
-    private LocalDateTime upload; // 그림 등록 날짜
-    private String startTime;
-    private String endTime;
+    private LocalDate createdAt; // 그림을 만든 날짜
+    private LocalDate upload; // 그림 등록 날짜
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private Integer current_auction_status;
 
     private String painter;
-
-
 
     @ManyToOne
     private UserEntity userEntity;

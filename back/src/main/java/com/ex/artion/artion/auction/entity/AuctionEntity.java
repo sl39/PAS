@@ -3,14 +3,19 @@ package com.ex.artion.artion.auction.entity;
 import com.ex.artion.artion.art.entity.ArtEntity;
 import com.ex.artion.artion.user.entity.UserEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class AuctionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +23,7 @@ public class AuctionEntity {
 
     private Long current_price;
 
+    @CreatedDate
     private LocalDateTime created_at;
 
     @ManyToOne
