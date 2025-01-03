@@ -71,6 +71,6 @@ public interface ArtRepository extends JpaRepository<ArtEntity, Integer> {
 
 
     @Query(value = "SELECT * FROM art_entity as a " +
-            "WHERE a.current_auction_status != 3 ",nativeQuery = true)
+            "WHERE a.current_auction_status != 3 AND a.start_time IS NOT NULL AND a.end_time IS NOT NULL ",nativeQuery = true)
     List<ArtEntity> findAllByCurrentAuctionStatus();
 }
